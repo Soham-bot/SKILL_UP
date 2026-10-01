@@ -1,0 +1,103 @@
+{
+  "version": "1.0.0",
+  "name": "SkillUp Neo-Brutalist & Anti-Design System Tokens",
+  "description": "Design tokens for SkillUp Gamified Learning & Certification Platform",
+  "author": "Soham Ahirrao",
+  "global": {
+    "color": {
+      "voidBlack": { "value": "#050505", "type": "color", "description": "Primary dark mode void canvas" },
+      "pitchBlack": { "value": "#000000", "type": "color", "description": "Terminal pitch black for borders and shadows" },
+      "starkWhite": { "value": "#FFFFFF", "type": "color", "description": "Maximum reflectance white for borders and surfaces" },
+      "acidGreen": { "value": "#00FF66", "type": "color", "description": "High-voltage neon acid green (PASS_GRANTED // NO_CAP)" },
+      "neonYellow": { "value": "#FFE600", "type": "color", "description": "Industrial caution yellow for streak and aura" },
+      "glitchCrimson": { "value": "#FF0055", "type": "color", "description": "Glitch crimson red (HAZARD_FAIL // RETRY_PROTOCOL)" },
+      "cyberCyan": { "value": "#00F0FF", "type": "color", "description": "Cyber cyan for systems and tracks" },
+      "concreteLight": { "value": "#F4F4F0", "type": "color", "description": "Concrete off-white for light brutalist background" },
+      "darkSurface": { "value": "#111111", "type": "color", "description": "Dark brutalist card surface" },
+      "bloodOrange": { "value": "#550C00", "type": "color", "description": "Anti-palette cognitive latency pulse glow" }
+    },
+    "borderWidth": {
+      "none": { "value": "0px", "type": "borderWidth" },
+      "thin": { "value": "1.5px", "type": "borderWidth" },
+      "regular": { "value": "2.0px", "type": "borderWidth" },
+      "brutal": { "value": "2.5px", "type": "borderWidth" },
+      "heavy": { "value": "3.0px", "type": "borderWidth" }
+    },
+    "borderRadius": {
+      "strict": { "value": "0px", "type": "borderRadius", "description": "Hostile, sharp zero border-radius across all elements" }
+    },
+    "boxShadow": {
+      "brutalHard": {
+        "value": {
+          "x": "4px",
+          "y": "4px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "#00FF66",
+          "type": "dropShadow"
+        },
+        "description": "Signature zero-blur 4px hard drop shadow"
+      },
+      "brutalHardBlack": {
+        "value": {
+          "x": "4px",
+          "y": "4px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "#000000",
+          "type": "dropShadow"
+        },
+        "description": "Light mode zero-blur 4px hard drop shadow"
+      },
+      "brutalPressed": {
+        "value": {
+          "x": "1px",
+          "y": "1px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "#000000",
+          "type": "dropShadow"
+        },
+        "description": "Active dent pressed state shadow"
+      }
+    },
+    "typography": {
+      "fontFamily": {
+        "monospace": { "value": "Space Mono, Courier New, monospace", "type": "fontFamilies" }
+      },
+      "titleLarge": {
+        "fontFamily": "{typography.fontFamily.monospace}",
+        "fontWeight": "900",
+        "fontSize": "26px",
+        "lineHeight": "1.2",
+        "letterSpacing": "-0.5px"
+      },
+      "titleMedium": {
+        "fontFamily": "{typography.fontFamily.monospace}",
+        "fontWeight": "900",
+        "fontSize": "18px",
+        "lineHeight": "1.3"
+      },
+      "body": {
+        "fontFamily": "{typography.fontFamily.monospace}",
+        "fontWeight": "600",
+        "fontSize": "12.5px",
+        "lineHeight": "1.4"
+      },
+      "tag": {
+        "fontFamily": "{typography.fontFamily.monospace}",
+        "fontWeight": "900",
+        "fontSize": "9.5px",
+        "letterSpacing": "0.5px"
+      }
+    },
+    "spacing": {
+      "zero": { "value": "0px", "type": "spacing" },
+      "xs": { "value": "4px", "type": "spacing" },
+      "sm": { "value": "8px", "type": "spacing" },
+      "md": { "value": "14px", "type": "spacing" },
+      "lg": { "value": "20px", "type": "spacing" },
+      "xl": { "value": "28px", "type": "spacing" }
+    }
+  }
+}
