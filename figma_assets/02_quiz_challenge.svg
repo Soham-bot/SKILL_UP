@@ -1,0 +1,131 @@
+<svg width="393" height="852" viewBox="0 0 393 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background: Void Black -->
+  <rect width="393" height="852" fill="#050505"/>
+
+  <!-- Blueprint Wireframe Grid Lines -->
+  <defs>
+    <pattern id="grid2" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity="0.04"/>
+      <path d="M 22 24 L 26 24 M 24 22 L 24 26" fill="none" stroke="#00FF66" stroke-width="1.2" stroke-opacity="0.2"/>
+    </pattern>
+  </defs>
+  <rect width="393" height="852" fill="url(#grid2)"/>
+
+  <!-- Top App Bar -->
+  <rect x="0" y="44" width="393" height="56" fill="#050505"/>
+  <text x="16" y="77" font-family="Space Mono, monospace" font-size="14" font-weight="900" fill="#FFFFFF">// FLUTTER MASTERCLASS // FINAL BOSS</text>
+  <rect x="290" y="58" width="90" height="26" fill="#1E1E1E" stroke="#00FF66" stroke-width="1.5"/>
+  <text x="300" y="75" font-family="Space Mono, monospace" font-size="10" font-weight="900" fill="#00FF66">7/10 LOCKED</text>
+
+  <!-- Status Ticker -->
+  <rect x="14" y="108" width="365" height="24" fill="#141414" stroke="#FFFFFF" stroke-width="1.5"/>
+  <text x="22" y="124" font-family="Space Mono, monospace" font-size="9" font-weight="900" fill="#00FF66">&lt;STATUS: COOKING OR COOKED?&gt;</text>
+  <text x="270" y="124" font-family="Space Mono, monospace" font-size="9" font-weight="900" fill="#00FF66">// LOCKED IN 🔥</text>
+
+  <!-- Progress Bar & Counter -->
+  <text x="14" y="152" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#00FF66">// QUESTION [03/10]</text>
+  <text x="315" y="152" font-family="Space Mono, monospace" font-size="10" font-weight="900" fill="#FFFFFF">30% DONE</text>
+  <rect x="14" y="160" width="365" height="8" fill="#222222" stroke="#FFFFFF" stroke-width="1.5"/>
+  <rect x="14" y="160" width="110" height="8" fill="#00FF66"/>
+
+  <!-- 10 Question Matrix Palette -->
+  <g transform="translate(14 178)">
+    <rect x="0" y="0" width="31" height="31" fill="#1E2E1E" stroke="#444444" stroke-width="1.2"/>
+    <text x="12" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#00FF66">1</text>
+
+    <rect x="37" y="0" width="31" height="31" fill="#1E2E1E" stroke="#444444" stroke-width="1.2"/>
+    <text x="49" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#00FF66">2</text>
+
+    <!-- Active Question 3 -->
+    <rect x="74" y="0" width="31" height="31" fill="#00FF66" stroke="#FFFFFF" stroke-width="2"/>
+    <text x="86" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#000000">3</text>
+
+    <rect x="111" y="0" width="31" height="31" fill="#161616" stroke="#444444" stroke-width="1.2"/>
+    <text x="123" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#888888">4</text>
+
+    <rect x="148" y="0" width="31" height="31" fill="#161616" stroke="#444444" stroke-width="1.2"/>
+    <text x="160" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#888888">5</text>
+
+    <rect x="185" y="0" width="31" height="31" fill="#161616" stroke="#444444" stroke-width="1.2"/>
+    <text x="197" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#888888">6</text>
+
+    <rect x="222" y="0" width="31" height="31" fill="#161616" stroke="#444444" stroke-width="1.2"/>
+    <text x="234" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#888888">7</text>
+
+    <rect x="259" y="0" width="31" height="31" fill="#161616" stroke="#444444" stroke-width="1.2"/>
+    <text x="271" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#888888">8</text>
+
+    <rect x="296" y="0" width="31" height="31" fill="#161616" stroke="#444444" stroke-width="1.2"/>
+    <text x="308" y="20" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#888888">9</text>
+
+    <rect x="333" y="0" width="31" height="31" fill="#161616" stroke="#444444" stroke-width="1.2"/>
+    <text x="341" y="20" font-family="Space Mono, monospace" font-size="10" font-weight="900" fill="#888888">10</text>
+  </g>
+
+  <!-- Question Prompt Box Shadow -->
+  <rect x="18" y="230" width="361" height="180" fill="#00FF66"/>
+  <!-- Question Prompt Box -->
+  <rect x="14" y="226" width="361" height="180" fill="#111111" stroke="#FFFFFF" stroke-width="2.5"/>
+  <rect x="26" y="238" width="95" height="18" fill="#FFFFFF"/>
+  <text x="30" y="251" font-family="Space Mono, monospace" font-size="9" font-weight="900" fill="#000000">MODULE_ID: 02</text>
+  <rect x="250" y="238" width="112" height="18" fill="#FFE600" stroke="#000000" stroke-width="1.5"/>
+  <text x="255" y="251" font-family="Space Mono, monospace" font-size="9" font-weight="900" fill="#000000">[FREE CHEATCODE]</text>
+
+  <text x="26" y="284" font-family="Space Mono, monospace" font-size="15" font-weight="900" fill="#FFFFFF">Which lifecycle method in Flutter is called</text>
+  <text x="26" y="304" font-family="Space Mono, monospace" font-size="15" font-weight="900" fill="#FFFFFF">exactly once when a StatefulWidget is</text>
+  <text x="26" y="324" font-family="Space Mono, monospace" font-size="15" font-weight="900" fill="#FFFFFF">inserted into the active widget tree?</text>
+
+  <!-- Debug Hint Box -->
+  <rect x="26" y="342" width="337" height="48" fill="#1E1A00" stroke="#FFE600" stroke-width="1.5"/>
+  <text x="36" y="362" font-family="Space Mono, monospace" font-size="10" font-weight="700" fill="#FFE600">// CLUE: Ideal place for one-time initialization,</text>
+  <text x="36" y="378" font-family="Space Mono, monospace" font-size="10" font-weight="700" fill="#FFE600">subscribing to streams, or controllers.</text>
+
+  <!-- ========================================================= -->
+  <!-- BOTTOM 42%: SINGLE-THUMB VELOCITY REACH ZONE             -->
+  <!-- ========================================================= -->
+  <rect x="0" y="440" width="393" height="412" fill="#111111" stroke="#FFFFFF" stroke-width="2.5"/>
+  <text x="14" y="462" font-family="Space Mono, monospace" font-size="9.5" font-weight="900" fill="#888888">// TAP YOUR PICK // LOCK IT IN:</text>
+
+  <!-- Option A -->
+  <rect x="17" y="478" width="361" height="52" fill="#FFFFFF" fill-opacity="0.25"/>
+  <rect x="14" y="475" width="361" height="52" fill="#141414" stroke="#FFFFFF" stroke-width="1.8"/>
+  <rect x="24" y="486" width="30" height="30" fill="#FFFFFF"/>
+  <text x="34" y="506" font-family="Space Mono, monospace" font-size="12" font-weight="900" fill="#000000">A</text>
+  <text x="64" y="506" font-family="Space Mono, monospace" font-size="12" font-weight="700" fill="#FFFFFF">build(BuildContext context)</text>
+
+  <!-- Option B (Selected & Locked In) -->
+  <rect x="17" y="540" width="361" height="52" fill="#FFFFFF"/>
+  <rect x="14" y="537" width="361" height="52" fill="#00FF66" stroke="#FFFFFF" stroke-width="2.5"/>
+  <rect x="24" y="548" width="30" height="30" fill="#000000"/>
+  <text x="34" y="568" font-family="Space Mono, monospace" font-size="12" font-weight="900" fill="#00FF66">B</text>
+  <text x="64" y="568" font-family="Space Mono, monospace" font-size="12" font-weight="900" fill="#000000">initState()</text>
+  <rect x="290" y="552" width="75" height="22" fill="#000000"/>
+  <text x="296" y="567" font-family="Space Mono, monospace" font-size="9" font-weight="900" fill="#00FF66">LOCKED IN</text>
+
+  <!-- Option C -->
+  <rect x="17" y="602" width="361" height="52" fill="#FFFFFF" fill-opacity="0.25"/>
+  <rect x="14" y="599" width="361" height="52" fill="#141414" stroke="#FFFFFF" stroke-width="1.8"/>
+  <rect x="24" y="610" width="30" height="30" fill="#FFFFFF"/>
+  <text x="34" y="630" font-family="Space Mono, monospace" font-size="12" font-weight="900" fill="#000000">C</text>
+  <text x="64" y="630" font-family="Space Mono, monospace" font-size="12" font-weight="700" fill="#FFFFFF">didChangeDependencies()</text>
+
+  <!-- Option D -->
+  <rect x="17" y="664" width="361" height="52" fill="#FFFFFF" fill-opacity="0.25"/>
+  <rect x="14" y="661" width="361" height="52" fill="#141414" stroke="#FFFFFF" stroke-width="1.8"/>
+  <rect x="24" y="672" width="30" height="30" fill="#FFFFFF"/>
+  <text x="34" y="692" font-family="Space Mono, monospace" font-size="12" font-weight="900" fill="#000000">D</text>
+  <text x="64" y="692" font-family="Space Mono, monospace" font-size="12" font-weight="700" fill="#FFFFFF">dispose()</text>
+
+  <!-- Velocity Action Bar -->
+  <g transform="translate(14 730)">
+    <!-- Prev Button -->
+    <rect x="3" y="3" width="90" height="50" fill="#FFFFFF"/>
+    <rect x="0" y="0" width="90" height="50" fill="#222222" stroke="#FFFFFF" stroke-width="2"/>
+    <text x="24" y="30" font-family="Space Mono, monospace" font-size="11" font-weight="900" fill="#FFFFFF">&lt; PREV</text>
+
+    <!-- Next Button -->
+    <rect x="105" y="3" width="258" height="50" fill="#FFFFFF"/>
+    <rect x="102" y="0" width="258" height="50" fill="#FFFFFF" stroke="#000000" stroke-width="2.5"/>
+    <text x="170" y="30" font-family="Space Mono, monospace" font-size="12" font-weight="900" fill="#000000">NEXT QUESTION &gt;</text>
+  </g>
+</svg>
