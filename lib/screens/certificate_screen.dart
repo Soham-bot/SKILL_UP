@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../models/quiz_result.dart';
 import '../services/course_service.dart';
 import '../theme/app_colors.dart';
+import '../widgets/wireframe_grid_background.dart';
 import '../widgets/certificate_widget.dart';
+import '../widgets/brutal_button.dart';
 
 class CertificateScreen extends StatelessWidget {
   final CourseService courseService;
@@ -31,7 +33,7 @@ class CertificateScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          '// CREDENTIAL_SAVED_TO_ON_DEVICE_STORAGE // SERIAL: ${quizResult.certificateId}',
+          '// CREDENTIAL_SAVED_TO_BUFFER // SERIAL: ${quizResult.certificateId}',
           style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
         ),
         backgroundColor: AppColors.acidGreen,
@@ -42,6 +44,7 @@ class CertificateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final learnerName = courseService.profile?.name ?? 'OPERATOR';
 
     return Scaffold(
@@ -50,64 +53,67 @@ class CertificateScreen extends StatelessWidget {
         actions: [
           IconButton(
             tooltip: 'SHARE_HASH',
-            icon: const Icon(Icons.share_rounded),
+            icon: const Icon(Icons.share_sharp),
             onPressed: () => _handleShare(context),
           ),
           IconButton(
             tooltip: 'DOWNLOAD_LOCAL',
-            icon: const Icon(Icons.download_rounded),
+            icon: const Icon(Icons.download_sharp),
             onPressed: () => _handleSave(context),
           ),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 540),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CertificateWidget(
-                    learnerName: learnerName,
-                    quizResult: quizResult,
-                  ),
+      body: WireframeGridBackground(
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 540),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CertificateWidget(
+                      learnerName: learnerName,
+                      quizResult: quizResult,
+                    ),
 
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 18),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => _handleSave(context),
-                          child: const Text('// SAVE_LOCAL'),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: BrutalButton(
+                            text: '// SAVE_LOCAL',
+                            onPressed: () => _handleSave(context),
+                            backgroundColor: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFE5E5DE),
+                            foregroundColor: isDark ? Colors.white : AppColors.pitchBlack,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: () => _handleShare(context),
-                          style: FilledButton.styleFrom(
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: BrutalButton(
+                            text: 'SHARE_HASH',
+                            onPressed: () => _handleShare(context),
                             backgroundColor: AppColors.acidGreen,
                             foregroundColor: AppColors.pitchBlack,
+                            shadowColor: isDark ? Colors.white : AppColors.pitchBlack,
                           ),
-                          child: const Text('SHARE_HASH'),
                         ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  TextButton(
-                    onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
-                    child: const Text(
-                      '// RETURN_TO_ROOT',
-                      style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900),
+                      ],
                     ),
-                  ),
-                ],
+
+                    const SizedBox(height: 12),
+
+                    TextButton(
+                      onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
+                      child: const Text(
+                        '// RETURN_TO_ROOT_FEED',
+                        style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

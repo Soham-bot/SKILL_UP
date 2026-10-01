@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/course.dart';
 import '../services/course_service.dart';
 import '../theme/app_colors.dart';
+import '../utils/glitch_page_route.dart';
+import '../widgets/wireframe_grid_background.dart';
 import '../widgets/course_card.dart';
 import 'learning_hub_screen.dart';
 import 'certificate_screen.dart';
@@ -33,23 +35,19 @@ class _MyLearningScreenState extends State<MyLearningScreen>
 
   void _onCourseTap(Course course) {
     if (course.status == CourseStatus.completed && course.bestResult != null) {
-      Navigator.push(
+      GlitchPageRoute.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => CertificateScreen(
-            courseService: widget.courseService,
-            quizResult: course.bestResult!,
-          ),
+        CertificateScreen(
+          courseService: widget.courseService,
+          quizResult: course.bestResult!,
         ),
       );
     } else {
-      Navigator.push(
+      GlitchPageRoute.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => LearningHubScreen(
-            courseService: widget.courseService,
-            courseId: course.id,
-          ),
+        LearningHubScreen(
+          courseService: widget.courseService,
+          courseId: course.id,
         ),
       );
     }
@@ -64,14 +62,14 @@ class _MyLearningScreenState extends State<MyLearningScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('// 03_BUFFS // MY_LEARNING'),
+        title: const Text('// FLEX_RECEIPT // BUFFER'),
         bottom: TabBar(
           controller: _tabController,
           labelColor: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
           unselectedLabelColor: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
           indicatorColor: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
           indicatorWeight: 3.5,
-          labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontFamily: 'monospace', fontSize: 11),
+          labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontFamily: 'monospace', fontSize: 10.5),
           tabs: [
             Tab(text: 'ENROLLED (${enrolled.length})'),
             Tab(text: 'IN_FLIGHT (${inProgress.length})'),
@@ -79,13 +77,15 @@ class _MyLearningScreenState extends State<MyLearningScreen>
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildCourseList(enrolled, '// NO_ENROLLED_NODES_IN_BUFFER\nBrowse nodes to initialize enrollment.'),
-          _buildCourseList(inProgress, '// NO_NODES_IN_FLIGHT\nExecute an enrolled node to begin.'),
-          _buildCourseList(completed, '// NO_CERTIFICATES_LOGGED\nPass a 10-MCQ assessment with ≥ 60% to get certified.'),
-        ],
+      body: WireframeGridBackground(
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            _buildCourseList(enrolled, '<EMPTY_BUFFER: NO_ENROLLED_NODES>\nBrowse curriculum nodes to initialize enrollment.'),
+            _buildCourseList(inProgress, '<EMPTY_BUFFER: NO_NODES_IN_FLIGHT>\nExecute an enrolled node to begin.'),
+            _buildCourseList(completed, '<EMPTY_BUFFER: NO_CERTIFICATES_LOGGED>\nPass a 10-MCQ assessment with ≥ 60% to get certified.'),
+          ],
+        ),
       ),
     );
   }
@@ -96,11 +96,11 @@ class _MyLearningScreenState extends State<MyLearningScreen>
     if (courses.isEmpty) {
       return Center(
         child: Container(
-          margin: const EdgeInsets.all(24),
-          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isDark ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
+              color: isDark ? Colors.white : AppColors.pitchBlack,
               width: 2,
             ),
           ),
@@ -108,10 +108,10 @@ class _MyLearningScreenState extends State<MyLearningScreen>
             emptyMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 11.5,
               fontFamily: 'monospace',
               fontWeight: FontWeight.w700,
-              height: 1.5,
+              height: 1.45,
               color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
             ),
           ),
@@ -123,12 +123,15 @@ class _MyLearningScreenState extends State<MyLearningScreen>
       builder: (context, constraints) {
         final isWide = constraints.maxWidth > 600;
         return GridView.builder(
-          padding: const EdgeInsets.all(16),
+          physics: const BouncingScrollPhysics(
+            decelerationRate: ScrollDecelerationRate.fast,
+          ),
+          padding: const EdgeInsets.all(14),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: isWide ? 2 : 1,
             childAspectRatio: isWide ? 1.25 : 1.28,
-            crossAxisSpacing: 14,
-            mainAxisSpacing: 14,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
           ),
           itemCount: courses.length,
           itemBuilder: (context, index) {

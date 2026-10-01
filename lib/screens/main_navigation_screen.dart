@@ -54,7 +54,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ProfileScreen(courseService: widget.courseService),
     ];
 
-    // Raw Anti-Design Navigation Bar
+    // Neo-Brutalist Zero-Radius Navigation Bar
+    // Traditional labels replaced with raw terminal status strings
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -66,19 +67,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           border: Border(
             top: BorderSide(
               color: isDark ? Colors.white : AppColors.pitchBlack,
-              width: 2.5, // Hard 2.5px brutalist border
+              width: 2.5,
             ),
           ),
         ),
         child: SafeArea(
           child: SizedBox(
-            height: 60,
+            height: 62,
             child: Row(
               children: [
-                _buildNavItem(0, '// 01_ROOT', Icons.grid_view_rounded),
-                _buildNavItem(1, '// 02_NODES', Icons.terminal_rounded),
-                _buildNavItem(2, '// 03_BUFFS', Icons.bolt_rounded),
-                _buildNavItem(3, '// 04_OPERATOR', Icons.person_sharp),
+                _buildNavItem(0, '// 01_FEED', Icons.grid_view_sharp),
+                _buildNavItem(1, '// 02_NODES', Icons.terminal_sharp),
+                _buildNavItem(2, '// FLEX_RECEIPT', Icons.verified_sharp),
+                _buildNavItem(3, '// ERROR_LOG', Icons.bug_report_sharp),
               ],
             ),
           ),
@@ -103,7 +104,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             children: [
               Icon(
                 icon,
-                size: 18,
+                size: 19,
                 color: isSelected
                     ? (isDark ? AppColors.pitchBlack : AppColors.acidGreen)
                     : (isDark ? Colors.white : AppColors.pitchBlack),
@@ -112,9 +113,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 9.5,
                   fontWeight: FontWeight.w900,
                   fontFamily: 'monospace',
+                  letterSpacing: 0.2,
                   color: isSelected
                       ? (isDark ? AppColors.pitchBlack : AppColors.acidGreen)
                       : (isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted),

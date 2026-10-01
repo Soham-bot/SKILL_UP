@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/course.dart';
 import '../services/course_service.dart';
 import '../theme/app_colors.dart';
+import '../utils/glitch_page_route.dart';
+import '../widgets/wireframe_grid_background.dart';
 import '../widgets/course_card.dart';
 import 'course_detail_screen.dart';
 import 'learning_hub_screen.dart';
@@ -37,33 +39,27 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   void _onCourseTap(Course course) {
     if (course.status == CourseStatus.completed && course.bestResult != null) {
-      Navigator.push(
+      GlitchPageRoute.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => CertificateScreen(
-            courseService: widget.courseService,
-            quizResult: course.bestResult!,
-          ),
+        CertificateScreen(
+          courseService: widget.courseService,
+          quizResult: course.bestResult!,
         ),
       );
     } else if (course.status == CourseStatus.inProgress || course.status == CourseStatus.enrolled) {
-      Navigator.push(
+      GlitchPageRoute.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => LearningHubScreen(
-            courseService: widget.courseService,
-            courseId: course.id,
-          ),
+        LearningHubScreen(
+          courseService: widget.courseService,
+          courseId: course.id,
         ),
       );
     } else {
-      Navigator.push(
+      GlitchPageRoute.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => CourseDetailScreen(
-            courseService: widget.courseService,
-            course: course,
-          ),
+        CourseDetailScreen(
+          courseService: widget.courseService,
+          course: course,
         ),
       );
     }
@@ -85,187 +81,195 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('// 02_EXPLORE_NODES'),
+        title: const Text('// 02_NODES_EXPLORER'),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Brutalist Search Terminal Field
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-                      offset: const Offset(3, 3),
-                      blurRadius: 0,
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
-                  onChanged: (val) => setState(() => _searchQuery = val.trim()),
-                  decoration: InputDecoration(
-                    hintText: 'QUERY: Flutter, Python, Security...',
-                    hintStyle: TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                      color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                    ),
-                    prefixIcon: const Icon(Icons.search_rounded),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear_rounded),
-                            onPressed: () {
-                              _searchController.clear();
-                              setState(() => _searchQuery = '');
-                            },
-                          )
-                        : null,
-                    filled: true,
-                    fillColor: isDark ? AppColors.darkSurface : Colors.white,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.zero,
-                      borderSide: BorderSide(
-                        color: isDark ? Colors.white : AppColors.pitchBlack,
-                        width: 2.5,
+      body: WireframeGridBackground(
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Brutalist Search Terminal Field
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                        offset: const Offset(3, 3),
+                        blurRadius: 0,
                       ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.zero,
-                      borderSide: BorderSide(
-                        color: isDark ? Colors.white : AppColors.pitchBlack,
-                        width: 2.5,
-                      ),
-                    ),
+                    ],
                   ),
-                ),
-              ),
-            ),
-
-            // Category Filter Buttons
-            SizedBox(
-              height: 44,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: _categories.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final cat = _categories[index];
-                  final isSelected = _selectedCategory == cat;
-
-                  return GestureDetector(
-                    onTap: () => setState(() => _selectedCategory = cat),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? (isDark ? AppColors.acidGreen : AppColors.pitchBlack)
-                            : (isDark ? const Color(0xFF161616) : Colors.white),
-                        border: Border.all(
+                  child: TextField(
+                    controller: _searchController,
+                    style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
+                    onChanged: (val) => setState(() => _searchQuery = val.trim()),
+                    decoration: InputDecoration(
+                      hintText: 'QUERY: Flutter, Python, Security...',
+                      hintStyle: TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 11.5,
+                        color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                      ),
+                      prefixIcon: const Icon(Icons.search_sharp),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear_sharp),
+                              onPressed: () {
+                                _searchController.clear();
+                                setState(() => _searchQuery = '');
+                              },
+                            )
+                          : null,
+                      filled: true,
+                      fillColor: isDark ? AppColors.darkSurface : Colors.white,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.zero,
+                        borderSide: BorderSide(
                           color: isDark ? Colors.white : AppColors.pitchBlack,
-                          width: 2,
-                        ),
-                        boxShadow: isSelected
-                            ? [
-                                BoxShadow(
-                                  color: isDark ? Colors.white.withValues(alpha: 0.3) : AppColors.pitchBlack,
-                                  offset: const Offset(2, 2),
-                                  blurRadius: 0,
-                                ),
-                              ]
-                            : null,
-                      ),
-                      child: Center(
-                        child: Text(
-                          cat.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w900,
-                            fontFamily: 'monospace',
-                            color: isSelected
-                                ? (isDark ? AppColors.pitchBlack : AppColors.acidGreen)
-                                : (isDark ? Colors.white : AppColors.pitchBlack),
-                          ),
+                          width: 2.5,
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            // Results Counter Tag
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: Row(
-                children: [
-                  Text(
-                    '// MATCHES: ${filteredCourses.length} NODES_FOUND',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'monospace',
-                      color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.zero,
+                        borderSide: BorderSide(
+                          color: isDark ? Colors.white : AppColors.pitchBlack,
+                          width: 2.5,
+                        ),
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
 
-            // Courses Grid
-            Expanded(
-              child: filteredCourses.isEmpty
-                  ? Center(
+              // Category Filter Buttons
+              SizedBox(
+                height: 42,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(
+                    decelerationRate: ScrollDecelerationRate.fast,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  itemCount: _categories.length,
+                  separatorBuilder: (context, index) => const SizedBox(width: 8),
+                  itemBuilder: (context, index) {
+                    final cat = _categories[index];
+                    final isSelected = _selectedCategory == cat;
+
+                    return GestureDetector(
+                      onTap: () => setState(() => _selectedCategory = cat),
                       child: Container(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
+                          color: isSelected
+                              ? (isDark ? AppColors.acidGreen : AppColors.pitchBlack)
+                              : (isDark ? const Color(0xFF161616) : Colors.white),
                           border: Border.all(
                             color: isDark ? Colors.white : AppColors.pitchBlack,
                             width: 2,
                           ),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: isDark ? Colors.white.withValues(alpha: 0.3) : AppColors.pitchBlack,
+                                    offset: const Offset(2, 2),
+                                    blurRadius: 0,
+                                  ),
+                                ]
+                              : null,
                         ),
-                        child: Text(
-                          '// NO_NODES_MATCH_QUERY',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900,
-                            fontFamily: 'monospace',
-                            color: isDark ? AppColors.glitchCrimson : AppColors.pitchBlack,
+                        child: Center(
+                          child: Text(
+                            cat.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: isSelected
+                                  ? (isDark ? AppColors.pitchBlack : AppColors.acidGreen)
+                                  : (isDark ? Colors.white : AppColors.pitchBlack),
+                            ),
                           ),
                         ),
                       ),
-                    )
-                  : LayoutBuilder(
-                      builder: (context, constraints) {
-                        final isWide = constraints.maxWidth > 600;
-                        return GridView.builder(
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: isWide ? 2 : 1,
-                            childAspectRatio: isWide ? 1.25 : 1.28,
-                            crossAxisSpacing: 14,
-                            mainAxisSpacing: 14,
-                          ),
-                          itemCount: filteredCourses.length,
-                          itemBuilder: (context, index) {
-                            final course = filteredCourses[index];
-                            return CourseCard(
-                              course: course,
-                              onTap: () => _onCourseTap(course),
-                            );
-                          },
-                        );
-                      },
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              // Results Counter Tag
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                child: Row(
+                  children: [
+                    Text(
+                      '// MATCHES: ${filteredCourses.length} NODES_ACTIVE',
+                      style: TextStyle(
+                        fontSize: 9.5,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                      ),
                     ),
-            ),
-          ],
+                  ],
+                ),
+              ),
+
+              // Courses Grid with snap-velocity scrolling
+              Expanded(
+                child: filteredCourses.isEmpty
+                    ? Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(18),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: isDark ? Colors.white : AppColors.pitchBlack,
+                              width: 2,
+                            ),
+                          ),
+                          child: Text(
+                            '<ERR_NO_MATCHING_NODES>',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: isDark ? AppColors.glitchCrimson : AppColors.pitchBlack,
+                            ),
+                          ),
+                        ),
+                      )
+                    : LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isWide = constraints.maxWidth > 600;
+                          return GridView.builder(
+                            physics: const BouncingScrollPhysics(
+                              decelerationRate: ScrollDecelerationRate.fast,
+                            ),
+                            padding: const EdgeInsets.fromLTRB(14, 6, 14, 14),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: isWide ? 2 : 1,
+                              childAspectRatio: isWide ? 1.25 : 1.28,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                            ),
+                            itemCount: filteredCourses.length,
+                            itemBuilder: (context, index) {
+                              final course = filteredCourses[index];
+                              return CourseCard(
+                                course: course,
+                                onTap: () => _onCourseTap(course),
+                              );
+                            },
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
