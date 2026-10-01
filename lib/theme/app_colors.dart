@@ -1,64 +1,83 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Brand Accents
-  static const Color primary = Color(0xFF6366F1); // Electric Indigo
-  static const Color primaryLight = Color(0xFF818CF8);
-  static const Color primaryDark = Color(0xFF4F46E5);
+  // Neo-Brutalist & Anti-Design Primary Palette
+  static const Color voidBlack = Color(0xFF050505);
+  static const Color pitchBlack = Color(0xFF000000);
+  static const Color starkWhite = Color(0xFFFFFFFF);
 
-  static const Color secondary = Color(0xFF06B6D4); // Cyber Cyan
-  static const Color secondaryLight = Color(0xFF22D3EE);
+  // High-Voltage Cyberpunk / Neon Accents
+  static const Color acidGreen = Color(0xFF00FF66); // PASS_GRANTED // NO_CAP
+  static const Color neonYellow = Color(0xFFFFE600); // Hazard / Streak / XP
+  static const Color glitchCrimson = Color(0xFFFF0055); // HAZARD_FAIL / ERROR
+  static const Color cyberCyan = Color(0xFF00F0FF); // Systems / Web
+  static const Color electricViolet = Color(0xFF8B00FF); // Mobile / Protocol
+  static const Color hotPink = Color(0xFFFF007F); // Tag sticker accent
 
-  static const Color accent = Color(0xFFF59E0B); // Gamified XP Amber
-  static const Color success = Color(0xFF10B981); // Emerald Pass
-  static const Color danger = Color(0xFFEF4444); // Crimson Fail
-  static const Color info = Color(0xFF3B82F6); // Info Blue
+  // Semantic Mappings
+  static const Color primary = acidGreen;
+  static const Color primaryLight = Color(0xFF5CFF9D);
+  static const Color primaryDark = Color(0xFF00CC52);
 
-  // Dark Palette
-  static const Color darkBg = Color(0xFF0A0F1D); // Deep Midnight
-  static const Color darkSurface = Color(0xFF121A2D); // Deep Slate Card
-  static const Color darkSurfaceElevated = Color(0xFF1E293B); // Slate 800
-  static const Color darkBorder = Color(0xFF334155); // Slate 700
-  static const Color darkTextPrimary = Color(0xFFF8FAFC);
-  static const Color darkTextSecondary = Color(0xFF94A3B8);
-  static const Color darkTextMuted = Color(0xFF64748B);
+  static const Color secondary = cyberCyan;
+  static const Color secondaryLight = Color(0xFF6BFFFF);
 
-  // Light Palette
-  static const Color lightBg = Color(0xFFF8FAFC); // Clean Canvas
+  static const Color accent = neonYellow;
+  static const Color success = acidGreen;
+  static const Color danger = glitchCrimson;
+  static const Color info = cyberCyan;
+
+  // Dark Brutalist Palette (The Void)
+  static const Color darkBg = Color(0xFF080808);
+  static const Color darkSurface = Color(0xFF111111);
+  static const Color darkSurfaceElevated = Color(0xFF1A1A1A);
+  static const Color darkBorder = Color(0xFFFFFFFF); // Sharp stark white border
+  static const Color darkBorderMuted = Color(0xFF333333);
+  static const Color darkTextPrimary = Color(0xFFFFFFFF);
+  static const Color darkTextSecondary = Color(0xFFBBBBBB);
+  static const Color darkTextMuted = Color(0xFF777777);
+
+  // Light Brutalist Palette (The Flashbang)
+  static const Color lightBg = Color(0xFFF4F4F0); // Off-white concrete
   static const Color lightSurface = Color(0xFFFFFFFF);
-  static const Color lightSurfaceElevated = Color(0xFFF1F5F9);
-  static const Color lightBorder = Color(0xFFE2E8F0);
-  static const Color lightTextPrimary = Color(0xFF0F172A);
-  static const Color lightTextSecondary = Color(0xFF475569);
-  static const Color lightTextMuted = Color(0xFF94A3B8);
+  static const Color lightSurfaceElevated = Color(0xFFE5E5DE);
+  static const Color lightBorder = Color(0xFF000000); // Sharp 2px solid black border
+  static const Color lightBorderMuted = Color(0xFFCCCCCC);
+  static const Color lightTextPrimary = Color(0xFF000000);
+  static const Color lightTextSecondary = Color(0xFF222222);
+  static const Color lightTextMuted = Color(0xFF666666);
+
+  // Signature Neo-Brutalist Hard Drop Shadows (NO BLUR, 4px hard offset)
+  static List<BoxShadow> brutalShadow(Color shadowColor, {double offset = 4.0}) => [
+        BoxShadow(
+          color: shadowColor,
+          offset: Offset(offset, offset),
+          blurRadius: 0,
+          spreadRadius: 0,
+        ),
+      ];
+
+  static List<BoxShadow> darkBrutalShadow({double offset = 4.0}) =>
+      brutalShadow(acidGreen, offset: offset);
+
+  static List<BoxShadow> lightBrutalShadow({double offset = 4.0}) =>
+      brutalShadow(pitchBlack, offset: offset);
 
   // Gradients
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [primary, Color(0xFF8B5CF6)],
+    colors: [acidGreen, cyberCyan],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
-  static const LinearGradient heroGradientDark = LinearGradient(
-    colors: [Color(0xFF1E1B4B), Color(0xFF0A0F1D)],
+  static const LinearGradient hazardGradient = LinearGradient(
+    colors: [neonYellow, glitchCrimson],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
-  static const LinearGradient heroGradientLight = LinearGradient(
-    colors: [Color(0xFFEEF2FF), Color(0xFFE0E7FF)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static const LinearGradient goldGradient = LinearGradient(
-    colors: [Color(0xFFF59E0B), Color(0xFFFBBF24)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static const LinearGradient successGradient = LinearGradient(
-    colors: [Color(0xFF10B981), Color(0xFF34D399)],
+  static const LinearGradient darkCardGradient = LinearGradient(
+    colors: [Color(0xFF141414), Color(0xFF0A0A0A)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

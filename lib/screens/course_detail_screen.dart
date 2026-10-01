@@ -72,7 +72,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_course.title),
+        title: Text('// ${_course.title.toUpperCase()}'),
         actions: [
           if (_course.status == CourseStatus.completed)
             Padding(
@@ -82,13 +82,13 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
           border: Border(
             top: BorderSide(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-              width: 1,
+              color: isDark ? Colors.white : AppColors.pitchBlack,
+              width: 2.5,
             ),
           ),
         ),
@@ -109,34 +109,41 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                         ),
                       );
                     },
-                    child: const Text('Review Course'),
+                    child: const Text('// REVIEW_NODE'),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: FilledButton.icon(
+                  child: FilledButton(
                     onPressed: _handleViewCertificate,
-                    icon: const Icon(Icons.workspace_premium_rounded, size: 18),
-                    label: const Text('Certificate'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.acidGreen,
+                      foregroundColor: AppColors.pitchBlack,
+                    ),
+                    child: const Text('VIEW_CERTIFICATE'),
                   ),
                 ),
               ] else if (_course.status == CourseStatus.inProgress ||
                   _course.status == CourseStatus.enrolled) ...[
                 Expanded(
-                  child: FilledButton.icon(
+                  child: FilledButton(
                     onPressed: _handleEnrollAndStart,
-                    icon: const Icon(Icons.play_arrow_rounded, size: 20),
-                    label: Text(
-                      _course.progress > 0 ? 'Continue Learning ($percent%)' : 'Enter Learning Hub',
+                    child: Text(
+                      _course.progress > 0
+                          ? '>>> RESUME_NODE ($percent%) >>>'
+                          : '>>> ENTER_HUB >>>',
                     ),
                   ),
                 ),
               ] else ...[
                 Expanded(
-                  child: FilledButton.icon(
+                  child: FilledButton(
                     onPressed: _handleEnrollAndStart,
-                    icon: const Icon(Icons.rocket_launch_rounded, size: 18),
-                    label: const Text('ENROLL & START LEARNING'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.acidGreen,
+                      foregroundColor: AppColors.pitchBlack,
+                    ),
+                    child: const Text('>>> INITIALIZE_FREE_ENROLLMENT >>>'),
                   ),
                 ),
               ],
@@ -145,11 +152,11 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Category & Difficulty Row
+            // Top Row: Badges
             Row(
               children: [
                 StatusBadge.category(_course.category),
@@ -158,14 +165,15 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
               ],
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
 
-            // Title
+            // Course Title
             Text(
-              _course.title,
+              _course.title.toUpperCase(),
               style: TextStyle(
-                fontSize: 26,
+                fontSize: 24,
                 fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
                 color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
               ),
             ),
@@ -176,156 +184,84 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
             Text(
               _course.fullDescription,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13,
                 height: 1.5,
                 color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
 
-            // Course Metrics Grid
+            // Telemetry Metric Row (Hard brutalist box)
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                borderRadius: BorderRadius.circular(16),
+                color: isDark ? const Color(0xFF141414) : const Color(0xFFEBEBE5),
                 border: Border.all(
-                  color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  color: isDark ? Colors.white : AppColors.pitchBlack,
+                  width: 2.0,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                    offset: const Offset(3, 3),
+                    blurRadius: 0,
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildMetricItem(
-                    context,
-                    icon: Icons.timer_outlined,
-                    label: 'DURATION',
-                    value: _course.duration,
-                  ),
+                  _buildMetric('DURATION', _course.duration.toUpperCase()),
                   _buildDivider(isDark),
-                  _buildMetricItem(
-                    context,
-                    icon: Icons.menu_book_rounded,
-                    label: 'MODULES',
-                    value: '${_course.modules.length} Modules',
-                  ),
+                  _buildMetric('MODULES', '${_course.modules.length}_UNITS'),
                   _buildDivider(isDark),
-                  _buildMetricItem(
-                    context,
-                    icon: Icons.quiz_outlined,
-                    label: 'ASSESSMENT',
-                    value: '10 MCQs',
-                  ),
+                  _buildMetric('ASSESSMENT', '10_MCQS'),
                 ],
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // If started, show current progress card
-            if (_course.status != CourseStatus.available) ...[
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: _course.status == CourseStatus.completed
-                      ? AppColors.success.withOpacity(0.1)
-                      : AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: _course.status == CourseStatus.completed
-                        ? AppColors.success.withOpacity(0.3)
-                        : AppColors.primary.withOpacity(0.3),
+            // Competencies Checklist
+            Text(
+              '// ACQUIRED_CAPABILITIES:',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
+                color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            ..._course.skillsLearned.map((skill) => Container(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkSurface : Colors.white,
+                    border: Border.all(
+                      color: isDark ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
+                      width: 1.5,
+                    ),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _course.status == CourseStatus.completed
-                              ? 'COURSE COMPLETED'
-                              : 'CURRENT PROGRESS',
+                  child: Row(
+                    children: [
+                      const Text(
+                        '► ',
+                        style: TextStyle(
+                          color: AppColors.acidGreen,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          skill.toUpperCase(),
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
-                            color: _course.status == CourseStatus.completed
-                                ? AppColors.success
-                                : AppColors.primary,
-                          ),
-                        ),
-                        Text(
-                          '$percent%',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w800,
-                            color: _course.status == CourseStatus.completed
-                                ? AppColors.success
-                                : AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
-                      child: LinearProgressIndicator(
-                        value: _course.progress,
-                        minHeight: 8,
-                        backgroundColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          _course.status == CourseStatus.completed
-                              ? AppColors.success
-                              : AppColors.primary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '${_course.completedModulesCount} of ${_course.modules.length} learning modules completed',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
-
-            // Section: YOU WILL LEARN
-            Text(
-              'YOU WILL LEARN:',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.0,
-                color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            ..._course.skillsLearned.map((skill) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.check_circle_rounded,
-                        color: AppColors.success,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          skill,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: 'monospace',
                             color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                           ),
                         ),
@@ -336,50 +272,50 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
             const SizedBox(height: 24),
 
-            // Section: COURSE SYLLABUS (5 MODULES)
+            // 5 Learning Modules Overview
             Text(
-              '5 LEARNING MODULES',
+              '// SYLLABUS_NODES [05_UNITS]:',
               style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.0,
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
                 color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             ..._course.modules.map((module) => Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  padding: const EdgeInsets.all(14),
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                    borderRadius: BorderRadius.circular(14),
+                    color: isDark ? AppColors.darkSurface : Colors.white,
                     border: Border.all(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      color: isDark ? Colors.white : AppColors.pitchBlack,
+                      width: 1.5,
                     ),
                   ),
                   child: Row(
                     children: [
                       Container(
-                        width: 32,
-                        height: 32,
+                        width: 28,
+                        height: 28,
                         decoration: BoxDecoration(
-                          color: module.isCompleted
-                              ? AppColors.success.withOpacity(0.15)
-                              : (isDark ? AppColors.darkSurfaceElevated : AppColors.lightSurfaceElevated),
-                          shape: BoxShape.circle,
+                          color: module.isCompleted ? AppColors.acidGreen : (isDark ? const Color(0xFF222222) : const Color(0xFFE5E5DE)),
+                          border: Border.all(
+                            color: isDark ? Colors.white : AppColors.pitchBlack,
+                            width: 1.5,
+                          ),
                         ),
                         child: Center(
-                          child: module.isCompleted
-                              ? const Icon(Icons.check_rounded, color: AppColors.success, size: 18)
-                              : Text(
-                                  '${module.orderIndex}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 13,
-                                    color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                                  ),
-                                ),
+                          child: Text(
+                            '0${module.orderIndex}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: isDark && !module.isCompleted ? Colors.white : AppColors.pitchBlack,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -388,18 +324,19 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              module.title,
+                              module.title.toUpperCase(),
                               style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'monospace',
                                 color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                               ),
                             ),
-                            const SizedBox(height: 2),
                             Text(
-                              module.estimatedMinutes,
+                              '// READ_TIME: ${module.estimatedMinutes.toUpperCase()}',
                               style: TextStyle(
-                                fontSize: 11,
+                                fontSize: 10,
+                                fontFamily: 'monospace',
                                 color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
                               ),
                             ),
@@ -410,32 +347,6 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                   ),
                 )),
 
-            const SizedBox(height: 16),
-
-            // Academic Disclaimer Card
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.verified_user_outlined, size: 16, color: AppColors.secondary),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Includes verifiable SkillUp certificate upon achieving ≥ 60% on the 10-question final assessment.',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
             const SizedBox(height: 20),
           ],
         ),
@@ -443,35 +354,17 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
     );
   }
 
-  Widget _buildMetricItem(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
+  Widget _buildMetric(String label, String value) {
     return Column(
       children: [
-        Icon(icon, size: 18, color: AppColors.primary),
-        const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 9,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.5,
-            color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-          ),
+          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
         ),
         const SizedBox(height: 2),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-          ),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
         ),
       ],
     );
@@ -479,9 +372,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
   Widget _buildDivider(bool isDark) {
     return Container(
-      width: 1,
-      height: 36,
-      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+      width: 2,
+      height: 28,
+      color: isDark ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
     );
   }
 }

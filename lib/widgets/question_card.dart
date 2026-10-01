@@ -33,17 +33,23 @@ class _QuestionCardState extends State<QuestionCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Question Header Card
+        // Question Header Box
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-              width: 1,
+              width: 2.5,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                offset: const Offset(4, 4),
+                blurRadius: 0,
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,83 +58,87 @@ class _QuestionCardState extends State<QuestionCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    color: isDark ? Colors.white : AppColors.pitchBlack,
                     child: Text(
-                      'QUESTION ${widget.questionNumber} OF ${widget.totalQuestions}',
-                      style: const TextStyle(
+                      '// QUESTION [${widget.questionNumber.toString().padLeft(2, '0')}/${widget.totalQuestions.toString().padLeft(2, '0')}]',
+                      style: TextStyle(
                         fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
-                        color: AppColors.primary,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
                       ),
                     ),
                   ),
-                  // Null Safety Demonstration: Only render hint action if hint != null
+
+                  // Sound Null Safety: Only render if hint != null
                   if (widget.question.hint != null)
-                    TextButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          _showHint = !_showHint;
-                        });
-                      },
-                      icon: Icon(
-                        _showHint ? Icons.lightbulb_rounded : Icons.lightbulb_outline_rounded,
-                        size: 16,
-                        color: AppColors.accent,
-                      ),
-                      label: Text(
-                        _showHint ? 'Hide Hint' : 'Hint',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.accent,
+                    GestureDetector(
+                      onTap: () => setState(() => _showHint = !_showHint),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.neonYellow,
+                          border: Border.all(color: AppColors.pitchBlack, width: 1.5),
+                        ),
+                        child: Text(
+                          _showHint ? '[HIDE_DEBUG_HINT]' : '[VIEW_HINT]',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            color: AppColors.pitchBlack,
+                          ),
                         ),
                       ),
                     ),
                 ],
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
 
-              // Question Text
+              // Question Prompt Text
               Text(
                 widget.question.questionText,
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'monospace',
                   height: 1.4,
                   color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                 ),
               ),
 
-              // Null Safety Display: Hint Body
+              // Sound Null Safety: Hint Body
               if (_showHint && widget.question.hint != null) ...[
                 const SizedBox(height: 12),
                 Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.accent.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: AppColors.accent.withOpacity(0.3),
-                      width: 1,
-                    ),
+                    color: isDark ? const Color(0xFF1E1A00) : const Color(0xFFFFFBEB),
+                    border: Border.all(color: AppColors.neonYellow, width: 2),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.info_outline_rounded, color: AppColors.accent, size: 16),
-                      const SizedBox(width: 8),
+                      const Text(
+                        '// DEBUG: ',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                          color: AppColors.neonYellow,
+                        ),
+                      ),
                       Expanded(
                         child: Text(
-                          widget.question.hint!, // Safe unwrapping after null check
+                          widget.question.hint!,
                           style: TextStyle(
-                            fontSize: 13,
-                            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'monospace',
+                            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                           ),
                         ),
                       ),
@@ -140,20 +150,22 @@ class _QuestionCardState extends State<QuestionCard> {
           ),
         ),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 18),
 
-        // 4 Options
+        // Action Zone Header
         Text(
-          'SELECT ONE ANSWER:',
+          '// SELECT_SINGLE_OPTION_MATRIX:',
           style: TextStyle(
             fontSize: 11,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w900,
+            fontFamily: 'monospace',
             letterSpacing: 0.8,
             color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
           ),
         ),
         const SizedBox(height: 10),
 
+        // 4 Tactile Option Selectors
         ...List.generate(widget.question.options.length, (index) {
           final isSelected = widget.selectedOptionIndex == index;
           final letter = index < optionLetters.length ? optionLetters[index] : '${index + 1}';
@@ -161,98 +173,101 @@ class _QuestionCardState extends State<QuestionCard> {
 
           return Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () => widget.onSelectOption(index),
-                borderRadius: BorderRadius.circular(14),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 180),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: BoxDecoration(
+            child: GestureDetector(
+              onTap: () => widget.onSelectOption(index),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 70),
+                transform: Matrix4.translationValues(
+                  isSelected ? 2.0 : 0.0,
+                  isSelected ? 2.0 : 0.0,
+                  0.0,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? (isDark ? AppColors.acidGreen : AppColors.pitchBlack)
+                      : (isDark ? AppColors.darkSurface : AppColors.lightSurface),
+                  border: Border.all(
                     color: isSelected
-                        ? (isDark ? AppColors.primary.withOpacity(0.2) : const Color(0xFFEEF2FF))
-                        : (isDark ? AppColors.darkSurface : AppColors.lightSurface),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: isSelected
-                          ? AppColors.primary
-                          : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
-                      width: isSelected ? 2 : 1,
-                    ),
+                        ? (isDark ? Colors.white : AppColors.acidGreen)
+                        : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                    width: isSelected ? 2.5 : 2.0,
                   ),
-                  child: Row(
-                    children: [
-                      // Letter Circle (A, B, C, D)
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.primary
-                              : (isDark ? AppColors.darkSurfaceElevated : AppColors.lightSurfaceElevated),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            letter,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: isSelected
-                                  ? Colors.white
-                                  : (isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary),
-                            ),
+                  boxShadow: isSelected
+                      ? null
+                      : [
+                          BoxShadow(
+                            color: isDark ? Colors.white.withValues(alpha: 0.25) : AppColors.pitchBlack,
+                            offset: const Offset(3, 3),
+                            blurRadius: 0,
                           ),
+                        ],
+                ),
+                child: Row(
+                  children: [
+                    // Letter Tag Box
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? (isDark ? AppColors.pitchBlack : AppColors.acidGreen)
+                            : (isDark ? const Color(0xFF222222) : const Color(0xFFEEEEEE)),
+                        border: Border.all(
+                          color: isSelected ? (isDark ? Colors.white : AppColors.pitchBlack) : (isDark ? Colors.white : AppColors.pitchBlack),
+                          width: 1.5,
                         ),
                       ),
-
-                      const SizedBox(width: 14),
-
-                      // Option Text
-                      Expanded(
+                      child: Center(
                         child: Text(
-                          optionText,
+                          letter,
                           style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
                             color: isSelected
-                                ? (isDark ? Colors.white : AppColors.primaryDark)
-                                : (isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary),
+                                ? (isDark ? AppColors.acidGreen : AppColors.pitchBlack)
+                                : (isDark ? Colors.white : AppColors.pitchBlack),
                           ),
                         ),
                       ),
+                    ),
 
-                      const SizedBox(width: 8),
+                    const SizedBox(width: 12),
 
-                      // Radio Check Indicator
+                    // Option Text
+                    Expanded(
+                      child: Text(
+                        optionText,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                          fontFamily: 'monospace',
+                          color: isSelected
+                              ? (isDark ? AppColors.pitchBlack : Colors.white)
+                              : (isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 8),
+
+                    // Active Check indicator
+                    if (isSelected)
                       Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: isSelected
-                                ? AppColors.primary
-                                : (isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted),
-                            width: 2,
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        color: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
+                        child: Text(
+                          'SELECTED',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
                           ),
                         ),
-                        child: isSelected
-                            ? Center(
-                                child: Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.primary,
-                                    shape: BoxShape.circle,
-                                  ),
-                                ),
-                              )
-                            : null,
                       ),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),

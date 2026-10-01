@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/learner_profile.dart';
 import '../services/course_service.dart';
 import '../theme/app_colors.dart';
-import '../utils/certificate_utils.dart';
 import 'certificate_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -25,7 +24,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Edit Learner Profile'),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        backgroundColor: AppColors.pitchBlack,
+        title: const Text(
+          '// EDIT_OPERATOR_TELEMETRY',
+          style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900, color: AppColors.acidGreen),
+        ),
         content: Form(
           key: formKey,
           child: SingleChildScrollView(
@@ -34,18 +38,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 TextFormField(
                   controller: nameCtrl,
-                  decoration: const InputDecoration(labelText: 'Full Name *'),
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Name is required' : null,
+                  style: const TextStyle(fontFamily: 'monospace', color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'OPERATOR_NAME *',
+                    labelStyle: TextStyle(fontFamily: 'monospace', color: AppColors.acidGreen),
+                  ),
+                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Name required' : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: emailCtrl,
-                  decoration: const InputDecoration(labelText: 'Email Address'),
+                  style: const TextStyle(fontFamily: 'monospace', color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'COMM_EMAIL',
+                    labelStyle: TextStyle(fontFamily: 'monospace', color: AppColors.cyberCyan),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: phoneCtrl,
-                  decoration: const InputDecoration(labelText: 'Phone Number'),
+                  style: const TextStyle(fontFamily: 'monospace', color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'PHONE_ID',
+                    labelStyle: TextStyle(fontFamily: 'monospace', color: AppColors.neonYellow),
+                  ),
                 ),
               ],
             ),
@@ -54,12 +70,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: const Text('// CANCEL', style: TextStyle(fontFamily: 'monospace')),
           ),
           FilledButton(
             onPressed: () async {
               if (!formKey.currentState!.validate()) return;
-              final updated = (profile ?? LearnerProfile(name: 'Learner')).copyWith(
+              final updated = (profile ?? LearnerProfile(name: 'OPERATOR')).copyWith(
                 name: nameCtrl.text.trim(),
                 email: emailCtrl.text.trim().isNotEmpty ? emailCtrl.text.trim() : null,
                 phone: phoneCtrl.text.trim().isNotEmpty ? phoneCtrl.text.trim() : null,
@@ -68,7 +84,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (ctx.mounted) Navigator.pop(ctx);
               setState(() {});
             },
-            child: const Text('Save'),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.acidGreen, foregroundColor: AppColors.pitchBlack),
+            child: const Text('COMMIT_CHANGES'),
           ),
         ],
       ),
@@ -84,152 +101,163 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Learner Profile'),
+        title: const Text('// 04_OPERATOR_TELEMETRY'),
         actions: [
           IconButton(
-            tooltip: 'Edit Profile',
-            icon: const Icon(Icons.edit_outlined),
+            tooltip: 'EDIT_OPERATOR',
+            icon: const Icon(Icons.edit_note_rounded),
             onPressed: _editProfileDialog,
           ),
         ],
       ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.all(16),
           children: [
-            // Avatar & Name Card
+            // Operator Identity Box (Hard Brutalist Container)
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  width: 2.5,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                    offset: const Offset(4, 4),
+                    blurRadius: 0,
+                  ),
+                ],
               ),
-              child: Column(
+              child: Row(
                 children: [
+                  // Square Avatar
                   Container(
-                    width: 76,
-                    height: 76,
+                    width: 60,
+                    height: 60,
                     decoration: BoxDecoration(
-                      gradient: AppColors.primaryGradient,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.3),
-                          blurRadius: 16,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
+                      color: AppColors.acidGreen,
+                      border: Border.all(
+                        color: isDark ? Colors.white : AppColors.pitchBlack,
+                        width: 2,
+                      ),
                     ),
                     child: Center(
                       child: Text(
                         (profile?.name.isNotEmpty ?? false)
                             ? profile!.name[0].toUpperCase()
-                            : 'S',
+                            : 'O',
                         style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                          color: AppColors.pitchBlack,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 14),
-                  Text(
-                    profile?.name ?? 'Learner',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+
+                  const SizedBox(width: 16),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '// OPERATOR:',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                          ),
+                        ),
+                        Text(
+                          (profile?.name ?? 'OPERATOR').toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            letterSpacing: -0.5,
+                            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                          ),
+                        ),
+                        if (profile?.email != null) ...[
+                          Text(
+                            profile!.email!,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'monospace',
+                              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
-                  if (profile?.email != null) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      profile!.email!,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                      ),
-                    ),
-                  ],
-                  if (profile?.phone != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      profile!.phone!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
-            // Statistics Grid (4 Metric Tiles)
+            // Telemetry 4-Pack Grid
             Row(
               children: [
                 Expanded(
                   child: _buildMetricTile(
-                    context,
                     title: 'ENROLLED',
                     value: '$enrolledCount',
-                    icon: Icons.menu_book_rounded,
-                    color: AppColors.primary,
+                    color: AppColors.cyberCyan,
+                    isDark: isDark,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _buildMetricTile(
-                    context,
-                    title: 'COMPLETED',
+                    title: 'CERTIFIED',
                     value: '${completedCourses.length}',
-                    icon: Icons.check_circle_rounded,
-                    color: AppColors.success,
+                    color: AppColors.acidGreen,
+                    isDark: isDark,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
                   child: _buildMetricTile(
-                    context,
-                    title: 'CERTIFICATES',
-                    value: '${completedCourses.length}',
-                    icon: Icons.workspace_premium_rounded,
-                    color: AppColors.accent,
+                    title: 'STREAK',
+                    value: '${profile?.streakDays ?? 1}D',
+                    color: const Color(0xFFFF5500),
+                    isDark: isDark,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _buildMetricTile(
-                    context,
-                    title: 'TOTAL XP',
+                    title: 'XP_POOL',
                     value: '${profile?.xp ?? 0}',
-                    icon: Icons.bolt_rounded,
-                    color: const Color(0xFFF97316),
+                    color: AppColors.neonYellow,
+                    isDark: isDark,
                   ),
                 ),
               ],
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
-            // THEME SETTINGS CARD
+            // THEME INVERSION CONTROL
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                borderRadius: BorderRadius.circular(16),
+                color: isDark ? const Color(0xFF141414) : const Color(0xFFEBEBE5),
                 border: Border.all(
-                  color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  color: isDark ? Colors.white : AppColors.pitchBlack,
+                  width: 2.0,
                 ),
               ),
               child: Row(
@@ -237,37 +265,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Row(
                     children: [
-                      Icon(
-                        isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-                        color: AppColors.primary,
+                      const Text(
+                        '// THEME_INVERSION:',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                        ),
                       ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Appearance Theme',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                            ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        color: isDark ? AppColors.pitchBlack : Colors.white,
+                        child: Text(
+                          isDark ? 'VOID_DARK' : 'FLASH_LIGHT',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
                           ),
-                          Text(
-                            isDark ? 'Dark Theme (Active)' : 'Light Theme (Active)',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                   Switch(
                     value: widget.courseService.isDarkMode,
                     onChanged: (_) => widget.courseService.toggleTheme(),
-                    activeColor: AppColors.primary,
+                    activeColor: AppColors.acidGreen,
                   ),
                 ],
               ),
@@ -277,36 +302,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             // EARNED CERTIFICATES GALLERY
             Text(
-              'EARNED CERTIFICATES',
+              '// VERIFIED_CREDENTIAL_LEDGER:',
               style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
                 letterSpacing: 1.0,
                 color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             if (completedCourses.isEmpty)
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                    color: isDark ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
+                    width: 2,
                   ),
                 ),
-                child: Center(
-                  child: Text(
-                    'No certificates earned yet.\nComplete all modules of a course and score ≥ 60% on the assessment!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
-                      height: 1.4,
-                      color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                    ),
-                  ),
+                child: const Text(
+                  '// NO_CREDENTIALS_ISSUED_YET\nComplete 5 modules and score ≥ 60% on assessment to earn credentials.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 11, fontFamily: 'monospace', height: 1.4),
                 ),
               )
             else
@@ -314,89 +333,98 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final result = c.bestResult;
                 if (result == null) return const SizedBox.shrink();
 
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        gradient: AppColors.goldGradient,
-                        shape: BoxShape.circle,
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkSurface : Colors.white,
+                    border: Border.all(
+                      color: isDark ? Colors.white : AppColors.pitchBlack,
+                      width: 2.0,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                        offset: const Offset(3, 3),
+                        blurRadius: 0,
                       ),
-                      child: const Icon(Icons.workspace_premium_rounded, color: Colors.white, size: 24),
-                    ),
-                    title: Text(
-                      c.title,
-                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                    ),
-                    subtitle: Text(
-                      'Score: ${result.score}/10 (${result.percentage.toInt()}%) • ${CertificateUtils.formatShortDate(result.attemptedAt)}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                      ),
-                    ),
-                    trailing: const Icon(Icons.chevron_right_rounded),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CertificateScreen(
-                            courseService: widget.courseService,
-                            quizResult: result,
-                          ),
-                        ),
-                      );
-                    },
+                    ],
                   ),
-                );
-              }),
-
-            const SizedBox(height: 24),
-
-            // ACADEMIC PROJECT INFO
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.terminal_rounded, size: 18, color: AppColors.primary),
-                      SizedBox(width: 8),
-                      Text(
-                        'ACADEMIC CAPSTONE PROJECT',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.8,
-                          color: AppColors.primary,
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: AppColors.acidGreen,
+                        child: const Icon(Icons.workspace_premium_rounded, color: AppColors.pitchBlack, size: 20),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              c.title.toUpperCase(),
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
+                            ),
+                            Text(
+                              'SCORE: ${result.score}/10 (${result.percentage.toInt()}%) // ${result.certificateId}',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontFamily: 'monospace',
+                                color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CertificateScreen(
+                                courseService: widget.courseService,
+                                quizResult: result,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          color: isDark ? Colors.white : AppColors.pitchBlack,
+                          child: Text(
+                            'VIEW',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: isDark ? AppColors.pitchBlack : Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                );
+              }),
+
+            const SizedBox(height: 20),
+
+            // Academic Capstone Info
+            Container(
+              padding: const EdgeInsets.all(12),
+              color: isDark ? const Color(0xFF161616) : const Color(0xFFE5E5DE),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    'SkillUp: Cross Platform Learning & Certification Platform',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                    ),
+                    '// B.TECH_CAPSTONE_PROJECT // CSE_&_AI',
+                    style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, fontFamily: 'monospace', color: AppColors.acidGreen),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 2),
                   Text(
-                    'Author: Soham Ahirrao\nB.Tech Computer Science Engineering & AI\nOffline Architecture • On-Device Scoring • Sound Null Safety',
-                    style: TextStyle(
-                      fontSize: 11,
-                      height: 1.4,
-                      color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                    ),
+                    'AUTHOR: SOHAM AHIRRAO // CROSS_PLATFORM_APP',
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, fontFamily: 'monospace'),
                   ),
                 ],
               ),
@@ -409,57 +437,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildMetricTile(
-    BuildContext context, {
+  Widget _buildMetricTile({
     required String title,
     required String value,
-    required IconData icon,
     required Color color,
+    required bool isDark,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+          color: isDark ? Colors.white : AppColors.pitchBlack,
+          width: 2.0,
         ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: color, size: 20),
+        boxShadow: [
+          BoxShadow(
+            color: color,
+            offset: const Offset(3, 3),
+            blurRadius: 0,
           ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.6,
-                  color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                ),
-              ),
-            ],
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '// $title',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w900,
+              fontFamily: 'monospace',
+              color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+              fontFamily: 'monospace',
+              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+            ),
           ),
         ],
       ),

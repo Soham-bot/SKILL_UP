@@ -38,14 +38,16 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
 
     final currentOrder = _currentModule.orderIndex;
 
-    // Check if next module exists
     if (currentOrder < widget.course.modules.length) {
-      final nextModule = widget.course.modules[currentOrder]; // 0-indexed matches currentOrder
+      final nextModule = widget.course.modules[currentOrder];
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Module $currentOrder Completed! (+30 XP) Moving to Module ${nextModule.orderIndex}...'),
-            backgroundColor: AppColors.success,
+            content: Text(
+              '// NODE_0$currentOrder COMPLETE (+30 XP) >>> ADVANCING TO NODE_0${nextModule.orderIndex}...',
+              style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
+            ),
+            backgroundColor: AppColors.pitchBlack,
             duration: const Duration(seconds: 2),
           ),
         );
@@ -67,25 +69,40 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
           context: context,
           barrierDismissible: false,
           builder: (dialogCtx) => AlertDialog(
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            backgroundColor: AppColors.pitchBlack,
             title: const Row(
               children: [
-                Icon(Icons.celebration_rounded, color: AppColors.accent, size: 28),
-                SizedBox(width: 10),
-                Text('All 5 Modules Done!'),
+                Icon(Icons.bolt_rounded, color: AppColors.acidGreen, size: 28),
+                SizedBox(width: 8),
+                Text(
+                  'ALL 5 NODES SYNCED',
+                  style: TextStyle(
+                    fontFamily: 'monospace',
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
               ],
             ),
             content: Text(
-              '🎉 Outstanding! You have completed all 5 learning modules for ${widget.course.title}. You are now ready to take the 10-question final assessment to earn your certificate.',
+              '100% curriculum sync achieved for ${widget.course.title.toUpperCase()}.\n\nFinal assessment protocol is unlocked: 10 randomly drawn MCQs will evaluate competence on-device.',
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 12,
+                color: Color(0xFFDDDDDD),
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(dialogCtx);
-                  Navigator.pop(context); // Back to Learning Hub
+                  Navigator.pop(context);
                 },
-                child: const Text('Back to Hub'),
+                child: const Text('// BACK_TO_HUB', style: TextStyle(fontFamily: 'monospace')),
               ),
-              FilledButton.icon(
+              FilledButton(
                 onPressed: () {
                   Navigator.pop(dialogCtx);
                   Navigator.pushReplacement(
@@ -98,8 +115,11 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                     ),
                   );
                 },
-                icon: const Icon(Icons.quiz_rounded, size: 18),
-                label: const Text('Start Assessment'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.acidGreen,
+                  foregroundColor: AppColors.pitchBlack,
+                ),
+                child: const Text('EXECUTE_ASSESSMENT'),
               ),
             ],
           ),
@@ -115,175 +135,162 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Module ${_currentModule.orderIndex} of ${widget.course.modules.length}',
-          style: const TextStyle(fontSize: 16),
-        ),
+        title: Text('// NODE [0${_currentModule.orderIndex}/05]'),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Center(
-              child: Row(
-                children: [
-                  const Icon(Icons.timer_outlined, size: 14, color: AppColors.primary),
-                  const SizedBox(width: 4),
-                  Text(
-                    _currentModule.estimatedMinutes,
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                  ),
-                ],
+          Center(
+            child: Container(
+              margin: const EdgeInsets.only(right: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              color: isDark ? const Color(0xFF222222) : const Color(0xFFE5E5DE),
+              child: Text(
+                '// ${_currentModule.estimatedMinutes.toUpperCase()}',
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
               ),
             ),
           ),
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
           border: Border(
             top: BorderSide(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+              color: isDark ? Colors.white : AppColors.pitchBlack,
+              width: 2.5,
             ),
           ),
         ),
         child: SafeArea(
-          child: Row(
-            children: [
-              Expanded(
-                child: FilledButton.icon(
-                  onPressed: _completeAndAdvance,
-                  icon: Icon(
-                    isLastModule ? Icons.assignment_turned_in_rounded : Icons.check_circle_rounded,
-                    size: 18,
-                  ),
-                  label: Text(
-                    isLastModule
-                        ? (_currentModule.isCompleted
-                            ? 'PROCEED TO ASSESSMENT →'
-                            : 'COMPLETE & TAKE ASSESSMENT →')
-                        : (_currentModule.isCompleted
-                            ? 'NEXT MODULE →'
-                            : 'MARK COMPLETE & CONTINUE →'),
-                  ),
-                ),
-              ),
-            ],
+          child: FilledButton(
+            onPressed: _completeAndAdvance,
+            style: FilledButton.styleFrom(
+              backgroundColor: isLastModule ? AppColors.acidGreen : (isDark ? Colors.white : AppColors.pitchBlack),
+              foregroundColor: isLastModule ? AppColors.pitchBlack : (isDark ? AppColors.pitchBlack : AppColors.acidGreen),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+            child: Text(
+              isLastModule
+                  ? (_currentModule.isCompleted
+                      ? '>>> EXECUTE_ASSESSMENT >>>'
+                      : '>>> SYNC_NODE & TAKE_ASSESSMENT >>>')
+                  : (_currentModule.isCompleted
+                      ? '>>> NEXT_NODE >>>'
+                      : '>>> MARK_SYNCED & CONTINUE >>>'),
+            ),
           ),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Module Header
-            Text(
-              'MODULE ${_currentModule.orderIndex}',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.0,
-                color: AppColors.primary,
+            // Module Node Header Tag
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              color: AppColors.acidGreen,
+              child: Text(
+                'NODE_0${_currentModule.orderIndex} // SYLLABUS_UNIT',
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'monospace',
+                  color: AppColors.pitchBlack,
+                ),
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
+
+            // Module Title
             Text(
-              _currentModule.title,
+              _currentModule.title.toUpperCase(),
               style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
+                letterSpacing: -0.5,
                 color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
               ),
             ),
             const SizedBox(height: 12),
 
-            // Summary Card
+            // Summary Terminal Box
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                borderRadius: BorderRadius.circular(14),
+                color: isDark ? const Color(0xFF141414) : const Color(0xFFEBEBE5),
                 border: Border.all(
-                  color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  color: isDark ? Colors.white : AppColors.pitchBlack,
+                  width: 2.0,
                 ),
               ),
-              child: Row(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.menu_book_rounded, color: AppColors.primary, size: 20),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'MODULE OVERVIEW',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
-                            color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _currentModule.summary,
-                          style: TextStyle(
-                            fontSize: 13,
-                            height: 1.4,
-                            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                          ),
-                        ),
-                      ],
+                  Text(
+                    '// ABSTRACT_SPECIFICATION:',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _currentModule.summary,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      height: 1.4,
                     ),
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
-            // Educational Sections
+            // Modular Educational Sections
             ..._currentModule.sections.map((sec) => _buildSectionCard(context, sec)),
 
             const SizedBox(height: 16),
 
-            // Key Takeaway Card
+            // Key Takeaway Protocol Box (Solid Hard Shadow)
             Container(
-              padding: const EdgeInsets.all(18),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: isDark
-                    ? const LinearGradient(
-                        colors: [Color(0xFF1E1B4B), Color(0xFF0F172A)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                    : const LinearGradient(
-                        colors: [Color(0xFFEEF2FF), Colors.white],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                borderRadius: BorderRadius.circular(16),
+                color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
                 border: Border.all(
-                  color: AppColors.primary.withOpacity(0.4),
-                  width: 1.5,
+                  color: isDark ? AppColors.neonYellow : AppColors.pitchBlack,
+                  width: 2.5,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark ? AppColors.neonYellow : AppColors.pitchBlack,
+                    offset: const Offset(4, 4),
+                    blurRadius: 0,
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.stars_rounded, color: AppColors.accent, size: 20),
-                      SizedBox(width: 8),
-                      Text(
-                        'KEY TAKEAWAY',
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        color: AppColors.neonYellow,
+                        child: const Icon(Icons.star_rate_rounded, color: AppColors.pitchBlack, size: 16),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        '// CORE_TAKEAWAY_PROTOCOL:',
                         style: TextStyle(
                           fontSize: 11,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.0,
-                          color: AppColors.accent,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                          color: AppColors.neonYellow,
                         ),
                       ),
                     ],
@@ -292,9 +299,10 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                   Text(
                     _currentModule.keyTakeaway,
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      height: 1.5,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'monospace',
+                      height: 1.4,
                       color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                     ),
                   ),
@@ -313,24 +321,32 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 18),
       child: Container(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+            width: 2.0,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: isDark ? Colors.white.withValues(alpha: 0.15) : AppColors.pitchBlack,
+              offset: const Offset(3, 3),
+              blurRadius: 0,
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              section.title,
+              section.title.toUpperCase(),
               style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
+                fontSize: 15,
+                fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
                 color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
               ),
             ),
@@ -338,53 +354,42 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
             Text(
               section.body,
               style: TextStyle(
-                fontSize: 14,
-                height: 1.6,
+                fontSize: 13,
+                height: 1.5,
                 color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
               ),
             ),
 
-            // Code Snippet Card
+            // High-Contrast Code Box
             if (section.codeSnippet != null) ...[
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0D1117), // GitHub Dark code theme
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xFF30363D)),
+                  color: const Color(0xFF000000), // Pure Black terminal
+                  border: Border.all(color: AppColors.acidGreen, width: 1.5),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'SYNTAX / CODE EXAMPLE',
-                          style: TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
-                            color: Color(0xFF8B949E),
-                          ),
-                        ),
-                        Icon(
-                          Icons.code_rounded,
-                          size: 14,
-                          color: Colors.grey.shade500,
-                        ),
-                      ],
+                    const Text(
+                      '// SOURCE_SYNTAX:',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: AppColors.acidGreen,
+                      ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     SelectableText(
                       section.codeSnippet!,
                       style: const TextStyle(
                         fontFamily: 'monospace',
-                        fontSize: 12.5,
+                        fontSize: 12,
                         height: 1.45,
-                        color: Color(0xFF58A6FF),
+                        color: Color(0xFF00FF66),
                       ),
                     ),
                   ],
@@ -394,27 +399,25 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
 
             // Bullet Points
             if (section.bulletPoints.isNotEmpty) ...[
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               ...section.bulletPoints.map((bp) => Padding(
                     padding: const EdgeInsets.only(bottom: 6),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(top: 6),
-                          width: 6,
-                          height: 6,
-                          decoration: const BoxDecoration(
-                            color: AppColors.primary,
-                            shape: BoxShape.circle,
+                        const Text(
+                          '► ',
+                          style: TextStyle(
+                            color: AppColors.acidGreen,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
                           ),
                         ),
-                        const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             bp,
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 12,
                               height: 1.4,
                               color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                             ),
@@ -425,28 +428,33 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                   )),
             ],
 
-            // Important Tip Box
+            // Tip Box
             if (section.tip != null) ...[
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: AppColors.accent.withOpacity(0.3),
-                  ),
+                  color: isDark ? const Color(0xFF1E1A00) : const Color(0xFFFFFBEB),
+                  border: Border.all(color: AppColors.neonYellow, width: 1.5),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.lightbulb_rounded, color: AppColors.accent, size: 16),
-                    const SizedBox(width: 8),
+                    const Text(
+                      '// TIP: ',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: AppColors.neonYellow,
+                      ),
+                    ),
                     Expanded(
                       child: Text(
                         section.tip!,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
                           color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                         ),
                       ),

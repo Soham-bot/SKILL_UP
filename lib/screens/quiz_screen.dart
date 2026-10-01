@@ -23,14 +23,13 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   late List<Question> _quizQuestions;
-  final Map<int, int> _selectedAnswers = {}; // questionIndex -> selectedOptionIndex
+  final Map<int, int> _selectedAnswers = {};
   int _currentIndex = 0;
   bool _isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
-    // Generate exactly 10 stratified random questions from the course's question bank
     _quizQuestions = QuizService.generateRandomQuestions(widget.course);
   }
 
@@ -53,21 +52,26 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _attemptSubmit() {
-    // Academic Requirement 34: Validate that all 10 questions are answered
     if (_selectedAnswers.length < _quizQuestions.length) {
       final unansweredCount = _quizQuestions.length - _selectedAnswers.length;
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          icon: const Icon(Icons.warning_amber_rounded, color: AppColors.accent, size: 36),
-          title: const Text('Incomplete Assessment'),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+          backgroundColor: AppColors.pitchBlack,
+          title: const Text(
+            'INCOMPLETE EVALUATION MATRIX',
+            style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900, color: AppColors.glitchCrimson),
+          ),
           content: Text(
-            'Please answer all 10 questions before submitting.\n\nYou have $unansweredCount unanswered ${unansweredCount == 1 ? "question" : "questions"} remaining.',
+            'Please answer all 10 questions before submitting.\n\n$unansweredCount question(s) remain unanswered.',
+            style: const TextStyle(fontFamily: 'monospace', color: Colors.white, fontSize: 12),
           ),
           actions: [
             FilledButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Back to Questions'),
+              style: FilledButton.styleFrom(backgroundColor: AppColors.glitchCrimson),
+              child: const Text('BACK_TO_QUESTIONS'),
             ),
           ],
         ),
@@ -75,26 +79,31 @@ class _QuizScreenState extends State<QuizScreen> {
       return;
     }
 
-    // Confirmation dialog before final on-device scoring
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        icon: const Icon(Icons.help_outline_rounded, color: AppColors.primary, size: 36),
-        title: const Text('Submit Final Assessment?'),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        backgroundColor: AppColors.pitchBlack,
+        title: const Text(
+          'SUBMIT ASSESSMENT PROTOCOL?',
+          style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900, color: AppColors.acidGreen),
+        ),
         content: const Text(
-          'All 10 questions have been answered. Your score will be calculated entirely on-device using Dart algorithms.\n\nAre you ready to view your result?',
+          'All 10 questions have been logged. Scoring will execute immediately on-device using Dart arithmetic.\n\nProceed to final evaluation?',
+          style: TextStyle(fontFamily: 'monospace', color: Colors.white, fontSize: 12),
         ),
         actions: [
-          OutlinedButton(
+          TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Review Answers'),
+            child: const Text('// REVIEW_LOGS', style: TextStyle(fontFamily: 'monospace')),
           ),
           FilledButton(
             onPressed: () {
               Navigator.pop(ctx);
               _finalizeSubmission();
             },
-            child: const Text('Confirm & Submit'),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.acidGreen, foregroundColor: AppColors.pitchBlack),
+            child: const Text('CONFIRM_SUBMIT'),
           ),
         ],
       ),
@@ -104,14 +113,12 @@ class _QuizScreenState extends State<QuizScreen> {
   void _finalizeSubmission() async {
     setState(() => _isSubmitting = true);
 
-    // On-Device Pure Dart Evaluation
     final result = QuizService.evaluateQuiz(
       course: widget.course,
       questions: _quizQuestions,
       selectedAnswers: _selectedAnswers,
     );
 
-    // Persist result and status
     await widget.courseService.recordQuizResult(widget.course.id, result);
 
     if (mounted) {
@@ -143,11 +150,23 @@ class _QuizScreenState extends State<QuizScreen> {
         final shouldLeave = await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text('Leave Assessment?'),
-            content: const Text('Your current assessment answers will not be submitted.'),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            backgroundColor: AppColors.pitchBlack,
+            title: const Text(
+              'ABORT ASSESSMENT?',
+              style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900, color: AppColors.glitchCrimson),
+            ),
+            content: const Text(
+              'Unsubmitted answers will be purged from active memory.',
+              style: TextStyle(fontFamily: 'monospace', color: Colors.white, fontSize: 12),
+            ),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-              FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Leave')),
+              TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('RESUME')),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                style: FilledButton.styleFrom(backgroundColor: AppColors.glitchCrimson),
+                child: const Text('ABORT'),
+              ),
             ],
           ),
         );
@@ -157,22 +176,20 @@ class _QuizScreenState extends State<QuizScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.course.title, style: const TextStyle(fontSize: 16)),
+          title: Text('// ${widget.course.title.toUpperCase()} // EXAM'),
           actions: [
             Center(
               child: Container(
-                margin: const EdgeInsets.only(right: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                margin: const EdgeInsets.only(right: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                color: isDark ? const Color(0xFF222222) : const Color(0xFFE5E5DE),
                 child: Text(
-                  '${_selectedAnswers.length}/10 Answered',
+                  '${_selectedAnswers.length}/10 ANSWERED',
                   style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
+                    color: AppColors.acidGreen,
                   ),
                 ),
               ),
@@ -180,41 +197,36 @@ class _QuizScreenState extends State<QuizScreen> {
           ],
         ),
         bottomNavigationBar: Container(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
           decoration: BoxDecoration(
             color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
             border: Border(
               top: BorderSide(
-                color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                width: 1,
+                color: isDark ? Colors.white : AppColors.pitchBlack,
+                width: 2.5,
               ),
             ),
           ),
           child: SafeArea(
             child: Row(
               children: [
-                // Previous Button
                 if (_currentIndex > 0) ...[
-                  OutlinedButton.icon(
+                  OutlinedButton(
                     onPressed: _previousQuestion,
-                    icon: const Icon(Icons.arrow_back_rounded, size: 16),
-                    label: const Text('Previous'),
+                    child: const Text('< PREV'),
                   ),
                   const SizedBox(width: 12),
                 ],
-
-                // Next or Submit Button
                 Expanded(
-                  child: FilledButton.icon(
+                  child: FilledButton(
                     onPressed: isLastQuestion ? _attemptSubmit : _nextQuestion,
                     style: FilledButton.styleFrom(
-                      backgroundColor: isLastQuestion ? AppColors.success : AppColors.primary,
+                      backgroundColor: isLastQuestion ? AppColors.acidGreen : (isDark ? Colors.white : AppColors.pitchBlack),
+                      foregroundColor: isLastQuestion ? AppColors.pitchBlack : (isDark ? AppColors.pitchBlack : AppColors.acidGreen),
                     ),
-                    icon: Icon(
-                      isLastQuestion ? Icons.check_circle_rounded : Icons.arrow_forward_rounded,
-                      size: 18,
+                    child: Text(
+                      isLastQuestion ? '>>> SUBMIT_EVALUATION >>>' : 'NEXT_QUESTION >',
                     ),
-                    label: Text(isLastQuestion ? 'Submit Assessment' : 'Next Question'),
                   ),
                 ),
               ],
@@ -226,17 +238,17 @@ class _QuizScreenState extends State<QuizScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(),
+                    CircularProgressIndicator(color: AppColors.acidGreen),
                     SizedBox(height: 16),
                     Text(
-                      'Calculating score on-device...',
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                      'COMPUTING SCORE ON-DEVICE...',
+                      style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900),
                     ),
                   ],
                 ),
               )
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -245,44 +257,50 @@ class _QuizScreenState extends State<QuizScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'ASSESSMENT PROGRESS',
+                          '// PROGRESS_TRACK:',
                           style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.8,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
                             color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
                           ),
                         ),
                         Text(
-                          '${_currentIndex + 1} / ${_quizQuestions.length}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                          '0${_currentIndex + 1} / ${_quizQuestions.length}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
-                      child: LinearProgressIndicator(
-                        value: progress,
-                        minHeight: 6,
-                        backgroundColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
-                        valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                    const SizedBox(height: 6),
+                    Container(
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF222222) : const Color(0xFFDDDDDD),
+                        border: Border.all(
+                          color: isDark ? Colors.white : AppColors.pitchBlack,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: FractionallySizedBox(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: progress.clamp(0.0, 1.0),
+                        child: Container(color: AppColors.acidGreen),
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
 
-                    // Quick Question Index Bar (1 to 10 clickable pills)
+                    // Question Matrix Palette
                     SizedBox(
                       height: 36,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemCount: _quizQuestions.length,
-                        separatorBuilder: (context, index) => const SizedBox(width: 8),
+                        separatorBuilder: (context, index) => const SizedBox(width: 6),
                         itemBuilder: (context, idx) {
                           final isAnswered = _selectedAnswers.containsKey(idx);
                           final isCur = idx == _currentIndex;
@@ -290,37 +308,35 @@ class _QuizScreenState extends State<QuizScreen> {
                           Color bgColor;
                           Color textColor;
                           if (isCur) {
-                            bgColor = AppColors.primary;
-                            textColor = Colors.white;
+                            bgColor = AppColors.acidGreen;
+                            textColor = AppColors.pitchBlack;
                           } else if (isAnswered) {
-                            bgColor = AppColors.success.withOpacity(0.2);
-                            textColor = AppColors.success;
+                            bgColor = isDark ? const Color(0xFF1E2E1E) : const Color(0xFFDCFCE7);
+                            textColor = isDark ? AppColors.acidGreen : const Color(0xFF166534);
                           } else {
-                            bgColor = isDark ? AppColors.darkSurface : AppColors.lightSurface;
+                            bgColor = isDark ? const Color(0xFF1A1A1A) : Colors.white;
                             textColor = isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted;
                           }
 
-                          return InkWell(
+                          return GestureDetector(
                             onTap: () => setState(() => _currentIndex = idx),
-                            borderRadius: BorderRadius.circular(10),
                             child: Container(
-                              width: 36,
-                              height: 36,
+                              width: 34,
+                              height: 34,
                               decoration: BoxDecoration(
                                 color: bgColor,
-                                borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: isCur
-                                      ? AppColors.primary
-                                      : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
+                                  color: isCur ? (isDark ? Colors.white : AppColors.pitchBlack) : (isDark ? const Color(0xFF444444) : const Color(0xFFBBBBBB)),
+                                  width: isCur ? 2.0 : 1.5,
                                 ),
                               ),
                               child: Center(
                                 child: Text(
                                   '${idx + 1}',
                                   style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: 'monospace',
                                     color: textColor,
                                   ),
                                 ),
@@ -331,9 +347,9 @@ class _QuizScreenState extends State<QuizScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
 
-                    // Question Card Component
+                    // Question Card Console
                     QuestionCard(
                       question: currentQ,
                       questionNumber: _currentIndex + 1,

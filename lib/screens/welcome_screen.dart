@@ -37,7 +37,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       name: _nameController.text.trim(),
       email: _emailController.text.trim().isNotEmpty ? _emailController.text.trim() : null,
       phone: _phoneController.text.trim().isNotEmpty ? _phoneController.text.trim() : null,
-      xp: 150, // Starting bonus XP
+      xp: 150,
       streakDays: 1,
     );
 
@@ -61,227 +61,285 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.all(16),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Brand Badge
-                    Center(
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          gradient: AppColors.primaryGradient,
-                          borderRadius: BorderRadius.circular(24),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary.withOpacity(0.35),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.school_rounded,
-                          color: Colors.white,
-                          size: 42,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Title & Tagline
-                    Text(
-                      'SKILLUP',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.5,
-                        color: isDark ? Colors.white : AppColors.lightTextPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'LEARN. LEVEL UP. GET CERTIFIED.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.2,
-                        color: AppColors.primary,
-                      ),
-                    ),
-
-                    const SizedBox(height: 28),
-
-                    // Setup Banner Card
+                    // Top Status Ticker
                     Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      color: AppColors.acidGreen,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'WELCOME TO SKILLUP',
+                            '>>> BOOT_SEQUENCE: ACTIVE',
                             style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.8,
-                              color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: AppColors.pitchBlack,
                             ),
                           ),
-                          const SizedBox(height: 4),
                           Text(
-                            'Let’s create your learner profile.',
+                            '// LATENCY: 0.00ms',
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Your profile name will appear on all course completion certificates.',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: AppColors.pitchBlack,
                             ),
                           ),
                         ],
                       ),
                     ),
 
+                    const SizedBox(height: 20),
+
+                    // Asymmetric Rotated Brand Header Sticker
+                    Transform.rotate(
+                      angle: -0.02,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                          border: Border.all(
+                            color: isDark ? Colors.white : AppColors.pitchBlack,
+                            width: 3.0,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                              offset: const Offset(5, 5),
+                              blurRadius: 0,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'SKILLUP',
+                                  style: TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: 'monospace',
+                                    letterSpacing: -1.0,
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  color: AppColors.neonYellow,
+                                  child: const Text(
+                                    '// V2.0',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'monospace',
+                                      color: AppColors.pitchBlack,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'LEARN. LEVEL UP. GET CERTIFIED.',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'monospace',
+                                letterSpacing: 0.8,
+                                color: AppColors.acidGreen,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                     const SizedBox(height: 24),
 
-                    // Form Fields
-                    // Name (Required)
+                    // Terminal Initialization Prompt Box
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF141414) : const Color(0xFFEBEBE5),
+                        border: Border.all(
+                          color: isDark ? Colors.white : AppColors.pitchBlack,
+                          width: 2.0,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '// OPERATOR_CREDENTIAL_SETUP:',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Input operator telemetry. Entered name will be immutably embedded into verified certification records.',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontFamily: 'monospace',
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Input 1: Name (Required)
                     Text(
-                      'FULL NAME *',
+                      '// OPERATOR_NAME *',
                       style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
-                        color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
                       ),
                     ),
                     const SizedBox(height: 6),
                     TextFormField(
                       controller: _nameController,
+                      style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
                       decoration: InputDecoration(
-                        hintText: 'Enter your full name',
-                        prefixIcon: const Icon(Icons.person_outline_rounded),
+                        hintText: 'e.g. SOHAM AHIRRAO',
                         filled: true,
-                        fillColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                        fillColor: isDark ? AppColors.darkSurface : Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.zero,
                           borderSide: BorderSide(
-                            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                            color: isDark ? Colors.white : AppColors.pitchBlack,
+                            width: 2.0,
                           ),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter your name for certificate issuance';
-                        }
-                        return null;
-                      },
+                      validator: (value) => (value == null || value.trim().isEmpty)
+                          ? 'Name required for certification protocol'
+                          : null,
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
 
-                    // Email (Optional)
+                    // Input 2: Email (Optional)
                     Text(
-                      'EMAIL ADDRESS (OPTIONAL)',
+                      '// COMM_EMAIL (OPTIONAL)',
                       style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
-                        color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: isDark ? AppColors.cyberCyan : AppColors.pitchBlack,
                       ),
                     ),
                     const SizedBox(height: 6),
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
+                      style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
                       decoration: InputDecoration(
-                        hintText: 'e.g. learner@skillup.edu',
-                        prefixIcon: const Icon(Icons.email_outlined),
+                        hintText: 'e.g. operator@skillup.edu',
                         filled: true,
-                        fillColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                        fillColor: isDark ? AppColors.darkSurface : Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.zero,
                           borderSide: BorderSide(
-                            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                            color: isDark ? Colors.white : AppColors.pitchBlack,
+                            width: 2.0,
                           ),
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 14),
 
-                    // Phone (Optional)
+                    // Input 3: Phone (Optional)
                     Text(
-                      'PHONE NUMBER (OPTIONAL)',
+                      '// PHONE_IDENTIFIER (OPTIONAL)',
                       style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
-                        color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: isDark ? AppColors.neonYellow : AppColors.pitchBlack,
                       ),
                     ),
                     const SizedBox(height: 6),
                     TextFormField(
                       controller: _phoneController,
                       keyboardType: TextInputType.phone,
+                      style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
                       decoration: InputDecoration(
                         hintText: 'e.g. +91 98765 43210',
-                        prefixIcon: const Icon(Icons.phone_outlined),
                         filled: true,
-                        fillColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                        fillColor: isDark ? AppColors.darkSurface : Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.zero,
                           borderSide: BorderSide(
-                            color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                            color: isDark ? Colors.white : AppColors.pitchBlack,
+                            width: 2.0,
                           ),
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 24),
 
-                    // Continue Button
-                    FilledButton(
-                      onPressed: _isSubmitting ? null : _handleContinue,
-                      child: _isSubmitting
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Continue to Dashboard'),
-                                SizedBox(width: 8),
-                                Icon(Icons.arrow_forward_rounded, size: 18),
-                              ],
+                    // Tactile Hard-Border Continue Button (Bottom Single-Thumb Zone)
+                    GestureDetector(
+                      onTap: _isSubmitting ? null : _handleContinue,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        decoration: BoxDecoration(
+                          color: AppColors.acidGreen,
+                          border: Border.all(
+                            color: isDark ? Colors.white : AppColors.pitchBlack,
+                            width: 2.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: isDark ? Colors.white : AppColors.pitchBlack,
+                              offset: const Offset(4, 4),
+                              blurRadius: 0,
                             ),
+                          ],
+                        ),
+                        child: Center(
+                          child: _isSubmitting
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppColors.pitchBlack,
+                                  ),
+                                )
+                              : const Text(
+                                  '>>> INITIALIZE_DASHBOARD >>>',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: 'monospace',
+                                    letterSpacing: 1.0,
+                                    color: AppColors.pitchBlack,
+                                  ),
+                                ),
+                        ),
+                      ),
                     ),
 
                     const SizedBox(height: 16),
@@ -290,13 +348,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       alignment: WrapAlignment.center,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Icon(Icons.offline_pin_rounded, size: 14, color: AppColors.success),
-                        const SizedBox(width: 6),
-                        Text(
-                          '100% Offline & Private • Stored On-Device',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFDDDDDD),
+                          child: const Text(
+                            '100%_OFFLINE // ZERO_NETWORK_IO // ON_DEVICE_DART',
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                            ),
                           ),
                         ),
                       ],

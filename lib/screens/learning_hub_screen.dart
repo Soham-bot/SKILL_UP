@@ -39,16 +39,12 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
   }
 
   void _onServiceUpdate() {
-    if (mounted) {
-      _loadCourse();
-    }
+    if (mounted) _loadCourse();
   }
 
   void _loadCourse() {
     final c = widget.courseService.getCourseById(widget.courseId);
-    if (c != null) {
-      setState(() => _course = c);
-    }
+    if (c != null) setState(() => _course = c);
   }
 
   void _openModule(LearningModule module) {
@@ -82,7 +78,6 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
     final percent = (_course.progress * 100).toInt();
     final allModulesDone = _course.isFullyLearned;
 
-    // Find current active module (first incomplete module)
     final currentModule = _course.modules.firstWhere(
       (m) => !m.isCompleted,
       orElse: () => _course.modules.last,
@@ -90,12 +85,12 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_course.title),
+        title: Text('// ${_course.title.toUpperCase()} // HUB'),
         actions: [
           if (_course.status == CourseStatus.completed && _course.bestResult != null)
             IconButton(
-              tooltip: 'View Certificate',
-              icon: const Icon(Icons.workspace_premium_rounded, color: AppColors.accent),
+              tooltip: 'VIEW_CREDENTIAL',
+              icon: const Icon(Icons.workspace_premium_rounded, color: AppColors.acidGreen),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -111,57 +106,64 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
           border: Border(
             top: BorderSide(
-              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-              width: 1,
+              color: isDark ? Colors.white : AppColors.pitchBlack,
+              width: 2.5,
             ),
           ),
         ),
         child: SafeArea(
           child: allModulesDone
-              ? FilledButton.icon(
+              ? FilledButton(
                   onPressed: _startAssessment,
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.success,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.acidGreen,
+                    foregroundColor: AppColors.pitchBlack,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  icon: const Icon(Icons.quiz_rounded, size: 20),
-                  label: Text(
+                  child: Text(
                     _course.status == CourseStatus.completed
-                        ? 'RETAKE FINAL ASSESSMENT'
-                        : 'TAKE FINAL ASSESSMENT (10 MCQs)',
-                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                        ? '>>> RETAKE_FINAL_ASSESSMENT [10_MCQS] >>>'
+                        : '>>> EXECUTE_FINAL_ASSESSMENT [10_MCQS] >>>',
+                    style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
                   ),
                 )
-              : FilledButton.icon(
+              : FilledButton(
                   onPressed: () => _openModule(currentModule),
                   style: FilledButton.styleFrom(
+                    backgroundColor: isDark ? Colors.white : AppColors.pitchBlack,
+                    foregroundColor: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  icon: const Icon(Icons.play_circle_fill_rounded, size: 20),
-                  label: Text('Continue Module ${currentModule.orderIndex}'),
+                  child: Text('>>> RUN_NODE_0${currentModule.orderIndex} >>>'),
                 ),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Progress Header Card
+            // Progress Telemetry Panel
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                  width: 2.5,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                    offset: const Offset(4, 4),
+                    blurRadius: 0,
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,57 +171,56 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'COURSE PROGRESS',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.8,
-                              color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${_course.completedModulesCount} of ${_course.modules.length} Modules Complete',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        '// CURRICULUM_SYNC_STATUS:',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                          color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                        ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: allModulesDone
-                              ? AppColors.success.withOpacity(0.12)
-                              : AppColors.primary.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        color: allModulesDone ? AppColors.acidGreen : AppColors.neonYellow,
                         child: Text(
-                          '$percent%',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w800,
-                            color: allModulesDone ? AppColors.success : AppColors.primary,
+                          '$percent%_SYNCED',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            color: AppColors.pitchBlack,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: LinearProgressIndicator(
-                      value: _course.progress,
-                      minHeight: 8,
-                      backgroundColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        allModulesDone ? AppColors.success : AppColors.primary,
+                  const SizedBox(height: 6),
+                  Text(
+                    '${_course.completedModulesCount} OF ${_course.modules.length} MODULES SYNCHRONIZED',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  // Hard Brutalist Progress Bar
+                  Container(
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF222222) : const Color(0xFFDDDDDD),
+                      border: Border.all(
+                        color: isDark ? Colors.white : AppColors.pitchBlack,
+                        width: 1.5,
+                      ),
+                    ),
+                    child: FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: _course.progress.clamp(0.0, 1.0),
+                      child: Container(
+                        color: allModulesDone ? AppColors.acidGreen : AppColors.neonYellow,
                       ),
                     ),
                   ),
@@ -227,59 +228,55 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
-            // Completion Banner (If all 5 modules done)
+            // Completion Banner (If all 5 modules completed)
             if (allModulesDone) ...[
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  gradient: isDark
-                      ? const LinearGradient(
-                          colors: [Color(0xFF064E3B), Color(0xFF0F172A)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
-                      : const LinearGradient(
-                          colors: [Color(0xFFECFDF5), Color(0xFFD1FAE5)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                  borderRadius: BorderRadius.circular(16),
+                  color: AppColors.acidGreen,
                   border: Border.all(
-                    color: AppColors.success.withOpacity(0.4),
+                    color: isDark ? Colors.white : AppColors.pitchBlack,
+                    width: 2.5,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDark ? Colors.white : AppColors.pitchBlack,
+                      offset: const Offset(3, 3),
+                      blurRadius: 0,
+                    ),
+                  ],
                 ),
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: const BoxDecoration(
-                        color: AppColors.success,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.celebration_rounded, color: Colors.white, size: 24),
+                      padding: const EdgeInsets.all(8),
+                      color: AppColors.pitchBlack,
+                      child: const Icon(Icons.bolt_rounded, color: AppColors.acidGreen, size: 24),
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
+                    const SizedBox(width: 12),
+                    const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '🎉 COURSE CONTENT COMPLETE',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.5,
-                              color: isDark ? Colors.white : const Color(0xFF065F46),
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'You’ve completed all five learning modules! Final assessment of 10 random MCQs is now unlocked.',
+                            'ALL 5 MODULES SYNCHRONIZED!',
                             style: TextStyle(
                               fontSize: 12,
-                              color: isDark ? AppColors.darkTextSecondary : const Color(0xFF047857),
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: AppColors.pitchBlack,
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'Protocol exam unlocked: 10 random MCQs will test all 5 nodes.',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'monospace',
+                              color: AppColors.pitchBlack,
                             ),
                           ),
                         ],
@@ -288,26 +285,26 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
             ],
 
-            // Section Header: 5 Modules Roadmap
+            // 5 Modules List Header
             Text(
-              '5 LEARNING MODULES',
+              '// EXECUTION_ROADMAP [05_UNITS]:',
               style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
                 letterSpacing: 1.0,
                 color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
-            // Modules List
             ..._course.modules.map((module) {
               final isCur = !allModulesDone && module.id == currentModule.id;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: ModuleTile(
                   module: module,
                   isCurrent: isCur,

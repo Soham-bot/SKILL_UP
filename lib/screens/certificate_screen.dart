@@ -17,8 +17,11 @@ class CertificateScreen extends StatelessWidget {
   void _handleShare(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Certificate ${quizResult.certificateId} copied to clipboard!'),
-        backgroundColor: AppColors.primary,
+        content: Text(
+          '// CREDENTIAL_HASH_COPIED: [${quizResult.certificateId}]',
+          style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
+        ),
+        backgroundColor: AppColors.pitchBlack,
         duration: const Duration(seconds: 2),
       ),
     );
@@ -27,8 +30,11 @@ class CertificateScreen extends StatelessWidget {
   void _handleSave(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Verified Certificate ${quizResult.certificateId} saved to local device!'),
-        backgroundColor: AppColors.success,
+        content: Text(
+          '// CREDENTIAL_SAVED_TO_ON_DEVICE_STORAGE // SERIAL: ${quizResult.certificateId}',
+          style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
+        ),
+        backgroundColor: AppColors.acidGreen,
         duration: const Duration(seconds: 2),
       ),
     );
@@ -36,19 +42,19 @@ class CertificateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final learnerName = courseService.profile?.name ?? 'Learner';
+    final learnerName = courseService.profile?.name ?? 'OPERATOR';
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Official Certificate'),
+        title: const Text('// OFFICIAL_CREDENTIAL'),
         actions: [
           IconButton(
-            tooltip: 'Share',
+            tooltip: 'SHARE_HASH',
             icon: const Icon(Icons.share_rounded),
             onPressed: () => _handleShare(context),
           ),
           IconButton(
-            tooltip: 'Save',
+            tooltip: 'DOWNLOAD_LOCAL',
             icon: const Icon(Icons.download_rounded),
             onPressed: () => _handleSave(context),
           ),
@@ -57,37 +63,36 @@ class CertificateScreen extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            padding: const EdgeInsets.all(16),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 540),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Certificate Container
                   CertificateWidget(
                     learnerName: learnerName,
                     quizResult: quizResult,
                   ),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 20),
 
-                  // Actions
                   Row(
                     children: [
                       Expanded(
-                        child: OutlinedButton.icon(
+                        child: OutlinedButton(
                           onPressed: () => _handleSave(context),
-                          icon: const Icon(Icons.download_rounded, size: 18),
-                          label: const Text('Save Local'),
+                          child: const Text('// SAVE_LOCAL'),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: FilledButton.icon(
+                        child: FilledButton(
                           onPressed: () => _handleShare(context),
-                          icon: const Icon(Icons.share_rounded, size: 18),
-                          label: const Text('Share Certificate'),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColors.acidGreen,
+                            foregroundColor: AppColors.pitchBlack,
+                          ),
+                          child: const Text('SHARE_HASH'),
                         ),
                       ),
                     ],
@@ -95,10 +100,12 @@ class CertificateScreen extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  TextButton.icon(
+                  TextButton(
                     onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
-                    icon: const Icon(Icons.home_rounded, size: 18),
-                    label: const Text('Back to Dashboard'),
+                    child: const Text(
+                      '// RETURN_TO_ROOT',
+                      style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900),
+                    ),
                   ),
                 ],
               ),

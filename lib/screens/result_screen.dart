@@ -20,9 +20,6 @@ class ResultScreen extends StatelessWidget {
   });
 
   void _retakeAssessment(BuildContext context) {
-    // Retake logic: Opens QuizScreen fresh.
-    // QuizScreen on initState will invoke QuizService.generateRandomQuestions(course)
-    // producing a brand-new random shuffle and resetting answers.
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -62,7 +59,7 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final passed = quizResult.passed;
-    final learnerName = courseService.profile?.name ?? 'Learner';
+    final learnerName = courseService.profile?.name ?? 'OPERATOR';
 
     return PopScope(
       canPop: false,
@@ -73,7 +70,7 @@ class ResultScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('Assessment Result'),
+          title: const Text('// EVALUATION_OUTCOME'),
           actions: [
             IconButton(
               icon: const Icon(Icons.close_rounded),
@@ -84,163 +81,122 @@ class ResultScreen extends StatelessWidget {
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              padding: const EdgeInsets.all(20),
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Result Icon
-                    Center(
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: passed
-                              ? AppColors.success.withOpacity(0.15)
-                              : AppColors.danger.withOpacity(0.15),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: passed ? AppColors.success : AppColors.danger,
-                            width: 2,
-                          ),
-                        ),
-                        child: Icon(
-                          passed ? Icons.emoji_events_rounded : Icons.replay_rounded,
-                          color: passed ? AppColors.success : AppColors.danger,
-                          size: 46,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Title
-                    Text(
-                      passed ? 'ASSESSMENT COMPLETE 🎉' : 'ASSESSMENT COMPLETE',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.0,
-                        color: isDark ? Colors.white : AppColors.lightTextPrimary,
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Score Display Card
+                    // Hazard / Success Banner Strip
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      color: passed ? AppColors.acidGreen : AppColors.glitchCrimson,
+                      child: Text(
+                        passed ? '>>> PASS_GRANTED // NO_CAP <<<' : '>>> HAZARD_FAIL // RETRY_PROTOCOL <<<',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                          color: AppColors.pitchBlack,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Score Inspection Box
+                    Container(
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                        borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: passed
-                              ? AppColors.success.withOpacity(0.4)
-                              : AppColors.danger.withOpacity(0.4),
-                          width: 1.5,
+                              ? AppColors.acidGreen
+                              : AppColors.glitchCrimson,
+                          width: 3.0,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: passed ? AppColors.acidGreen : AppColors.glitchCrimson,
+                            offset: const Offset(5, 5),
+                            blurRadius: 0,
+                          ),
+                        ],
                       ),
                       child: Column(
                         children: [
                           Text(
-                            'YOUR SCORE',
+                            '// COMPUTED_TELEMETRY:',
                             style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.8,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
                               color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                '${quizResult.score}',
-                                style: TextStyle(
-                                  fontSize: 48,
-                                  fontWeight: FontWeight.w900,
-                                  color: passed ? AppColors.success : AppColors.danger,
-                                ),
-                              ),
-                              Text(
-                                ' / ${quizResult.totalQuestions}',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${quizResult.percentage.toInt()}%',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              color: passed ? AppColors.success : AppColors.danger,
-                            ),
-                          ),
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 10),
 
-                          // Pass/Fail Pill
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: passed
-                                  ? AppColors.success.withOpacity(0.15)
-                                  : AppColors.danger.withOpacity(0.15),
-                              borderRadius: BorderRadius.circular(20),
+                          // Large Raw Monospace Score
+                          Text(
+                            '${quizResult.score.toString().padLeft(2, '0')} / ${quizResult.totalQuestions.toString().padLeft(2, '0')}',
+                            style: TextStyle(
+                              fontSize: 48,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: passed ? AppColors.acidGreen : AppColors.glitchCrimson,
                             ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  passed ? Icons.check_circle_rounded : Icons.cancel_rounded,
-                                  size: 16,
-                                  color: passed ? AppColors.success : AppColors.danger,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  passed ? '✓ YOU PASSED (≥ 60%)' : '✕ NOT PASSED (< 60%)',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w800,
-                                    color: passed ? AppColors.success : AppColors.danger,
-                                  ),
-                                ),
-                              ],
+                          ),
+
+                          Text(
+                            '${quizResult.percentage.toInt()}% FINAL_GRADE',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
+                              color: isDark ? Colors.white : AppColors.pitchBlack,
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            color: passed ? AppColors.acidGreen : AppColors.glitchCrimson,
+                            child: Text(
+                              passed ? 'GRADE: PASS (THRESHOLD ≥ 60%)' : 'GRADE: FAIL (BELOW 60%)',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                fontFamily: 'monospace',
+                                color: AppColors.pitchBlack,
+                              ),
                             ),
                           ),
 
                           const SizedBox(height: 16),
 
                           Text(
-                            course.title,
+                            course.title.toUpperCase(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: 'monospace',
                             ),
                           ),
 
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 8),
 
                           Text(
                             passed
-                                ? 'Outstanding work, $learnerName! You have met the academic threshold and earned your official completion certificate.'
-                                : 'Don’t worry, $learnerName. Review the course learning modules and retake the assessment to earn your certificate.',
+                                ? 'Operator $learnerName has officially passed the on-device verification matrix. Certificate protocol generated.'
+                                : 'Threshold not met. Review syllabus modules and re-execute assessment.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 13,
-                              height: 1.4,
+                              fontSize: 12,
+                              fontFamily: 'monospace',
                               color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                             ),
                           ),
@@ -248,46 +204,38 @@ class ResultScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 24),
 
                     // Actions
                     if (passed) ...[
-                      FilledButton.icon(
+                      FilledButton(
                         onPressed: () => _viewCertificate(context),
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.success,
-                          foregroundColor: Colors.white,
+                          backgroundColor: AppColors.acidGreen,
+                          foregroundColor: AppColors.pitchBlack,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        icon: const Icon(Icons.workspace_premium_rounded, size: 20),
-                        label: const Text(
-                          'VIEW CERTIFICATE',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-                        ),
+                        child: const Text('>>> VIEW_OFFICIAL_CREDENTIAL >>>'),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       OutlinedButton(
                         onPressed: () => _retakeAssessment(context),
-                        child: const Text('Retake Assessment'),
+                        child: const Text('// RETAKE_ASSESSMENT'),
                       ),
                     ] else ...[
-                      FilledButton.icon(
+                      FilledButton(
                         onPressed: () => _retakeAssessment(context),
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.primary,
+                          backgroundColor: isDark ? Colors.white : AppColors.pitchBlack,
+                          foregroundColor: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        icon: const Icon(Icons.refresh_rounded, size: 20),
-                        label: const Text(
-                          'RETAKE ASSESSMENT',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-                        ),
+                        child: const Text('>>> RETRY_EXAM_PROTOCOL >>>'),
                       ),
-                      const SizedBox(height: 12),
-                      OutlinedButton.icon(
+                      const SizedBox(height: 10),
+                      OutlinedButton(
                         onPressed: () => _reviewCourse(context),
-                        icon: const Icon(Icons.menu_book_rounded, size: 16),
-                        label: const Text('Review Learning Modules'),
+                        child: const Text('// REVIEW_SYLLABUS'),
                       ),
                     ],
 
@@ -295,7 +243,7 @@ class ResultScreen extends StatelessWidget {
 
                     TextButton(
                       onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
-                      child: const Text('Back to Home Dashboard'),
+                      child: const Text('// RETURN_TO_ROOT', style: TextStyle(fontFamily: 'monospace')),
                     ),
                   ],
                 ),

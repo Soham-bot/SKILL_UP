@@ -74,7 +74,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final allCourses = widget.courseService.courses;
 
-    // Filter courses based on search query and category chip
     final filteredCourses = allCourses.where((c) {
       final matchesCat = _selectedCategory == 'All' || c.category == _selectedCategory;
       final matchesSearch = _searchQuery.isEmpty ||
@@ -86,59 +85,115 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Explore Skill Courses'),
+        title: const Text('// 02_EXPLORE_NODES'),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            // Search Input Field
+            // Brutalist Search Terminal Field
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: TextField(
-                controller: _searchController,
-                onChanged: (val) => setState(() => _searchQuery = val.trim()),
-                decoration: InputDecoration(
-                  hintText: 'Search skills, topics, or technologies...',
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  suffixIcon: _searchQuery.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear_rounded),
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() => _searchQuery = '');
-                          },
-                        )
-                      : null,
-                  filled: true,
-                  fillColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                      offset: const Offset(3, 3),
+                      blurRadius: 0,
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
+                  onChanged: (val) => setState(() => _searchQuery = val.trim()),
+                  decoration: InputDecoration(
+                    hintText: 'QUERY: Flutter, Python, Security...',
+                    hintStyle: TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 12,
+                      color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                    ),
+                    prefixIcon: const Icon(Icons.search_rounded),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear_rounded),
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() => _searchQuery = '');
+                            },
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: isDark ? AppColors.darkSurface : Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.zero,
+                      borderSide: BorderSide(
+                        color: isDark ? Colors.white : AppColors.pitchBlack,
+                        width: 2.5,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.zero,
+                      borderSide: BorderSide(
+                        color: isDark ? Colors.white : AppColors.pitchBlack,
+                        width: 2.5,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
 
-            // Category Filter Chips (SingleChildScrollView with Row)
+            // Category Filter Buttons
             SizedBox(
-              height: 48,
+              height: 44,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: _categories.length,
                 separatorBuilder: (context, index) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final cat = _categories[index];
                   final isSelected = _selectedCategory == cat;
-                  return ChoiceChip(
-                    label: Text(cat),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      if (selected) setState(() => _selectedCategory = cat);
-                    },
+
+                  return GestureDetector(
+                    onTap: () => setState(() => _selectedCategory = cat),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? (isDark ? AppColors.acidGreen : AppColors.pitchBlack)
+                            : (isDark ? const Color(0xFF161616) : Colors.white),
+                        border: Border.all(
+                          color: isDark ? Colors.white : AppColors.pitchBlack,
+                          width: 2,
+                        ),
+                        boxShadow: isSelected
+                            ? [
+                                BoxShadow(
+                                  color: isDark ? Colors.white.withValues(alpha: 0.3) : AppColors.pitchBlack,
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 0,
+                                ),
+                              ]
+                            : null,
+                      ),
+                      child: Center(
+                        child: Text(
+                          cat.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            color: isSelected
+                                ? (isDark ? AppColors.pitchBlack : AppColors.acidGreen)
+                                : (isDark ? Colors.white : AppColors.pitchBlack),
+                          ),
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),
@@ -146,16 +201,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
             const SizedBox(height: 8),
 
-            // Results Counter
+            // Results Counter Tag
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 children: [
                   Text(
-                    'Showing ${filteredCourses.length} ${filteredCourses.length == 1 ? "course" : "courses"}',
+                    '// MATCHES: ${filteredCourses.length} NODES_FOUND',
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
                       color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
                     ),
                   ),
@@ -167,38 +223,33 @@ class _ExploreScreenState extends State<ExploreScreen> {
             Expanded(
               child: filteredCourses.isEmpty
                   ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.search_off_rounded,
-                            size: 48,
-                            color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: isDark ? Colors.white : AppColors.pitchBlack,
+                            width: 2,
                           ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'No courses match your criteria',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
+                        child: Text(
+                          '// NO_NODES_MATCH_QUERY',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            color: isDark ? AppColors.glitchCrimson : AppColors.pitchBlack,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Try adjusting your search terms or filter chip.',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     )
                   : LayoutBuilder(
                       builder: (context, constraints) {
                         final isWide = constraints.maxWidth > 600;
                         return GridView.builder(
-                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: isWide ? 2 : 1,
-                            childAspectRatio: isWide ? 1.25 : 1.35,
+                            childAspectRatio: isWide ? 1.25 : 1.28,
                             crossAxisSpacing: 14,
                             mainAxisSpacing: 14,
                           ),

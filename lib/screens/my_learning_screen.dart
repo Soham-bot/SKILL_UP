@@ -64,26 +64,27 @@ class _MyLearningScreenState extends State<MyLearningScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Learning Hub'),
+        title: const Text('// 03_BUFFS // MY_LEARNING'),
         bottom: TabBar(
           controller: _tabController,
-          labelColor: AppColors.primary,
+          labelColor: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
           unselectedLabelColor: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-          indicatorColor: AppColors.primary,
-          indicatorWeight: 3,
+          indicatorColor: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+          indicatorWeight: 3.5,
+          labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontFamily: 'monospace', fontSize: 11),
           tabs: [
-            Tab(text: 'All Enrolled (${enrolled.length})'),
-            Tab(text: 'In Progress (${inProgress.length})'),
-            Tab(text: 'Completed (${completed.length})'),
+            Tab(text: 'ENROLLED (${enrolled.length})'),
+            Tab(text: 'IN_FLIGHT (${inProgress.length})'),
+            Tab(text: 'CERTIFIED (${completed.length})'),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildCourseList(enrolled, 'No enrolled courses yet.\nExplore our catalog and enroll for free!'),
-          _buildCourseList(inProgress, 'No courses currently in progress.\nPick a course to start learning!'),
-          _buildCourseList(completed, 'No completed courses yet.\nFinish all 5 modules and score ≥ 60% to get certified!'),
+          _buildCourseList(enrolled, '// NO_ENROLLED_NODES_IN_BUFFER\nBrowse nodes to initialize enrollment.'),
+          _buildCourseList(inProgress, '// NO_NODES_IN_FLIGHT\nExecute an enrolled node to begin.'),
+          _buildCourseList(completed, '// NO_CERTIFICATES_LOGGED\nPass a 10-MCQ assessment with ≥ 60% to get certified.'),
         ],
       ),
     );
@@ -94,27 +95,25 @@ class _MyLearningScreenState extends State<MyLearningScreen>
 
     if (courses.isEmpty) {
       return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.school_outlined,
-                size: 54,
-                color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                emptyMessage,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  height: 1.5,
-                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                ),
-              ),
-            ],
+        child: Container(
+          margin: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: isDark ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
+              width: 2,
+            ),
+          ),
+          child: Text(
+            emptyMessage,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'monospace',
+              fontWeight: FontWeight.w700,
+              height: 1.5,
+              color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+            ),
           ),
         ),
       );
@@ -124,10 +123,10 @@ class _MyLearningScreenState extends State<MyLearningScreen>
       builder: (context, constraints) {
         final isWide = constraints.maxWidth > 600;
         return GridView.builder(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: isWide ? 2 : 1,
-            childAspectRatio: isWide ? 1.25 : 1.35,
+            childAspectRatio: isWide ? 1.25 : 1.28,
             crossAxisSpacing: 14,
             mainAxisSpacing: 14,
           ),

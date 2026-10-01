@@ -54,42 +54,75 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ProfileScreen(courseService: widget.courseService),
     ];
 
+    // Raw Anti-Design Navigation Bar
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: screens,
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        indicatorColor: AppColors.primary.withOpacity(0.15),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.dashboard_outlined),
-            selectedIcon: Icon(Icons.dashboard_rounded, color: AppColors.primary),
-            label: 'Home',
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+          border: Border(
+            top: BorderSide(
+              color: isDark ? Colors.white : AppColors.pitchBlack,
+              width: 2.5, // Hard 2.5px brutalist border
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.explore_outlined),
-            selectedIcon: Icon(Icons.explore_rounded, color: AppColors.primary),
-            label: 'Explore',
+        ),
+        child: SafeArea(
+          child: SizedBox(
+            height: 60,
+            child: Row(
+              children: [
+                _buildNavItem(0, '// 01_ROOT', Icons.grid_view_rounded),
+                _buildNavItem(1, '// 02_NODES', Icons.terminal_rounded),
+                _buildNavItem(2, '// 03_BUFFS', Icons.bolt_rounded),
+                _buildNavItem(3, '// 04_OPERATOR', Icons.person_sharp),
+              ],
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.menu_book_outlined),
-            selectedIcon: Icon(Icons.menu_book_rounded, color: AppColors.primary),
-            label: 'My Learning',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(int index, String label, IconData icon) {
+    final isSelected = _currentIndex == index;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => _currentIndex = index),
+        child: Container(
+          color: isSelected
+              ? (isDark ? AppColors.acidGreen : AppColors.pitchBlack)
+              : Colors.transparent,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 18,
+                color: isSelected
+                    ? (isDark ? AppColors.pitchBlack : AppColors.acidGreen)
+                    : (isDark ? Colors.white : AppColors.pitchBlack),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'monospace',
+                  color: isSelected
+                      ? (isDark ? AppColors.pitchBlack : AppColors.acidGreen)
+                      : (isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted),
+                ),
+              ),
+            ],
           ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline_rounded),
-            selectedIcon: Icon(Icons.person_rounded, color: AppColors.primary),
-            label: 'Profile',
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -18,13 +18,6 @@ class HomeScreen extends StatelessWidget {
     required this.onNavigateToExplore,
   });
 
-  String _getTimeGreeting() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
-  }
-
   void _onCourseTap(BuildContext context, Course course) {
     if (course.status == CourseStatus.completed && course.bestResult != null) {
       Navigator.push(
@@ -63,12 +56,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final profile = courseService.profile;
-    final learnerName = profile?.name ?? 'Learner';
+    final learnerName = profile?.name ?? 'OPERATOR';
     final completedCount = courseService.completedCourses.length;
     final inProgressCourses = courseService.inProgressCourses;
     final allCourses = courseService.courses;
 
-    // Determine currently active course for "Continue Learning"
     final activeCourse = inProgressCourses.isNotEmpty
         ? inProgressCourses.first
         : (courseService.enrolledCourses.isNotEmpty ? courseService.enrolledCourses.first : null);
@@ -78,104 +70,166 @@ class HomeScreen extends StatelessWidget {
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                gradient: AppColors.primaryGradient,
-                borderRadius: BorderRadius.circular(10),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+              child: Text(
+                'SKL',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'monospace',
+                  color: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
+                ),
               ),
-              child: const Icon(Icons.school_rounded, color: Colors.white, size: 20),
             ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'SKILLUP',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-                Text(
-                  'LEVEL UP YOUR SKILLS',
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.5,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ],
-            ),
+            const SizedBox(width: 8),
+            const Text('SKILLUP // CORE'),
           ],
         ),
         actions: [
           IconButton(
-            tooltip: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
-            icon: Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded),
+            tooltip: isDark ? 'INVERT_THEME: LIGHT' : 'INVERT_THEME: DARK',
+            icon: Icon(isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
             onPressed: () => courseService.toggleTheme(),
           ),
-          const SizedBox(width: 8),
         ],
       ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           children: [
-            // Greeting & Motivation
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
+            // Top Live Telemetry Ticker
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              color: isDark ? const Color(0xFF161616) : const Color(0xFFE5E5DE),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '>>> RUNTIME: ON_DEVICE_DART',
+                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
+                  ),
+                  Text(
+                    '// API: NULL // ZERO_LATENCY',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      color: AppColors.acidGreen,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Operator Greeting & Asymmetric Sticker
+            Stack(
+              clipBehavior: Clip.none,
               children: [
-                Expanded(
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                    border: Border.all(
+                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                      width: 2.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
+                        offset: const Offset(4, 4),
+                        blurRadius: 0,
+                      ),
+                    ],
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${_getTimeGreeting()}, $learnerName 👋',
+                        '// LOGGED_OPERATOR:',
                         style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                          color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Ready to level up your engineering skills?',
+                        '${learnerName.toUpperCase()} ⚡',
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                          letterSpacing: -0.5,
+                          color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Select a skill node. Execute 5 modules. Verify competence via 10-MCQ protocol.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          height: 1.4,
                           color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                         ),
                       ),
                     ],
                   ),
                 ),
+
+                // Asymmetric Rotated Sticker Overlay
+                Positioned(
+                  top: -8,
+                  right: 12,
+                  child: Transform.rotate(
+                    angle: 0.05,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.neonYellow,
+                        border: Border.all(color: AppColors.pitchBlack, width: 1.5),
+                      ),
+                      child: const Text(
+                        'RANK: APPRENTICE',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: 'monospace',
+                          color: AppColors.pitchBlack,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
 
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
 
-            // Gamified Metric Cards (Streak & XP)
+            // Telemetry Grid: Streak & XP (Hard brutalist cards)
             Row(
               children: [
                 Expanded(
                   child: StatCard(
-                    title: 'Learning Streak',
+                    title: 'STREAK_CYCLE',
                     value: '${profile?.streakDays ?? 1} DAYS',
                     icon: Icons.local_fire_department_rounded,
-                    accentColor: const Color(0xFFF97316),
-                    subtitle: 'Keep it going!',
+                    accentColor: const Color(0xFFFF5500),
+                    subtitle: 'CYCLE_ACTIVE',
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: StatCard(
-                    title: 'Total XP',
+                    title: 'ACCUM_XP',
                     value: '${profile?.xp ?? 0}',
                     icon: Icons.bolt_rounded,
-                    accentColor: AppColors.accent,
-                    subtitle: 'Rank: Apprentice',
+                    accentColor: AppColors.neonYellow,
+                    subtitle: 'LOCAL_BUFFER',
                   ),
                 ),
               ],
@@ -183,55 +237,41 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            // Quick Status Pills
+            // Hard Brutalist Metric Tags
             Wrap(
-              spacing: 10,
+              spacing: 8,
               runSpacing: 8,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.success.withOpacity(0.3)),
+                    color: AppColors.acidGreen,
+                    border: Border.all(color: isDark ? Colors.white : AppColors.pitchBlack, width: 2),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 14),
-                      const SizedBox(width: 6),
-                      Text(
-                        '$completedCount Courses Completed',
-                        style: const TextStyle(
-                          color: AppColors.success,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    '[CERTIFIED: $completedCount NODES]',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      color: AppColors.pitchBlack,
+                    ),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                    color: isDark ? Colors.white : AppColors.pitchBlack,
+                    border: Border.all(color: isDark ? Colors.white : AppColors.pitchBlack, width: 2),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.play_circle_fill_rounded, color: AppColors.primary, size: 14),
-                      const SizedBox(width: 6),
-                      Text(
-                        '${inProgressCourses.length} In Progress',
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    '[IN_FLIGHT: ${inProgressCourses.length}]',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'monospace',
+                      color: isDark ? AppColors.pitchBlack : Colors.white,
+                    ),
                   ),
                 ),
               ],
@@ -239,17 +279,18 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // SECTION 1: CONTINUE LEARNING
+            // SECTION 1: CONTINUE LEARNING (Active Node)
             Text(
-              'CONTINUE LEARNING',
+              '// ACTIVE_EXECUTION_NODE:',
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
                 letterSpacing: 1.0,
                 color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
 
             if (activeCourse != null)
               CourseCard(
@@ -258,71 +299,95 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => _onCourseTap(context, activeCourse),
               )
             else
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.rocket_launch_rounded, color: AppColors.primary, size: 24),
-                          SizedBox(width: 10),
-                          Text(
-                            'Begin Your Journey',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
-                        ],
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                  border: Border.all(
+                    color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                    width: 2.0,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDark ? Colors.white.withValues(alpha: 0.2) : AppColors.pitchBlack,
+                      offset: const Offset(3, 3),
+                      blurRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '// STANDBY: NO ACTIVE NODE',
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Select a course below to initialize module execution.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'You haven’t enrolled in any courses yet. Pick a short skill course below to start learning and get certified!',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                    ),
+                    const SizedBox(height: 12),
+                    GestureDetector(
+                      onTap: onNavigateToExplore,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                        color: AppColors.acidGreen,
+                        child: const Text(
+                          '>>> BROWSE_ALL_NODES >>>',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: 'monospace',
+                            color: AppColors.pitchBlack,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 14),
-                      FilledButton.icon(
-                        onPressed: onNavigateToExplore,
-                        icon: const Icon(Icons.explore_rounded, size: 16),
-                        label: const Text('Browse Courses'),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
 
-            const SizedBox(height: 28),
+            const SizedBox(height: 24),
 
-            // SECTION 2: EXPLORE COURSES (GridView)
+            // SECTION 2: EXPLORE COURSES (Grid)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'EXPLORE COURSES',
+                  '// CURRICULUM_MATRIX:',
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'monospace',
                     letterSpacing: 1.0,
                     color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
                   ),
                 ),
-                TextButton(
-                  onPressed: onNavigateToExplore,
-                  child: const Row(
-                    children: [
-                      Text('View All', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
-                      SizedBox(width: 4),
-                      Icon(Icons.arrow_forward_rounded, size: 14),
-                    ],
+                GestureDetector(
+                  onTap: onNavigateToExplore,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    color: isDark ? Colors.white : AppColors.pitchBlack,
+                    child: Text(
+                      'EXPAND_ALL',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        fontFamily: 'monospace',
+                        color: isDark ? AppColors.pitchBlack : Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 10),
 
-            // Responsive Course Cards Grid / List
+            // GridView of Course Nodes
             LayoutBuilder(
               builder: (context, constraints) {
                 final isWide = constraints.maxWidth > 600;
@@ -332,7 +397,7 @@ class HomeScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: isWide ? 2 : 1,
-                    childAspectRatio: isWide ? 1.25 : 1.35,
+                    childAspectRatio: isWide ? 1.25 : 1.28,
                     crossAxisSpacing: 14,
                     mainAxisSpacing: 14,
                   ),
@@ -348,44 +413,45 @@ class HomeScreen extends StatelessWidget {
               },
             ),
 
-            const SizedBox(height: 28),
+            const SizedBox(height: 24),
 
-            // SECTION 3: YOUR ACHIEVEMENTS
+            // SECTION 3: SYSTEM BADGE STAMPS
             Text(
-              'YOUR ACHIEVEMENTS',
+              '// PROTOCOL_UNLOCKS:',
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w900,
+                fontFamily: 'monospace',
                 letterSpacing: 1.0,
                 color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             Row(
               children: [
                 _buildAchievementBadge(
                   context,
-                  title: 'First Step',
-                  subtitle: 'Enrolled in Course',
-                  icon: Icons.emoji_events_rounded,
+                  title: 'INITIAL_SYNC',
+                  subtitle: 'ENROLLED',
                   isUnlocked: courseService.enrolledCourses.isNotEmpty,
+                  angle: -0.03,
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 _buildAchievementBadge(
                   context,
-                  title: 'Module Master',
-                  subtitle: '5 Modules Done',
-                  icon: Icons.auto_awesome_rounded,
+                  title: '5_MODULES',
+                  subtitle: 'SYLLABUS_DONE',
                   isUnlocked: allCourses.any((c) => c.isFullyLearned),
+                  angle: 0.02,
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 _buildAchievementBadge(
                   context,
-                  title: 'Certified',
-                  subtitle: 'Passed Assessment',
-                  icon: Icons.workspace_premium_rounded,
+                  title: 'CERTIFIED',
+                  subtitle: 'ASSESS_PASS',
                   isUnlocked: completedCount > 0,
+                  angle: -0.02,
                 ),
               ],
             ),
@@ -401,59 +467,63 @@ class HomeScreen extends StatelessWidget {
     BuildContext context, {
     required String title,
     required String subtitle,
-    required IconData icon,
     required bool isUnlocked,
+    double angle = 0.0,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-        decoration: BoxDecoration(
-          color: isUnlocked
-              ? (isDark ? AppColors.darkSurface : AppColors.lightSurface)
-              : (isDark ? const Color(0xFF161E2E).withOpacity(0.6) : Colors.grey.shade100),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
+      child: Transform.rotate(
+        angle: angle,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+          decoration: BoxDecoration(
             color: isUnlocked
-                ? AppColors.accent.withOpacity(0.4)
-                : (isDark ? AppColors.darkBorder : AppColors.lightBorder),
-            width: 1,
+                ? AppColors.neonYellow
+                : (isDark ? const Color(0xFF141414) : const Color(0xFFEBEBE5)),
+            border: Border.all(
+              color: isDark ? Colors.white : AppColors.pitchBlack,
+              width: 2.0,
+            ),
+            boxShadow: isUnlocked
+                ? [
+                    BoxShadow(
+                      color: isDark ? Colors.white.withValues(alpha: 0.3) : AppColors.pitchBlack,
+                      offset: const Offset(2, 2),
+                      blurRadius: 0,
+                    ),
+                  ]
+                : null,
           ),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              color: isUnlocked ? AppColors.accent : (isDark ? AppColors.darkTextMuted : Colors.grey),
-              size: 26,
-            ),
-            const SizedBox(height: 6),
-            Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: isUnlocked
-                    ? (isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary)
-                    : (isDark ? AppColors.darkTextMuted : Colors.grey),
+          child: Column(
+            children: [
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'monospace',
+                  color: isUnlocked
+                      ? AppColors.pitchBlack
+                      : (isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted),
+                ),
               ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              subtitle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 9,
-                color: isUnlocked
-                    ? (isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary)
-                    : (isDark ? AppColors.darkTextMuted : Colors.grey),
+              const SizedBox(height: 2),
+              Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'monospace',
+                  color: isUnlocked
+                      ? AppColors.pitchBlack
+                      : (isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
