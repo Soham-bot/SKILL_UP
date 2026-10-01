@@ -30,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         backgroundColor: AppColors.pitchBlack,
         title: const Text(
-          '<EDIT_OPERATOR_TELEMETRY>',
+          '<EDIT YOUR LORE>',
           style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900, color: AppColors.acidGreen),
         ),
         content: Form(
@@ -43,17 +43,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: nameCtrl,
                   style: const TextStyle(fontFamily: 'monospace', color: Colors.white),
                   decoration: const InputDecoration(
-                    labelText: 'OPERATOR_NAME *',
+                    labelText: 'GAMER TAG / NAME *',
                     labelStyle: TextStyle(fontFamily: 'monospace', color: AppColors.acidGreen),
                   ),
-                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Name required' : null,
+                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Drop a name!' : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: emailCtrl,
                   style: const TextStyle(fontFamily: 'monospace', color: Colors.white),
                   decoration: const InputDecoration(
-                    labelText: 'COMM_EMAIL',
+                    labelText: 'EMAIL (OPTIONAL)',
                     labelStyle: TextStyle(fontFamily: 'monospace', color: AppColors.cyberCyan),
                   ),
                 ),
@@ -62,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   controller: phoneCtrl,
                   style: const TextStyle(fontFamily: 'monospace', color: Colors.white),
                   decoration: const InputDecoration(
-                    labelText: 'PHONE_ID',
+                    labelText: 'PHONE DIGITS (OPTIONAL)',
                     labelStyle: TextStyle(fontFamily: 'monospace', color: AppColors.neonYellow),
                   ),
                 ),
@@ -76,10 +76,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: const Text('// CANCEL', style: TextStyle(fontFamily: 'monospace', color: Colors.white)),
           ),
           BrutalButton(
-            text: 'COMMIT_CHANGES',
+            text: 'SAVE CHANGES',
             onPressed: () async {
               if (!formKey.currentState!.validate()) return;
-              final updated = (profile ?? LearnerProfile(name: 'OPERATOR')).copyWith(
+              final updated = (profile ?? LearnerProfile(name: 'MAIN CHARACTER')).copyWith(
                 name: nameCtrl.text.trim(),
                 email: emailCtrl.text.trim().isNotEmpty ? emailCtrl.text.trim() : null,
                 phone: phoneCtrl.text.trim().isNotEmpty ? phoneCtrl.text.trim() : null,
@@ -106,10 +106,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('// ERROR_LOG // TELEMETRY'),
+        title: const Text('// AURA_STATS // YOUR LORE'),
         actions: [
           IconButton(
-            tooltip: 'EDIT_OPERATOR',
+            tooltip: 'EDIT LORE',
             icon: const Icon(Icons.edit_note_sharp),
             onPressed: _editProfileDialog,
           ),
@@ -134,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '<SYS_LOG: ERRORS_0 // STABLE>',
+                      '<SYS_STATUS: ZERO L\'S // IMMACULATE>',
                       style: TextStyle(
                         fontSize: 9.5,
                         fontWeight: FontWeight.w900,
@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     Text(
-                      '// MEMORY: ON_DEVICE',
+                      '// 100% NO CAP',
                       style: TextStyle(
                         fontSize: 9.5,
                         fontWeight: FontWeight.w900,
@@ -156,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 14),
 
-              // Operator Identity Box (Hard Brutalist Container)
+              // Operator Identity Box
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -208,7 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '// OPERATOR_HANDLE:',
+                            '// GAMER TAG:',
                             style: TextStyle(
                               fontSize: 9,
                               fontWeight: FontWeight.w900,
@@ -217,7 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           Text(
-                            (profile?.name ?? 'OPERATOR').toUpperCase(),
+                            (profile?.name ?? 'MAIN CHARACTER').toUpperCase(),
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w900,
@@ -259,7 +259,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: _buildMetricTile(
-                      title: 'CERTIFIED',
+                      title: 'BIG W\'S',
                       value: '${completedCourses.length}',
                       color: AppColors.acidGreen,
                       isDark: isDark,
@@ -272,7 +272,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Expanded(
                     child: _buildMetricTile(
-                      title: 'STREAK',
+                      title: 'STREAK 🔥',
                       value: '${profile?.streakDays ?? 1}D',
                       color: const Color(0xFFFF5500),
                       isDark: isDark,
@@ -281,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: _buildMetricTile(
-                      title: 'XP_POOL',
+                      title: 'AURA POINTS ✨',
                       value: '${profile?.xp ?? 0}',
                       color: AppColors.neonYellow,
                       isDark: isDark,
@@ -308,7 +308,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       children: [
                         const Text(
-                          '// THEME_INVERSION:',
+                          '// VIBE_CHECK:',
                           style: TextStyle(
                             fontSize: 10.5,
                             fontWeight: FontWeight.w900,
@@ -320,7 +320,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           color: isDark ? AppColors.pitchBlack : Colors.white,
                           child: Text(
-                            isDark ? 'VOID_DARK' : 'FLASH_LIGHT',
+                            isDark ? 'VOID_DARK' : 'FLASHBANG',
                             style: TextStyle(
                               fontSize: 9.5,
                               fontWeight: FontWeight.w900,
@@ -344,7 +344,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               // EARNED CERTIFICATES GALLERY
               Text(
-                '// VERIFIED_CREDENTIAL_LEDGER:',
+                '// CERTIFIED RECEIPTS (BIG FLEXES) 🧾:',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
@@ -365,7 +365,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   child: const Text(
-                    '<NO_CREDENTIALS_ISSUED_YET>\nComplete 5 modules and score ≥ 60% on assessment to earn credentials.',
+                    '<NO RECEIPTS YET 💀>\nFinish 5 modules and score ≥ 60% on the final boss to get your official certificate.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 11, fontFamily: 'monospace', height: 1.4),
                   ),
@@ -433,7 +433,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             color: isDark ? Colors.white : AppColors.pitchBlack,
                             child: Text(
-                              'VIEW',
+                              'FLEX',
                               style: TextStyle(
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w900,
@@ -453,17 +453,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Academic Capstone Info
               Container(
                 padding: const EdgeInsets.all(12),
-                color: isDark ? const Color(0xFF141414) : const Color(0xFFE5E5DE),
+                color: isDark ? const Color(0xFF161616) : const Color(0xFFE5E5DE),
                 child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '// B.TECH_CAPSTONE_PROJECT // CSE_&_AI',
+                      '// B.TECH CAPSTONE PROJECT // CSE & AI',
                       style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, fontFamily: 'monospace', color: AppColors.acidGreen),
                     ),
                     SizedBox(height: 2),
                     Text(
-                      'AUTHOR: SOHAM AHIRRAO // CROSS_PLATFORM_APP',
+                      'CREATOR: SOHAM AHIRRAO // CROSS-PLATFORM FLUTTER // NO CAP',
                       style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w700, fontFamily: 'monospace'),
                     ),
                   ],

@@ -47,7 +47,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              '// NODE_0$currentOrder SYNCED (+30 XP) >>> OPENING NODE_0${nextModule.orderIndex}...',
+              '// MODULE 0$currentOrder DONE (+30 AURA POINTS) >>> OPENING MODULE 0${nextModule.orderIndex}...',
               style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
             ),
             backgroundColor: AppColors.pitchBlack,
@@ -77,7 +77,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                 Icon(Icons.bolt_sharp, color: AppColors.acidGreen, size: 26),
                 SizedBox(width: 8),
                 Text(
-                  'ALL 5 NODES SYNCED',
+                  'ALL 5 MODULES MAXED OUT 🔥',
                   style: TextStyle(
                     fontFamily: 'monospace',
                     fontWeight: FontWeight.w900,
@@ -88,7 +88,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
               ],
             ),
             content: Text(
-              '100% curriculum sync achieved for ${widget.course.title.toUpperCase()}.\n\nFinal assessment protocol is unlocked: 10 randomly drawn MCQs will evaluate competence on-device.',
+              '100% curriculum conquered for ${widget.course.title.toUpperCase()}.\n\nFinal boss unlocked: 10 randomly drawn MCQs will test your skills on-device.',
               style: const TextStyle(
                 fontFamily: 'monospace',
                 fontSize: 11.5,
@@ -101,11 +101,11 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                   Navigator.pop(dialogCtx);
                   Navigator.pop(context);
                 },
-                child: const Text('// BACK_TO_HUB',
+                child: const Text('// BACK TO HUB',
                     style: TextStyle(fontFamily: 'monospace', color: Colors.white)),
               ),
               BrutalButton(
-                text: 'EXECUTE_ASSESSMENT',
+                text: 'FIGHT THE FINAL BOSS',
                 onPressed: () {
                   Navigator.pop(dialogCtx);
                   GlitchPageRoute.pushReplacement(
@@ -134,7 +134,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('// NODE [0${_currentModule.orderIndex}/05]'),
+        title: Text('// MODULE [0${_currentModule.orderIndex}/05]'),
         actions: [
           Center(
             child: Container(
@@ -164,11 +164,11 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
           child: BrutalButton(
             text: isLastModule
                 ? (_currentModule.isCompleted
-                    ? '>>> EXECUTE_ASSESSMENT >>>'
-                    : '>>> SYNC_NODE & TAKE_ASSESSMENT >>>')
+                    ? '>>> FIGHT THE FINAL BOSS >>>'
+                    : '>>> FINISH & FIGHT THE FINAL BOSS >>>')
                 : (_currentModule.isCompleted
-                    ? '>>> NEXT_NODE >>>'
-                    : '>>> MARK_SYNCED & CONTINUE >>>'),
+                    ? '>>> NEXT MODULE >>>'
+                    : '>>> MARK DONE & KEEP COOKING >>>'),
             onPressed: _completeAndAdvance,
             backgroundColor: isLastModule
                 ? AppColors.acidGreen
@@ -191,7 +191,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 color: AppColors.acidGreen,
                 child: Text(
-                  'NODE_0${_currentModule.orderIndex} // SYLLABUS_UNIT',
+                  'MODULE 0${_currentModule.orderIndex} // THE LESSON',
                   style: const TextStyle(
                     fontSize: 9.5,
                     fontWeight: FontWeight.w900,
@@ -229,7 +229,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '// ABSTRACT_SPECIFICATION:',
+                      '// THE LOWDOWN (TL;DR):',
                       style: TextStyle(
                         fontSize: 9.5,
                         fontWeight: FontWeight.w900,
@@ -285,7 +285,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                         ),
                         const SizedBox(width: 8),
                         const Text(
-                          '// CORE_TAKEAWAY_PROTOCOL:',
+                          '// THE BIGGEST TAKEAWAY FR:',
                           style: TextStyle(
                             fontSize: 10.5,
                             fontWeight: FontWeight.w900,
@@ -375,7 +375,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      '// SOURCE_SYNTAX:',
+                      '// CODE DROP:',
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w900,
@@ -407,7 +407,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          '► ',
+                          '⚡ ',
                           style: TextStyle(
                             color: AppColors.acidGreen,
                             fontWeight: FontWeight.w900,
@@ -442,7 +442,7 @@ class _LearningModuleScreenState extends State<LearningModuleScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      '// TIP: ',
+                      '// PRO TIP: ',
                       style: TextStyle(
                         fontSize: 9.5,
                         fontWeight: FontWeight.w900,

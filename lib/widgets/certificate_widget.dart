@@ -23,12 +23,12 @@ class CertificateWidget extends StatelessWidget {
         color: isDark ? const Color(0xFF0C0C0C) : Colors.white,
         border: Border.all(
           color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-          width: 3.0, // Hard 3px solid brutalist border
+          width: 3.0,
         ),
         boxShadow: [
           BoxShadow(
             color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-            offset: const Offset(6, 6), // 6px hard shadow
+            offset: const Offset(6, 6),
             blurRadius: 0,
           ),
         ],
@@ -42,12 +42,12 @@ class CertificateWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'SKILLUP // PROTOCOL_CERT_V1',
+                'SKILLUP // CERTIFICATE OF FLEX',
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 10.5,
                   fontWeight: FontWeight.w900,
                   fontFamily: 'monospace',
-                  letterSpacing: 1.0,
+                  letterSpacing: 0.8,
                   color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
                 ),
               ),
@@ -55,9 +55,9 @@ class CertificateWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 color: AppColors.acidGreen,
                 child: const Text(
-                  'PASS_GRANTED // NO_CAP',
+                  'PASS_GRANTED // NO_CAP 🔥',
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: 8.5,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
                     color: AppColors.pitchBlack,
@@ -96,13 +96,13 @@ class CertificateWidget extends StatelessWidget {
               color: isDark ? Colors.white : AppColors.pitchBlack,
             ),
             child: Text(
-              'OFFICIAL_VERIFIED_CREDENTIAL',
+              'OFFICIAL_VERIFIED_RECEIPT',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 13.5,
                 fontWeight: FontWeight.w900,
                 fontFamily: 'monospace',
-                letterSpacing: 2.0,
+                letterSpacing: 1.5,
                 color: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
               ),
             ),
@@ -111,7 +111,7 @@ class CertificateWidget extends StatelessWidget {
           const SizedBox(height: 20),
 
           Text(
-            '// CERTIFIES_THAT_OPERATOR:',
+            '// CERTIFIES THAT MAIN CHARACTER:',
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w900,
@@ -147,7 +147,7 @@ class CertificateWidget extends StatelessWidget {
           const SizedBox(height: 14),
 
           Text(
-            '// HAS_DEMONSTRATED_MASTERY_IN_NODE:',
+            '// HAS OFFICIALLY CONQUERED:',
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w900,
@@ -171,7 +171,7 @@ class CertificateWidget extends StatelessWidget {
             child: Text(
               quizResult.courseTitle.toUpperCase(),
               style: TextStyle(
-                fontSize: 17,
+                fontSize: 16,
                 fontWeight: FontWeight.w900,
                 fontFamily: 'monospace',
                 color: isDark ? Colors.white : AppColors.pitchBlack,
@@ -189,7 +189,7 @@ class CertificateWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'COMPUTED_SCORE:',
+                  'FINAL GRADE:',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w900,
@@ -198,9 +198,9 @@ class CertificateWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${quizResult.score}/10 [${quizResult.percentage.toInt()}%] // VERIFIED',
+                  '${quizResult.score}/10 [${quizResult.percentage.toInt()}%] // ABSOLUTE W',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 11.5,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'monospace',
                     color: AppColors.pitchBlack,
@@ -220,7 +220,7 @@ class CertificateWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '// CERT_ID:',
+                      '// RECEIPT_SERIAL:',
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w900,
@@ -246,7 +246,7 @@ class CertificateWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '// ISSUE_TIMESTAMP:',
+                      '// MINTED_ON:',
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w900,

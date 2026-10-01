@@ -81,7 +81,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('// 02_NODES_EXPLORER'),
+        title: const Text('// 02_DROPS_EXPLORER'),
       ),
       body: WireframeGridBackground(
         child: SafeArea(
@@ -105,7 +105,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
                     onChanged: (val) => setState(() => _searchQuery = val.trim()),
                     decoration: InputDecoration(
-                      hintText: 'QUERY: Flutter, Python, Security...',
+                      hintText: 'SEARCH DROPS: Flutter, Python, Security...',
                       hintStyle: TextStyle(
                         fontFamily: 'monospace',
                         fontSize: 11.5,
@@ -207,7 +207,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 child: Row(
                   children: [
                     Text(
-                      '// MATCHES: ${filteredCourses.length} NODES_ACTIVE',
+                      '// ${filteredCourses.length} TRACKS READY TO GRIND',
                       style: TextStyle(
                         fontSize: 9.5,
                         fontWeight: FontWeight.w900,
@@ -219,7 +219,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ),
               ),
 
-              // Courses Grid with snap-velocity scrolling
+              // Courses Grid
               Expanded(
                 child: filteredCourses.isEmpty
                     ? Center(
@@ -232,7 +232,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             ),
                           ),
                           child: Text(
-                            '<ERR_NO_MATCHING_NODES>',
+                            '<NO TRACKS FOUND FR 💀>',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w900,

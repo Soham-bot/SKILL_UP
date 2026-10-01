@@ -78,17 +78,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              '>>> BOOT_SEQUENCE: ACTIVE',
-                              style: TextStyle(
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w900,
-                                fontFamily: 'monospace',
-                                color: AppColors.pitchBlack,
+                            Flexible(
+                              child: Text(
+                                '>>> SPAWNING PLAYER 🔥',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'monospace',
+                                  color: AppColors.pitchBlack,
+                                ),
                               ),
                             ),
+                            SizedBox(width: 8),
                             Text(
-                              '// LATENCY: 0.00ms',
+                              '// ZERO LAG',
                               style: TextStyle(
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w900,
@@ -102,7 +106,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                       const SizedBox(height: 18),
 
-                      // Asymmetric Rotated Brand Header Sticker (-3deg / -0.05 rad)
+                      // Asymmetric Rotated Brand Header Sticker
                       Transform.rotate(
                         angle: -0.04,
                         child: Container(
@@ -140,7 +144,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     color: AppColors.neonYellow,
                                     child: const Text(
-                                      '// V2.0',
+                                      '// V2.0 // NO CAP',
                                       style: TextStyle(
                                         fontSize: 9.5,
                                         fontWeight: FontWeight.w900,
@@ -183,7 +187,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '// OPERATOR_CREDENTIAL_SETUP:',
+                              '// DROP YOUR LORE // CHARACTER CREATION:',
                               style: TextStyle(
                                 fontSize: 10.5,
                                 fontWeight: FontWeight.w900,
@@ -193,7 +197,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                             const SizedBox(height: 4),
                             const Text(
-                              'Input operator telemetry. Entered name will be immutably embedded into verified certification records.',
+                              'Drop your gamer tag below. Your name will be stamped permanently on your flex certificates. No cap.',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontFamily: 'monospace',
@@ -208,7 +212,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                       // Input 1: Name (Required)
                       Text(
-                        '// OPERATOR_NAME *',
+                        '// GAMER TAG / YOUR NAME *',
                         style: TextStyle(
                           fontSize: 9.5,
                           fontWeight: FontWeight.w900,
@@ -233,7 +237,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         ),
                         validator: (value) => (value == null || value.trim().isEmpty)
-                            ? 'Name required for certification protocol'
+                            ? 'Drop a name so we know whose certificate it is!'
                             : null,
                       ),
 
@@ -241,7 +245,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                       // Input 2: Email (Optional)
                       Text(
-                        '// COMM_EMAIL (OPTIONAL)',
+                        '// EMAIL (IF YOU FEEL LIKE IT)',
                         style: TextStyle(
                           fontSize: 9.5,
                           fontWeight: FontWeight.w900,
@@ -255,7 +259,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         keyboardType: TextInputType.emailAddress,
                         style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
                         decoration: InputDecoration(
-                          hintText: 'e.g. operator@skillup.edu',
+                          hintText: 'e.g. soham@skillup.edu',
                           filled: true,
                           fillColor: isDark ? AppColors.darkSurface : Colors.white,
                           border: OutlineInputBorder(
@@ -272,7 +276,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                       // Input 3: Phone (Optional)
                       Text(
-                        '// PHONE_IDENTIFIER (OPTIONAL)',
+                        '// PHONE DIGITS (OPTIONAL)',
                         style: TextStyle(
                           fontSize: 9.5,
                           fontWeight: FontWeight.w900,
@@ -301,7 +305,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                       const SizedBox(height: 22),
 
-                      // Tactile Hard-Border Continue Button (Bottom Single-Thumb Zone)
+                      // Tactile Hard-Border Continue Button
                       _isSubmitting
                           ? const Center(
                               child: CircularProgressIndicator(
@@ -310,7 +314,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               ),
                             )
                           : BrutalButton(
-                              text: '>>> INITIALIZE_DASHBOARD >>>',
+                              text: ">>> LET'S COOK // ENTER APP >>>",
                               onPressed: _handleContinue,
                               backgroundColor: AppColors.acidGreen,
                               foregroundColor: AppColors.pitchBlack,
@@ -328,7 +332,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFDDDDDD),
                             child: const Text(
-                              '100%_OFFLINE // ZERO_NETWORK_IO // ON_DEVICE_DART',
+                              '100% OFFLINE // NO WIFI NEEDED // PURE DART SPEED',
                               style: TextStyle(
                                 fontSize: 9,
                                 fontWeight: FontWeight.w900,

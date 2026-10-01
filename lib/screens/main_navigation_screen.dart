@@ -54,8 +54,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ProfileScreen(courseService: widget.courseService),
     ];
 
-    // Neo-Brutalist Zero-Radius Navigation Bar
-    // Traditional labels replaced with raw terminal status strings
+    // Neo-Brutalist Navigation Bar with Gen-Z Status Strings
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -77,9 +76,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             child: Row(
               children: [
                 _buildNavItem(0, '// 01_FEED', Icons.grid_view_sharp),
-                _buildNavItem(1, '// 02_NODES', Icons.terminal_sharp),
+                _buildNavItem(1, '// 02_DROPS', Icons.terminal_sharp),
                 _buildNavItem(2, '// FLEX_RECEIPT', Icons.verified_sharp),
-                _buildNavItem(3, '// ERROR_LOG', Icons.bug_report_sharp),
+                _buildNavItem(3, '// AURA_STATS', Icons.bolt_sharp),
               ],
             ),
           ),

@@ -141,7 +141,7 @@ class _QuizScreenState extends State<QuizScreen>
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           backgroundColor: AppColors.pitchBlack,
           title: const Text(
-            '<ERR_INCOMPLETE_EVALUATION>',
+            '<WAIT YOU MISSED SOME 💀>',
             style: TextStyle(
               fontFamily: 'monospace',
               fontWeight: FontWeight.w900,
@@ -149,7 +149,7 @@ class _QuizScreenState extends State<QuizScreen>
             ),
           ),
           content: Text(
-            'Answer all 10 questions before submitting.\n\n$unansweredCount question(s) remain in unselected buffer.',
+            'Answer all 10 questions before submitting!\n\n$unansweredCount question(s) still empty bestie.',
             style: const TextStyle(
               fontFamily: 'monospace',
               color: Colors.white,
@@ -158,7 +158,7 @@ class _QuizScreenState extends State<QuizScreen>
           ),
           actions: [
             BrutalButton(
-              text: 'RESUME_QUESTIONS',
+              text: 'MY BAD, GO BACK',
               onPressed: () => Navigator.pop(ctx),
               backgroundColor: AppColors.glitchCrimson,
               foregroundColor: Colors.white,
@@ -176,7 +176,7 @@ class _QuizScreenState extends State<QuizScreen>
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         backgroundColor: AppColors.pitchBlack,
         title: const Text(
-          '<SUBMIT_PROTOCOL_READY>',
+          '<READY TO LOCK IN? NO TAKEBACKS>',
           style: TextStyle(
             fontFamily: 'monospace',
             fontWeight: FontWeight.w900,
@@ -184,7 +184,7 @@ class _QuizScreenState extends State<QuizScreen>
           ),
         ),
         content: const Text(
-          '10/10 questions locked into on-device memory.\n\nScoring will execute instantaneously using pure Dart arithmetic (Passing mark: 60%).\n\nConfirm final submission?',
+          'All 10 picks logged in memory.\n\nOn-device Dart arithmetic will grade this right now (Need 60% for the W).\n\nYou confident?',
           style: TextStyle(
             fontFamily: 'monospace',
             color: Colors.white,
@@ -194,11 +194,11 @@ class _QuizScreenState extends State<QuizScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('// REVIEW_LOGS',
+            child: const Text('// WAIT LEMME DOUBLE CHECK',
                 style: TextStyle(fontFamily: 'monospace', color: Colors.white)),
           ),
           BrutalButton(
-            text: 'CONFIRM_SUBMISSION',
+            text: 'LOCK IT IN & GRADE ME',
             onPressed: () {
               Navigator.pop(ctx);
               _finalizeSubmission();
@@ -253,7 +253,7 @@ class _QuizScreenState extends State<QuizScreen>
           // Pulse from Void Black into Blood Orange / Glitch Crimson
           final orangeTone = Color.lerp(
             baseBg,
-            const Color(0xFF550C00), // Intense blood orange ambient glow
+            const Color(0xFF550C00),
             _pulseAnimation.value * 0.85,
           )!;
           baseBg = orangeTone;
@@ -269,7 +269,7 @@ class _QuizScreenState extends State<QuizScreen>
                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                 backgroundColor: AppColors.pitchBlack,
                 title: const Text(
-                  '<ABORT_ASSESSMENT?>',
+                  '<RAGE QUIT? YOU GIVING UP FR?>',
                   style: TextStyle(
                     fontFamily: 'monospace',
                     fontWeight: FontWeight.w900,
@@ -277,7 +277,7 @@ class _QuizScreenState extends State<QuizScreen>
                   ),
                 ),
                 content: const Text(
-                  'Unsubmitted responses will be purged from active session.',
+                  'Your unsubmitted picks will vanish into thin air.',
                   style: TextStyle(
                     fontFamily: 'monospace',
                     color: Colors.white,
@@ -287,11 +287,11 @@ class _QuizScreenState extends State<QuizScreen>
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(ctx, false),
-                    child: const Text('RESUME',
+                    child: const Text('NAH I\'M COOKING',
                         style: TextStyle(fontFamily: 'monospace', color: Colors.white)),
                   ),
                   BrutalButton(
-                    text: 'ABORT_NOW',
+                    text: 'YEAH I\'M OUT',
                     onPressed: () => Navigator.pop(ctx, true),
                     backgroundColor: AppColors.glitchCrimson,
                     foregroundColor: Colors.white,
@@ -308,7 +308,7 @@ class _QuizScreenState extends State<QuizScreen>
             backgroundColor: baseBg,
             appBar: AppBar(
               backgroundColor: baseBg,
-              title: Text('// ${widget.course.title.toUpperCase()} // EXAM'),
+              title: Text('// ${widget.course.title.toUpperCase()} // FINAL BOSS'),
               actions: [
                 Center(
                   child: Container(
@@ -324,7 +324,7 @@ class _QuizScreenState extends State<QuizScreen>
                       ),
                     ),
                     child: Text(
-                      '${_selectedAnswers.length}/10 LOCKED',
+                      '${_selectedAnswers.length}/10 LOCKED IN',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w900,
@@ -344,7 +344,7 @@ class _QuizScreenState extends State<QuizScreen>
                         CircularProgressIndicator(color: AppColors.acidGreen),
                         SizedBox(height: 16),
                         Text(
-                          '>>> COMPUTING SCORE ON-DEVICE >>>',
+                          '>>> COMPUTING SCORE ON-DEVICE... >>>',
                           style: TextStyle(
                             fontFamily: 'monospace',
                             fontWeight: FontWeight.w900,
@@ -386,7 +386,7 @@ class _QuizScreenState extends State<QuizScreen>
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: Text(
-                                              '// COGNITIVE_LATENCY_DETECTED [${_questionSecondsElapsed.toStringAsFixed(1)}s] // OPERATOR_HESITATION',
+                                              '// BRO IS OVERTHINKING FR 💀 [${_questionSecondsElapsed.toStringAsFixed(1)}s] // BRAIN LAG DETECTED',
                                               style: const TextStyle(
                                                 fontSize: 9.5,
                                                 fontWeight: FontWeight.w900,
@@ -411,7 +411,7 @@ class _QuizScreenState extends State<QuizScreen>
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           const Text(
-                                            '<STATUS: OPERATOR_INPUT_ACTIVE>',
+                                            '<STATUS: COOKING OR COOKED?>',
                                             style: TextStyle(
                                               fontSize: 9.5,
                                               fontWeight: FontWeight.w900,
@@ -421,8 +421,8 @@ class _QuizScreenState extends State<QuizScreen>
                                           ),
                                           Text(
                                             selectedOption != null
-                                                ? '// INPUT_LOCKED'
-                                                : '// WAITING_RESPONSE',
+                                                ? '// LOCKED IN 🔥'
+                                                : '// PICK ONE BESTIE',
                                             style: TextStyle(
                                               fontSize: 9.5,
                                               fontWeight: FontWeight.w900,
@@ -455,7 +455,7 @@ class _QuizScreenState extends State<QuizScreen>
                                         ),
                                       ),
                                       Text(
-                                        '${(progress * 100).toInt()}% COMPLETE',
+                                        '${(progress * 100).toInt()}% DONE',
                                         style: const TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w900,
@@ -649,8 +649,8 @@ class _QuizScreenState extends State<QuizScreen>
                                                   ),
                                                   child: Text(
                                                     _showHint
-                                                        ? '[HIDE_HINT]'
-                                                        : '[DEBUG_HINT]',
+                                                        ? '[HIDE CHEATCODE]'
+                                                        : '[FREE CHEATCODE]',
                                                     style: const TextStyle(
                                                       fontSize: 9.5,
                                                       fontWeight: FontWeight.w900,
@@ -692,7 +692,7 @@ class _QuizScreenState extends State<QuizScreen>
                                                   width: 1.5),
                                             ),
                                             child: Text(
-                                              '// HINT: ${currentQ.hint!}',
+                                              '// CLUE: ${currentQ.hint!}',
                                               style: TextStyle(
                                                 fontSize: 11,
                                                 fontFamily: 'monospace',
@@ -714,7 +714,6 @@ class _QuizScreenState extends State<QuizScreen>
 
                           // -----------------------------------------------------------
                           // BOTTOM 42%: SINGLE-THUMB VELOCITY REACH ZONE
-                          // All critical interactions mapped strictly here!
                           // -----------------------------------------------------------
                           Container(
                             decoration: BoxDecoration(
@@ -746,7 +745,7 @@ class _QuizScreenState extends State<QuizScreen>
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  '// SINGLE_THUMB_SELECTION_MATRIX:',
+                                  '// TAP YOUR PICK // LOCK IT IN:',
                                   style: TextStyle(
                                     fontSize: 9.5,
                                     fontWeight: FontWeight.w900,
@@ -878,7 +877,7 @@ class _QuizScreenState extends State<QuizScreen>
                                                     ? AppColors.pitchBlack
                                                     : AppColors.acidGreen,
                                                 child: Text(
-                                                  'LOCKED',
+                                                  'LOCKED IN',
                                                   style: TextStyle(
                                                     fontSize: 8.5,
                                                     fontWeight: FontWeight.w900,
@@ -898,7 +897,7 @@ class _QuizScreenState extends State<QuizScreen>
 
                                 const SizedBox(height: 6),
 
-                                // Velocity Navigation Bar (Previous & Next/Submit)
+                                // Velocity Navigation Bar
                                 Row(
                                   children: [
                                     if (_currentIndex > 0) ...[
@@ -920,8 +919,8 @@ class _QuizScreenState extends State<QuizScreen>
                                     Expanded(
                                       child: BrutalButton(
                                         text: isLastQuestion
-                                            ? '>>> SUBMIT_EVALUATION >>>'
-                                            : 'NEXT_QUESTION >',
+                                            ? '>>> LOCK IN & SUBMIT FINAL BOSS >>>'
+                                            : 'NEXT QUESTION >',
                                         onPressed: isLastQuestion
                                             ? _attemptSubmit
                                             : _nextQuestion,

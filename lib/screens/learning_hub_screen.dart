@@ -117,15 +117,15 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
           child: allModulesDone
               ? BrutalButton(
                   text: _course.status == CourseStatus.completed
-                      ? '>>> RETAKE_FINAL_ASSESSMENT [10_MCQS] >>>'
-                      : '>>> EXECUTE_FINAL_ASSESSMENT [10_MCQS] >>>',
+                      ? '>>> RETAKE FINAL BOSS [10 MCQS] >>>'
+                      : '>>> FIGHT THE FINAL BOSS [10 MCQS] >>>',
                   onPressed: _startAssessment,
                   backgroundColor: AppColors.acidGreen,
                   foregroundColor: AppColors.pitchBlack,
                   shadowColor: isDark ? Colors.white : AppColors.pitchBlack,
                 )
               : BrutalButton(
-                  text: '>>> RUN_NODE_0${currentModule.orderIndex} >>>',
+                  text: '>>> JUMP INTO MODULE 0${currentModule.orderIndex} >>>',
                   onPressed: () => _openModule(currentModule),
                   backgroundColor: isDark ? Colors.white : AppColors.pitchBlack,
                   foregroundColor: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
@@ -163,7 +163,7 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '// CURRICULUM_SYNC_STATUS:',
+                          '// PROGRESS CHECK:',
                           style: TextStyle(
                             fontSize: 9.5,
                             fontWeight: FontWeight.w900,
@@ -175,7 +175,7 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           color: allModulesDone ? AppColors.acidGreen : AppColors.neonYellow,
                           child: Text(
-                            '$percent%_SYNCED',
+                            '$percent%_COOKED',
                             style: const TextStyle(
                               fontSize: 10.5,
                               fontWeight: FontWeight.w900,
@@ -188,7 +188,7 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      '${_course.completedModulesCount} OF ${_course.modules.length} MODULES SYNCHRONIZED',
+                      '${_course.completedModulesCount} OF ${_course.modules.length} MODULES CRUSHED',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w900,
@@ -252,7 +252,7 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'ALL 5 MODULES SYNCHRONIZED!',
+                              'ALL 5 MODULES CLEARED! 🔥',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w900,
@@ -262,7 +262,7 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
                             ),
                             SizedBox(height: 2),
                             Text(
-                              'Protocol exam unlocked: 10 random MCQs will test all 5 nodes.',
+                              'Ready for the final boss? 10 random MCQs will test your skills on-device.',
                               style: TextStyle(
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w700,
@@ -281,7 +281,7 @@ class _LearningHubScreenState extends State<LearningHubScreen> {
 
               // 5 Modules List Header
               Text(
-                '// EXECUTION_ROADMAP [05_UNITS]:',
+                '// THE ROADMAP [05 MODULES]:',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,

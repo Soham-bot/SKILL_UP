@@ -98,7 +98,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
               if (_course.status == CourseStatus.completed) ...[
                 Expanded(
                   child: BrutalButton(
-                    text: '// REVIEW_NODE',
+                    text: '// REVIEW MODULES',
                     onPressed: () {
                       GlitchPageRoute.push(
                         context,
@@ -115,7 +115,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: BrutalButton(
-                    text: 'VIEW_CERTIFICATE',
+                    text: 'VIEW CERTIFICATE (THE FLEX)',
                     onPressed: _handleViewCertificate,
                     backgroundColor: AppColors.acidGreen,
                     foregroundColor: AppColors.pitchBlack,
@@ -126,8 +126,8 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                 Expanded(
                   child: BrutalButton(
                     text: _course.progress > 0
-                        ? '>>> RESUME_NODE ($percent%) >>>'
-                        : '>>> ENTER_HUB >>>',
+                        ? '>>> KEEP COOKING ($percent%) >>>'
+                        : '>>> ENTER TRACK >>>',
                     onPressed: _handleEnrollAndStart,
                     backgroundColor: AppColors.acidGreen,
                     foregroundColor: AppColors.pitchBlack,
@@ -136,7 +136,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
               ] else ...[
                 Expanded(
                   child: BrutalButton(
-                    text: '>>> INITIALIZE_FREE_ENROLLMENT >>>',
+                    text: '>>> ENROLL FOR FREE // TAP IN >>>',
                     onPressed: _handleEnrollAndStart,
                     backgroundColor: AppColors.acidGreen,
                     foregroundColor: AppColors.pitchBlack,
@@ -210,11 +210,11 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildMetric('DURATION', _course.duration.toUpperCase()),
+                    _buildMetric('GRIND TIME', _course.duration.toUpperCase()),
                     _buildDivider(isDark),
-                    _buildMetric('MODULES', '${_course.modules.length}_UNITS'),
+                    _buildMetric('MODULES', '${_course.modules.length} UNITS'),
                     _buildDivider(isDark),
-                    _buildMetric('ASSESSMENT', '10_MCQS'),
+                    _buildMetric('FINAL BOSS', '10 MCQS'),
                   ],
                 ),
               ),
@@ -223,7 +223,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
               // Acquired Capabilities
               Text(
-                '// ACQUIRED_CAPABILITIES:',
+                '// WHAT YOU GET GOOD AT:',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
@@ -246,7 +246,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                     child: Row(
                       children: [
                         const Text(
-                          '► ',
+                          '⚡ ',
                           style: TextStyle(
                             color: AppColors.acidGreen,
                             fontWeight: FontWeight.w900,
@@ -272,7 +272,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
 
               // 5 Syllabus Nodes
               Text(
-                '// SYLLABUS_NODES [05_UNITS]:',
+                '// THE GRIND [05 MODULES]:',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
@@ -335,7 +335,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                                 ),
                               ),
                               Text(
-                                '// READ_TIME: ${module.estimatedMinutes.toUpperCase()}',
+                                '// READ TIME: ${module.estimatedMinutes.toUpperCase()}',
                                 style: TextStyle(
                                   fontSize: 9.5,
                                   fontFamily: 'monospace',

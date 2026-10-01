@@ -57,7 +57,7 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final passed = quizResult.passed;
-    final learnerName = courseService.profile?.name ?? 'OPERATOR';
+    final learnerName = courseService.profile?.name ?? 'MAIN CHARACTER';
 
     return PopScope(
       canPop: false,
@@ -68,7 +68,7 @@ class ResultScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('// 05_EVALUATION_OUTCOME'),
+          title: const Text('// THE VERDICT'),
           actions: [
             IconButton(
               icon: const Icon(Icons.close_sharp),
@@ -89,12 +89,12 @@ class ResultScreen extends StatelessWidget {
                       // Hyper-Contrast Indicator Tape
                       if (passed)
                         HazardStripeBanner.pass(
-                          text: '>>> PASS_GRANTED // NO_CAP <<<',
+                          text: '>>> PASS_GRANTED // ABSOLUTE W // NO CAP <<<',
                           height: 44.0,
                         )
                       else
                         HazardStripeBanner.fail(
-                          text: '>>> HAZARD_FAIL // RETRY_PROTOCOL <<<',
+                          text: '>>> TOTAL L // COOKED // RUN IT BACK 💀 <<<',
                           height: 44.0,
                         ),
 
@@ -126,7 +126,7 @@ class ResultScreen extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                   color: passed ? AppColors.acidGreen : AppColors.glitchCrimson,
                                   child: Text(
-                                    passed ? '<STATUS: 200_OK>' : '<STATUS: 403_FAIL>',
+                                    passed ? '<STATUS: ABSOLUTE_W>' : '<STATUS: SKILL_ISSUE>',
                                     style: const TextStyle(
                                       fontSize: 9.5,
                                       fontWeight: FontWeight.w900,
@@ -136,7 +136,7 @@ class ResultScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  '// DART_EVAL: ${quizResult.attemptedAt.toIso8601String().substring(11, 19)}',
+                                  '// GRADED_AT: ${quizResult.attemptedAt.toIso8601String().substring(11, 19)}',
                                   style: TextStyle(
                                     fontSize: 9.5,
                                     fontFamily: 'monospace',
@@ -161,7 +161,7 @@ class ResultScreen extends StatelessWidget {
                             ),
 
                             Text(
-                              '${quizResult.percentage.toInt()}% FINAL_GRADE_PERCENTILE',
+                              '${quizResult.percentage.toInt()}% FINAL SCORE',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w900,
@@ -181,8 +181,8 @@ class ResultScreen extends StatelessWidget {
                               ),
                               child: Text(
                                 passed
-                                    ? 'VERIFICATION_GRANTED: MET MINIMUM (≥ 60%)'
-                                    : 'VERIFICATION_DENIED: BELOW THRESHOLD (< 60%)',
+                                    ? 'GRADE: PASS (BIG W ≥ 60%)'
+                                    : 'GRADE: FAIL (SKILL ISSUE < 60%)',
                                 style: const TextStyle(
                                   fontSize: 10.5,
                                   fontWeight: FontWeight.w900,
@@ -208,8 +208,8 @@ class ResultScreen extends StatelessWidget {
 
                             Text(
                               passed
-                                  ? 'Operator $learnerName has satisfied all on-device verification criteria. Tamper-evident credential record has been dispatched to local storage buffer.'
-                                  : 'Deficiencies detected in module knowledge. Review syllabus nodes and execute re-examination.',
+                                  ? 'Massive W, $learnerName! You actually cooked. Your official verifiable certificate has been saved to your receipts. Go flex it.'
+                                  : 'Minor setback. You got cooked on a few questions. Review the notes and run it back immediately.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 12,
@@ -227,7 +227,7 @@ class ResultScreen extends StatelessWidget {
                       // Single-Thumb Velocity Action Bay
                       if (passed) ...[
                         BrutalButton(
-                          text: '>>> VIEW_OFFICIAL_CREDENTIAL >>>',
+                          text: '>>> VIEW THE BIG FLEX (CERTIFICATE) >>>',
                           onPressed: () => _viewCertificate(context),
                           backgroundColor: AppColors.acidGreen,
                           foregroundColor: AppColors.pitchBlack,
@@ -235,7 +235,7 @@ class ResultScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         BrutalButton(
-                          text: '// RETAKE_ASSESSMENT (RESHUFFLE)',
+                          text: '// RUN IT BACK ANYWAY (RESHUFFLE)',
                           onPressed: () => _retakeAssessment(context),
                           backgroundColor: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFE5E5DE),
                           foregroundColor: isDark ? Colors.white : AppColors.pitchBlack,
@@ -243,7 +243,7 @@ class ResultScreen extends StatelessWidget {
                         ),
                       ] else ...[
                         BrutalButton(
-                          text: '>>> RETRY_EXAM_PROTOCOL >>>',
+                          text: '>>> RUN IT BACK (RETAKE TEST) >>>',
                           onPressed: () => _retakeAssessment(context),
                           backgroundColor: isDark ? Colors.white : AppColors.pitchBlack,
                           foregroundColor: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
@@ -251,7 +251,7 @@ class ResultScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         BrutalButton(
-                          text: '// REVIEW_SYLLABUS_NODES',
+                          text: '// HIT THE BOOKS (REVIEW SYLLABUS)',
                           onPressed: () => _reviewCourse(context),
                           backgroundColor: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFE5E5DE),
                           foregroundColor: isDark ? Colors.white : AppColors.pitchBlack,
@@ -264,7 +264,7 @@ class ResultScreen extends StatelessWidget {
                       TextButton(
                         onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
                         child: const Text(
-                          '// RETURN_TO_ROOT_FEED',
+                          '// RETURN TO FEED',
                           style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
                         ),
                       ),

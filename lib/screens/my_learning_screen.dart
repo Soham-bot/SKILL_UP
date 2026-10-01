@@ -62,7 +62,7 @@ class _MyLearningScreenState extends State<MyLearningScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('// FLEX_RECEIPT // BUFFER'),
+        title: const Text('// FLEX_RECEIPT // YOUR HUB'),
         bottom: TabBar(
           controller: _tabController,
           labelColor: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
@@ -72,8 +72,8 @@ class _MyLearningScreenState extends State<MyLearningScreen>
           labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontFamily: 'monospace', fontSize: 10.5),
           tabs: [
             Tab(text: 'ENROLLED (${enrolled.length})'),
-            Tab(text: 'IN_FLIGHT (${inProgress.length})'),
-            Tab(text: 'CERTIFIED (${completed.length})'),
+            Tab(text: 'COOKING (${inProgress.length})'),
+            Tab(text: 'CERTIFIED W\'S (${completed.length})'),
           ],
         ),
       ),
@@ -81,9 +81,9 @@ class _MyLearningScreenState extends State<MyLearningScreen>
         child: TabBarView(
           controller: _tabController,
           children: [
-            _buildCourseList(enrolled, '<EMPTY_BUFFER: NO_ENROLLED_NODES>\nBrowse curriculum nodes to initialize enrollment.'),
-            _buildCourseList(inProgress, '<EMPTY_BUFFER: NO_NODES_IN_FLIGHT>\nExecute an enrolled node to begin.'),
-            _buildCourseList(completed, '<EMPTY_BUFFER: NO_CERTIFICATES_LOGGED>\nPass a 10-MCQ assessment with ≥ 60% to get certified.'),
+            _buildCourseList(enrolled, '<NOTHING ENROLLED YET 💀>\nGo pick a track from drops to start cooking.'),
+            _buildCourseList(inProgress, '<NOTHING COOKING RN>\nPick an enrolled track to begin grinding.'),
+            _buildCourseList(completed, '<NO CERTIFICATES YET 💀>\nBeat the 10-MCQ test with ≥ 60% to unlock your big flex.'),
           ],
         ),
       ),

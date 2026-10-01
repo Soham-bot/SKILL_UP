@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final profile = courseService.profile;
-    final learnerName = profile?.name ?? 'OPERATOR';
+    final learnerName = profile?.name ?? 'MAIN CHARACTER';
     final completedCount = courseService.completedCourses.length;
     final inProgressCourses = courseService.inProgressCourses;
     final allCourses = courseService.courses;
@@ -85,7 +85,7 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            tooltip: isDark ? 'INVERT_THEME: LIGHT' : 'INVERT_THEME: DARK',
+            tooltip: isDark ? 'VIBE: FLASHBANG' : 'VIBE: VOID DARK',
             icon: Icon(isDark ? Icons.light_mode_sharp : Icons.dark_mode_sharp),
             onPressed: () => courseService.toggleTheme(),
           ),
@@ -113,12 +113,16 @@ class HomeScreen extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '>>> ARCH: ZERO_PADDING_BRUTALISM',
-                      style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
+                    Flexible(
+                      child: Text(
+                        '>>> ZERO-PADDING BRUTALISM // FLUTTER',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
+                      ),
                     ),
+                    SizedBox(width: 8),
                     Text(
-                      '// GLITCH_TEAR: 120ms',
+                      '// NO CAP 🔥',
                       style: TextStyle(
                         fontSize: 9.5,
                         fontWeight: FontWeight.w900,
@@ -162,7 +166,7 @@ class HomeScreen extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                               color: isDark ? Colors.white : AppColors.pitchBlack,
                               child: Text(
-                                '// OPERATOR_LOG',
+                                '// MAIN CHARACTER',
                                 style: TextStyle(
                                   fontSize: 9.5,
                                   fontWeight: FontWeight.w900,
@@ -173,7 +177,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             const Text(
-                              '<STATUS: 200_OK>',
+                              '<VIBE: IMMACULATE>',
                               style: TextStyle(
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w900,
@@ -196,7 +200,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          'Edge-to-edge curriculum matrix. Single-thumb execution mapped to bottom velocity zone.',
+                          'Pick a track. Grind 5 modules. Ace the 10-question final boss to flex your certificate. No cap.',
                           style: TextStyle(
                             fontSize: 12,
                             height: 1.4,
@@ -208,7 +212,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Asymmetric Rotated Sticker Overlay (-4deg / -0.07 rad)
+                  // Asymmetric Rotated Sticker Overlay
                   Positioned(
                     top: -10,
                     right: 10,
@@ -228,7 +232,7 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                         child: const Text(
-                          'RANK: APPRENTICE // V2.0',
+                          'RANK: GOAT IN TRAINING 🔥',
                           style: TextStyle(
                             fontSize: 9.5,
                             fontWeight: FontWeight.w900,
@@ -244,26 +248,26 @@ class HomeScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Telemetry Grid: Streak & XP
+              // Telemetry Grid: Streak & Aura
               Row(
                 children: [
                   Expanded(
                     child: StatCard(
-                      title: 'STREAK_CYCLE',
+                      title: 'DAILY STREAK',
                       value: '${profile?.streakDays ?? 1} DAYS',
                       icon: Icons.local_fire_department_sharp,
                       accentColor: const Color(0xFFFF5500),
-                      subtitle: 'CYCLE_ACTIVE',
+                      subtitle: 'NEVER MISSED 🔥',
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: StatCard(
-                      title: 'ACCUM_XP',
+                      title: 'AURA POINTS',
                       value: '${profile?.xp ?? 0}',
                       icon: Icons.bolt_sharp,
                       accentColor: AppColors.neonYellow,
-                      subtitle: 'ON_DEVICE_BUFFER',
+                      subtitle: 'BANKED ON-DEVICE ✨',
                     ),
                   ),
                 ],
@@ -271,7 +275,7 @@ class HomeScreen extends StatelessWidget {
 
               const SizedBox(height: 10),
 
-              // Raw HTML Error Log Badges & Metric Pills
+              // Metric Tags
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
@@ -283,7 +287,7 @@ class HomeScreen extends StatelessWidget {
                       border: Border.all(color: isDark ? Colors.white : AppColors.pitchBlack, width: 2),
                     ),
                     child: Text(
-                      '[CERTIFIED: $completedCount NODES]',
+                      '[BIG W\'S: $completedCount CERTS]',
                       style: const TextStyle(
                         fontSize: 10.5,
                         fontWeight: FontWeight.w900,
@@ -299,7 +303,7 @@ class HomeScreen extends StatelessWidget {
                       border: Border.all(color: isDark ? Colors.white : AppColors.pitchBlack, width: 2),
                     ),
                     child: Text(
-                      '[IN_FLIGHT: ${inProgressCourses.length}]',
+                      '[GRINDING: ${inProgressCourses.length} TRACKS]',
                       style: TextStyle(
                         fontSize: 10.5,
                         fontWeight: FontWeight.w900,
@@ -315,7 +319,7 @@ class HomeScreen extends StatelessWidget {
                       border: Border.all(color: isDark ? Colors.white : AppColors.pitchBlack, width: 1.5),
                     ),
                     child: const Text(
-                      '<NULL_EXC: 0>',
+                      '<ZERO_L\'S // LOCKED_IN>',
                       style: TextStyle(
                         fontSize: 10.5,
                         fontWeight: FontWeight.w900,
@@ -330,7 +334,7 @@ class HomeScreen extends StatelessWidget {
 
               // SECTION 1: CONTINUE LEARNING (Active Node)
               Text(
-                '// ACTIVE_EXECUTION_NODE:',
+                '// WHAT YOU\'RE COOKING RN:',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
@@ -368,12 +372,12 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        '<STANDBY: NO_ACTIVE_NODE>',
+                        '<NOTHING COOKING RN 💀>',
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Select a curriculum node below to initialize on-device module execution.',
+                        'Pick a course below and start leveling up your skills on-device.',
                         style: TextStyle(
                           fontSize: 11,
                           fontFamily: 'monospace',
@@ -382,7 +386,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       BrutalButton(
-                        text: '>>> BROWSE_ALL_NODES >>>',
+                        text: '>>> BROWSE ALL DROPS >>>',
                         onPressed: onNavigateToExplore,
                         backgroundColor: AppColors.acidGreen,
                         foregroundColor: AppColors.pitchBlack,
@@ -399,7 +403,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '// CURRICULUM_MATRIX [04_TRACKS]:',
+                    '// CURRICULUM DROPS [04 TRACKS]:',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w900,
@@ -458,7 +462,7 @@ class HomeScreen extends StatelessWidget {
 
               // SECTION 3: SYSTEM PROTOCOL UNLOCKS
               Text(
-                '// PROTOCOL_UNLOCKS:',
+                '// BADGES & TROPHIES:',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
@@ -473,16 +477,16 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   _buildAchievementBadge(
                     context,
-                    title: 'INITIAL_SYNC',
-                    subtitle: 'ENROLLED',
+                    title: 'FIRST SYNC',
+                    subtitle: 'ENROLLED 🔥',
                     isUnlocked: courseService.enrolledCourses.isNotEmpty,
                     angle: -0.04,
                   ),
                   const SizedBox(width: 8),
                   _buildAchievementBadge(
                     context,
-                    title: '5_MODULES',
-                    subtitle: 'SYLLABUS_DONE',
+                    title: '5 MODULES',
+                    subtitle: 'TRACK BEATEN ✨',
                     isUnlocked: allCourses.any((c) => c.isFullyLearned),
                     angle: 0.05,
                   ),
@@ -490,7 +494,7 @@ class HomeScreen extends StatelessWidget {
                   _buildAchievementBadge(
                     context,
                     title: 'CERTIFIED',
-                    subtitle: 'PASS_≥60%',
+                    subtitle: 'HUGE W ≥60%',
                     isUnlocked: completedCount > 0,
                     angle: -0.03,
                   ),
