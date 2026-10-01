@@ -290,6 +290,19 @@ flutter test
 
 ---
 
+## 📦 Academic & Design Deliverables Bundle
+
+All non-runtime submission artifacts, formal reports, Figma assets, and testing matrices have been consolidated into [`academic_deliverables/`](./academic_deliverables/) and packaged into a single submission archive:
+* **Single Submission Archive:** [`SkillUp_Academic_Deliverables.zip`](./SkillUp_Academic_Deliverables.zip) (741 KB)
+* **Manifest & Evaluation Guide:** [`academic_deliverables/DELIVERABLES_MANIFEST.md`](./academic_deliverables/DELIVERABLES_MANIFEST.md)
+* **Full Academic Report (38 Chapters):** [`academic_deliverables/SkillUp_Academic_Project_Report.docx`](./academic_deliverables/SkillUp_Academic_Project_Report.docx)
+* **Figma Neo-Brutalist Design System:** [`academic_deliverables/FIGMA_DESIGN_SYSTEM.md`](./academic_deliverables/FIGMA_DESIGN_SYSTEM.md)
+* **Figma Vector Artboards:** [`academic_deliverables/figma_assets/`](./academic_deliverables/figma_assets/)
+* **Formal QA Test Report (TC01–TC25):** [`academic_deliverables/TEST_REPORT.md`](./academic_deliverables/TEST_REPORT.md)
+* **Viva Voce Defense & Demo Script:** [`academic_deliverables/VIVA_GUIDE.md`](./academic_deliverables/VIVA_GUIDE.md)
+
+---
+
 ## 👨‍💻 Author
 
 **Soham Ahirrao**  
