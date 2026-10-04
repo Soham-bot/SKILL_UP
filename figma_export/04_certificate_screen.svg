@@ -1,0 +1,94 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="390" height="844" fill="#FAF8F4"/>
+
+  <!-- Status Bar -->
+  <g id="StatusBar">
+    <text x="32" y="32" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="14" font-weight="600">9:41</text>
+    <circle cx="330" cy="28" r="3" fill="#1C1B1F"/>
+    <circle cx="340" cy="28" r="3" fill="#1C1B1F"/>
+    <rect x="350" y="22" width="22" height="12" rx="3" stroke="#1C1B1F" stroke-width="1.5" fill="none"/>
+    <rect x="352" y="24" width="14" height="8" rx="1.5" fill="#1C1B1F"/>
+  </g>
+
+  <!-- Top App Bar -->
+  <g id="AppBar">
+    <circle cx="40" cy="74" r="18" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <path d="M44 68L36 74L44 80" stroke="#2B3A67" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="74" y="80" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="20" font-weight="600">Official Certificate</text>
+  </g>
+
+  <!-- Certificate Canvas Widget (Authentic Parchment Ratio) -->
+  <g id="CertificateCanvas" filter="drop-shadow(0px 8px 24px rgba(43, 58, 103, 0.08))">
+    <!-- Paper -->
+    <rect x="20" y="112" width="350" height="495" rx="8" fill="#FAF8F4"/>
+    
+    <!-- Outer Navy Border -->
+    <rect x="28" y="120" width="334" height="479" rx="4" fill="none" stroke="#2B3A67" stroke-width="2"/>
+    
+    <!-- Inner Gold Inset Line -->
+    <rect x="34" y="126" width="322" height="467" rx="2" fill="none" stroke="#B08D57" stroke-width="1"/>
+
+    <!-- Decorative Top Ribbon / Seal -->
+    <g id="EmblemSeal">
+      <circle cx="195" cy="160" r="18" fill="#B08D57" fill-opacity="0.12" stroke="#B08D57" stroke-width="1.2"/>
+      <circle cx="195" cy="160" r="14" fill="#B08D57" fill-opacity="0.2"/>
+      <path d="M195 150L197 156L203 156L198 160L200 166L195 162L190 166L192 160L187 156L193 156Z" fill="#B08D57"/>
+    </g>
+
+    <!-- Wordmark & Subtitle -->
+    <text x="195" y="196" fill="#2B3A67" font-family="Inter, sans-serif" font-size="12" font-weight="700" letter-spacing="3" text-anchor="middle">SKILLUP CERTIFICATION</text>
+    <text x="195" y="218" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="20" font-weight="600" text-anchor="middle">Certificate of Completion</text>
+    <line x1="150" y1="228" x2="240" y2="228" stroke="#B08D57" stroke-width="1"/>
+
+    <!-- Recipient Section -->
+    <text x="195" y="254" fill="#505C7C" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">This is to certify that</text>
+    <text x="195" y="292" fill="#2B3A67" font-family="Fraunces, Georgia, serif" font-size="26" font-style="italic" font-weight="600" text-anchor="middle">Alex Johnson</text>
+    <line x1="80" y1="304" x2="310" y2="304" stroke="#E4E0D8" stroke-width="1"/>
+
+    <!-- Course Achievement Section -->
+    <text x="195" y="328" fill="#505C7C" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">has successfully completed all requirements and passed the assessment for</text>
+    <text x="195" y="356" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="18" font-weight="600" text-anchor="middle">Flutter Fundamentals</text>
+
+    <!-- Score & Verified Badge -->
+    <rect x="135" y="376" width="120" height="28" rx="14" fill="#E2EFE7" stroke="#4F7F6A" stroke-width="1"/>
+    <text x="195" y="394" fill="#4F7F6A" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">✓ PASSED · 8/10 (80%)</text>
+
+    <!-- Bottom Verification Row -->
+    <g id="SignaturesAndDates">
+      <!-- Date -->
+      <text x="50" y="490" fill="#505C7C" font-family="Inter, sans-serif" font-size="10">ISSUE DATE</text>
+      <text x="50" y="506" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="12" font-weight="600">Oct 4, 2026</text>
+
+      <!-- Gold Star Seal -->
+      <circle cx="195" cy="494" r="16" fill="#B08D57"/>
+      <circle cx="195" cy="494" r="13" fill="#FAF8F4"/>
+      <text x="195" y="498" fill="#B08D57" font-family="Inter, sans-serif" font-size="10" font-weight="700" text-anchor="middle">★</text>
+
+      <!-- Signature -->
+      <text x="340" y="490" fill="#505C7C" font-family="Inter, sans-serif" font-size="10" text-anchor="end">ISSUED BY</text>
+      <text x="340" y="506" fill="#2B3A67" font-family="Fraunces, Georgia, serif" font-size="12" font-style="italic" font-weight="600" text-anchor="end">SkillUp Board</text>
+    </g>
+
+    <!-- Certificate Serial Identifier -->
+    <rect x="100" y="542" width="190" height="22" rx="4" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="195" y="556" fill="#505C7C" font-family="monospace" font-size="10" letter-spacing="1" text-anchor="middle">ID: SKL-FLU-2026-X8K2</text>
+  </g>
+
+  <!-- Primary & Secondary Action CTAs -->
+  <g id="CertificateActions">
+    <!-- Download PDF Button (Primary) -->
+    <rect x="24" y="630" width="342" height="52" rx="12" fill="#2B3A67"/>
+    <text x="195" y="662" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="15" font-weight="600" text-anchor="middle">Download PDF Certificate</text>
+
+    <!-- Secondary Actions Row -->
+    <rect x="24" y="694" width="164" height="48" rx="12" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="106" y="723" fill="#2B3A67" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Share</text>
+
+    <rect x="202" y="694" width="164" height="48" rx="12" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="284" y="723" fill="#505C7C" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">Print</text>
+
+    <!-- Back to Home Text Link -->
+    <text x="195" y="776" fill="#505C7C" font-family="Inter, sans-serif" font-size="14" font-weight="500" text-anchor="middle">← Back to Course Catalog</text>
+  </g>
+</svg>

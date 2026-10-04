@@ -1,0 +1,125 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="390" height="844" fill="#FAF8F4"/>
+
+  <!-- Status Bar -->
+  <g id="StatusBar">
+    <text x="32" y="32" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="14" font-weight="600">9:41</text>
+    <circle cx="330" cy="28" r="3" fill="#1C1B1F"/>
+    <circle cx="340" cy="28" r="3" fill="#1C1B1F"/>
+    <rect x="350" y="22" width="22" height="12" rx="3" stroke="#1C1B1F" stroke-width="1.5" fill="none"/>
+    <rect x="352" y="24" width="14" height="8" rx="1.5" fill="#1C1B1F"/>
+  </g>
+
+  <!-- Top App Bar & Progress Cue -->
+  <g id="AppBar">
+    <circle cx="40" cy="74" r="18" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <path d="M44 68L36 74L44 80" stroke="#2B3A67" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <text x="74" y="80" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="19" font-weight="600">Final Assessment</text>
+    
+    <!-- Question Progress Counter -->
+    <text x="366" y="80" fill="#505C7C" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="end">Question 4 of 10</text>
+    
+    <!-- Linear Progress Bar (40% progress) -->
+    <rect x="24" y="104" width="342" height="6" rx="3" fill="#DDE1F5"/>
+    <rect x="24" y="104" width="136" height="6" rx="3" fill="#2B3A67"/>
+  </g>
+
+  <!-- Question Jump Strip (10 interactive pills) -->
+  <g id="QuestionNavStrip">
+    <!-- Q1 Answered -->
+    <rect x="24" y="124" width="30" height="30" rx="8" fill="#DDE1F5" stroke="#2B3A67" stroke-width="1"/>
+    <text x="39" y="144" fill="#2B3A67" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">1</text>
+
+    <!-- Q2 Answered -->
+    <rect x="58" y="124" width="30" height="30" rx="8" fill="#DDE1F5" stroke="#2B3A67" stroke-width="1"/>
+    <text x="73" y="144" fill="#2B3A67" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">2</text>
+
+    <!-- Q3 Answered -->
+    <rect x="92" y="124" width="30" height="30" rx="8" fill="#DDE1F5" stroke="#2B3A67" stroke-width="1"/>
+    <text x="107" y="144" fill="#2B3A67" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">3</text>
+
+    <!-- Q4 Current Active -->
+    <rect x="126" y="124" width="30" height="30" rx="8" fill="#2B3A67"/>
+    <text x="141" y="144" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle">4</text>
+
+    <!-- Q5 to Q10 Unanswered Outline -->
+    <rect x="160" y="124" width="30" height="30" rx="8" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="175" y="144" fill="#787579" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">5</text>
+
+    <rect x="194" y="124" width="30" height="30" rx="8" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="209" y="144" fill="#787579" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">6</text>
+
+    <rect x="228" y="124" width="30" height="30" rx="8" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="243" y="144" fill="#787579" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">7</text>
+
+    <rect x="262" y="124" width="30" height="30" rx="8" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="277" y="144" fill="#787579" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">8</text>
+
+    <rect x="296" y="124" width="30" height="30" rx="8" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="311" y="144" fill="#787579" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">9</text>
+
+    <rect x="330" y="124" width="36" height="30" rx="8" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="348" y="144" fill="#787579" font-family="Inter, sans-serif" font-size="12" text-anchor="middle">10</text>
+  </g>
+
+  <!-- Question Prompt Card -->
+  <g id="QuestionCard">
+    <rect x="24" y="170" width="342" height="150" rx="16" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="44" y="198" fill="#B08D57" font-family="Inter, sans-serif" font-size="11" font-weight="600" letter-spacing="0.5">SCENARIO APPLIED QUESTION</text>
+    <text x="44" y="226" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="17" font-weight="600">A fintech team notices heavy frame drops whenever a dynamic stock ticker updates inside a complex financial dashboard. What is the architectural fix?</text>
+    
+    <!-- Hint Pill (Null-safe showcase) -->
+    <rect x="44" y="286" width="100" height="24" rx="6" fill="#FCEECB"/>
+    <text x="94" y="302" fill="#B08D57" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">💡 View Hint</text>
+  </g>
+
+  <!-- Option Tiles (4 large tap targets >= 48dp) -->
+  <g id="OptionsList">
+    <!-- Option A (Unselected) -->
+    <g id="Option_A">
+      <rect x="24" y="336" width="342" height="58" rx="12" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+      <circle cx="50" cy="365" r="10" stroke="#787579" stroke-width="1.5" fill="none"/>
+      <text x="50" y="369" fill="#787579" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">A</text>
+      <text x="74" y="370" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13">Wrap the entire screen tree in a global StatefulBuilder</text>
+    </g>
+
+    <!-- Option B (Selected - Active Role) -->
+    <g id="Option_B">
+      <rect x="24" y="406" width="342" height="58" rx="12" fill="#DDE1F5" stroke="#2B3A67" stroke-width="1.8"/>
+      <circle cx="50" cy="435" r="10" fill="#2B3A67"/>
+      <path d="M46 435L49 438L55 432" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="74" y="440" fill="#2B3A67" font-family="Inter, sans-serif" font-size="13" font-weight="600">Isolate ticker in a RepaintBoundary &amp; local ValueListenable</text>
+    </g>
+
+    <!-- Option C (Unselected) -->
+    <g id="Option_C">
+      <rect x="24" y="476" width="342" height="58" rx="12" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+      <circle cx="50" cy="505" r="10" stroke="#787579" stroke-width="1.5" fill="none"/>
+      <text x="50" y="509" fill="#787579" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">C</text>
+      <text x="74" y="510" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13">Replace all StatelessWidget with StatefulWidget instances</text>
+    </g>
+
+    <!-- Option D (Unselected) -->
+    <g id="Option_D">
+      <rect x="24" y="546" width="342" height="58" rx="12" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+      <circle cx="50" cy="575" r="10" stroke="#787579" stroke-width="1.5" fill="none"/>
+      <text x="50" y="579" fill="#787579" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">D</text>
+      <text x="74" y="580" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13">Trigger markNeedsBuild directly on RenderObject</text>
+    </g>
+  </g>
+
+  <!-- Sticky Bottom Navigation Action Bar -->
+  <g id="BottomQuizBar">
+    <rect x="0" y="754" width="390" height="90" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    
+    <!-- Previous Button -->
+    <rect x="24" y="768" width="100" height="52" rx="12" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="74" y="800" fill="#505C7C" font-family="Inter, sans-serif" font-size="14" font-weight="500" text-anchor="middle">Previous</text>
+
+    <!-- Next / Review Button -->
+    <rect x="136" y="768" width="230" height="52" rx="12" fill="#2B3A67"/>
+    <text x="251" y="800" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="15" font-weight="600" text-anchor="middle">Next Question →</text>
+  </g>
+</svg>

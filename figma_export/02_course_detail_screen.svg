@@ -1,0 +1,111 @@
+<svg width="390" height="844" viewBox="0 0 390 844" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="390" height="844" fill="#FAF8F4"/>
+
+  <!-- Status Bar -->
+  <g id="StatusBar">
+    <text x="32" y="32" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="14" font-weight="600">9:41</text>
+    <circle cx="330" cy="28" r="3" fill="#1C1B1F"/>
+    <circle cx="340" cy="28" r="3" fill="#1C1B1F"/>
+    <rect x="350" y="22" width="22" height="12" rx="3" stroke="#1C1B1F" stroke-width="1.5" fill="none"/>
+    <rect x="352" y="24" width="14" height="8" rx="1.5" fill="#1C1B1F"/>
+  </g>
+
+  <!-- Top App Bar with Back Button -->
+  <g id="AppBar">
+    <circle cx="40" cy="74" r="18" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <path d="M44 68L36 74L44 80" stroke="#2B3A67" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="74" y="80" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="20" font-weight="600">Course Detail</text>
+  </g>
+
+  <!-- Scrollable Content Area -->
+  <g id="HeaderSection">
+    <text x="24" y="126" fill="#B08D57" font-family="Inter, sans-serif" font-size="11" font-weight="600" letter-spacing="1">MOBILE DEVELOPMENT</text>
+    <text x="24" y="156" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="24" font-weight="600">Flutter Fundamentals</text>
+    <text x="24" y="178" fill="#505C7C" font-family="Inter, sans-serif" font-size="14">Master production widget architecture, Dart sound null safety, and responsive state machines.</text>
+  </g>
+
+  <!-- Summary Metric Card (Prompt requirement: Title, duration, difficulty, question count) -->
+  <g id="SummaryMetricCard">
+    <rect x="24" y="198" width="342" height="74" rx="14" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    
+    <!-- Col 1: Duration -->
+    <text x="56" y="228" fill="#787579" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">DURATION</text>
+    <text x="56" y="250" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">~90 min</text>
+
+    <!-- Divider 1 -->
+    <line x1="114" y1="212" x2="114" y2="258" stroke="#E4E0D8" stroke-width="1"/>
+
+    <!-- Col 2: Difficulty Tag -->
+    <text x="180" y="228" fill="#787579" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">DIFFICULTY</text>
+    <rect x="145" y="235" width="70" height="20" rx="4" fill="none" stroke="#B08D57" stroke-width="1"/>
+    <text x="180" y="249" fill="#B08D57" font-family="Inter, sans-serif" font-size="10" font-weight="600" text-anchor="middle">BEGINNER</text>
+
+    <!-- Divider 2 -->
+    <line x1="246" y1="212" x2="246" y2="258" stroke="#E4E0D8" stroke-width="1"/>
+
+    <!-- Col 3: Questions -->
+    <text x="304" y="228" fill="#787579" font-family="Inter, sans-serif" font-size="11" text-anchor="middle">ASSESSMENT</text>
+    <text x="304" y="250" fill="#2B3A67" font-family="Inter, sans-serif" font-size="14" font-weight="600" text-anchor="middle">10 Questions</text>
+  </g>
+
+  <!-- About This Course -->
+  <g id="AboutSection">
+    <text x="24" y="306" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="17" font-weight="600">About this course</text>
+    <text x="24" y="328" fill="#505C7C" font-family="Inter, sans-serif" font-size="13">An exhaustive, hands-on certification curriculum engineered to elevate developers from fundamental Dart concepts to production-grade cross-platform application design.</text>
+  </g>
+
+  <!-- What You'll Learn -->
+  <g id="OutcomesSection">
+    <text x="24" y="380" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="17" font-weight="600">What you'll learn</text>
+    
+    <circle cx="32" cy="404" r="3" fill="#B08D57"/>
+    <text x="44" y="408" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13">Architect declarative widget trees with const optimizations</text>
+
+    <circle cx="32" cy="428" r="3" fill="#B08D57"/>
+    <text x="44" y="432" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13">Harness Dart sound null safety, late bindings, and patterns</text>
+
+    <circle cx="32" cy="452" r="3" fill="#B08D57"/>
+    <text x="44" y="456" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13">Manage deterministic state with ChangeNotifier and Scopes</text>
+  </g>
+
+  <!-- Course Content (5 Lessons) -->
+  <g id="CourseContentSection">
+    <text x="24" y="496" fill="#1C1B1F" font-family="Fraunces, Georgia, serif" font-size="17" font-weight="600">Course content · 5 lessons</text>
+    
+    <!-- Lesson 1 -->
+    <rect x="24" y="510" width="342" height="42" rx="10" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="38" y="535" fill="#2B3A67" font-family="Inter, sans-serif" font-size="12" font-weight="600">1</text>
+    <text x="58" y="535" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13" font-weight="500">Flutter Architecture &amp; Skia/Impeller</text>
+    <text x="348" y="535" fill="#787579" font-family="Inter, sans-serif" font-size="11" text-anchor="end">18 min</text>
+
+    <!-- Lesson 2 -->
+    <rect x="24" y="558" width="342" height="42" rx="10" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="38" y="583" fill="#2B3A67" font-family="Inter, sans-serif" font-size="12" font-weight="600">2</text>
+    <text x="58" y="583" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13" font-weight="500">Widget Tree, Element &amp; RenderObject</text>
+    <text x="348" y="583" fill="#787579" font-family="Inter, sans-serif" font-size="11" text-anchor="end">16 min</text>
+
+    <!-- Lesson 3 -->
+    <rect x="24" y="606" width="342" height="42" rx="10" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    <text x="38" y="631" fill="#2B3A67" font-family="Inter, sans-serif" font-size="12" font-weight="600">3</text>
+    <text x="58" y="631" fill="#1C1B1F" font-family="Inter, sans-serif" font-size="13" font-weight="500">Dart Sound Null Safety &amp; Memory</text>
+    <text x="348" y="631" fill="#787579" font-family="Inter, sans-serif" font-size="11" text-anchor="end">20 min</text>
+  </g>
+
+  <!-- Assessment Requirement Card -->
+  <g id="FinalAssessmentBanner">
+    <rect x="24" y="660" width="342" height="74" rx="12" fill="#DDE1F5" stroke="#2B3A67" stroke-width="1" stroke-opacity="0.2"/>
+    <text x="40" y="684" fill="#2B3A67" font-family="Inter, sans-serif" font-size="12" font-weight="700">FINAL CERTIFICATION EXAM</text>
+    <text x="40" y="704" fill="#505C7C" font-family="Inter, sans-serif" font-size="12">10 MCQs · Pass mark 60% · Official digital certificate issued on pass.</text>
+    <text x="40" y="722" fill="#505C7C" font-family="Inter, sans-serif" font-size="11">Unlock by completing all 5 lessons.</text>
+  </g>
+
+  <!-- Sticky Bottom Bar -->
+  <g id="StickyBottomBar">
+    <rect x="0" y="754" width="390" height="90" fill="#FFFFFF" stroke="#E4E0D8" stroke-width="1"/>
+    
+    <!-- CTA Button -->
+    <rect x="24" y="768" width="342" height="52" rx="12" fill="#2B3A67"/>
+    <text x="195" y="800" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="15" font-weight="600" text-anchor="middle">Enroll for free</text>
+  </g>
+</svg>
