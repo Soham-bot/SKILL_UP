@@ -1,575 +1,381 @@
 import 'package:flutter/material.dart';
+import '../data/course_repository.dart';
 import '../models/course.dart';
-import '../services/course_service.dart';
-import '../theme/app_colors.dart';
-import '../utils/glitch_page_route.dart';
-import '../widgets/wireframe_grid_background.dart';
+import '../services/progress_scope.dart';
 import '../widgets/course_card.dart';
-import '../widgets/stat_card.dart';
-import '../widgets/brutal_button.dart';
-import 'course_detail_screen.dart';
-import 'learning_hub_screen.dart';
-import 'certificate_screen.dart';
+import '../widgets/empty_state.dart';
+import '../widgets/responsive_container.dart';
 
-class HomeScreen extends StatelessWidget {
-  final CourseService courseService;
-  final VoidCallback onNavigateToExplore;
+class HomeScreen extends StatefulWidget {
+  final ValueChanged<int>? onNavigateToTab;
 
-  const HomeScreen({
-    super.key,
-    required this.courseService,
-    required this.onNavigateToExplore,
-  });
+  const HomeScreen({super.key, this.onNavigateToTab});
 
-  void _onCourseTap(BuildContext context, Course course) {
-    if (course.status == CourseStatus.completed && course.bestResult != null) {
-      GlitchPageRoute.push(
-        context,
-        CertificateScreen(
-          courseService: courseService,
-          quizResult: course.bestResult!,
-        ),
-      );
-    } else if (course.status == CourseStatus.inProgress || course.status == CourseStatus.enrolled) {
-      GlitchPageRoute.push(
-        context,
-        LearningHubScreen(
-          courseService: courseService,
-          courseId: course.id,
-        ),
-      );
-    } else {
-      GlitchPageRoute.push(
-        context,
-        CourseDetailScreen(
-          courseService: courseService,
-          course: course,
-        ),
-      );
-    }
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final _searchController = TextEditingController();
+  String _selectedCategory = 'All';
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text.trim().toLowerCase();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<String> get _categories {
+    final cats = CourseRepository.allCourses.map((c) => c.category).toSet().toList();
+    return ['All', ...cats];
+  }
+
+  List<Course> get _filteredCourses {
+    return CourseRepository.allCourses.where((course) {
+      final matchesCategory =
+          _selectedCategory == 'All' || course.category == _selectedCategory;
+      final matchesSearch = _searchQuery.isEmpty ||
+          course.title.toLowerCase().contains(_searchQuery) ||
+          course.description.toLowerCase().contains(_searchQuery);
+      return matchesCategory && matchesSearch;
+    }).toList();
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _searchController.clear();
+      _selectedCategory = 'All';
+      _searchQuery = '';
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final profile = courseService.profile;
-    final learnerName = profile?.name ?? 'MAIN CHARACTER';
-    final completedCount = courseService.completedCourses.length;
-    final inProgressCourses = courseService.inProgressCourses;
-    final allCourses = courseService.courses;
-
-    final activeCourse = inProgressCourses.isNotEmpty
-        ? inProgressCourses.first
-        : (courseService.enrolledCourses.isNotEmpty ? courseService.enrolledCourses.first : null);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final progress = ProgressScope.of(context);
+    final activeCourse = progress.getActiveCourse();
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Row(
+        titleSpacing: 20,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-              child: Text(
-                'SKL',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'monospace',
-                  color: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
-                ),
+            Text(
+              'Hello, ${progress.profile.firstName}',
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onSurface,
               ),
             ),
-            const SizedBox(width: 8),
-            const Text('SKILLUP // 01_FEED'),
+            Text(
+              'Select a course to build certified mastery',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurface.withOpacity(0.65),
+              ),
+            ),
           ],
         ),
         actions: [
-          IconButton(
-            tooltip: isDark ? 'VIBE: FLASHBANG' : 'VIBE: VOID DARK',
-            icon: Icon(isDark ? Icons.light_mode_sharp : Icons.dark_mode_sharp),
-            onPressed: () => courseService.toggleTheme(),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: IconButton(
+              tooltip: 'Learner Profile',
+              onPressed: () {
+                if (widget.onNavigateToTab != null) {
+                  widget.onNavigateToTab!(2); // Switch to Profile tab
+                } else {
+                  Navigator.of(context).pushNamed('/profile');
+                }
+              },
+              icon: CircleAvatar(
+                radius: 18,
+                backgroundColor: colorScheme.primaryContainer,
+                child: Text(
+                  progress.profile.firstName.isNotEmpty
+                      ? progress.profile.firstName[0].toUpperCase()
+                      : 'L',
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onPrimaryContainer,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
-      body: WireframeGridBackground(
-        child: SafeArea(
-          child: ListView(
-            // Snap-Velocity Scrolling Momentum
-            physics: const BouncingScrollPhysics(
-              decelerationRate: ScrollDecelerationRate.fast,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            children: [
-              // Top Live Telemetry Ticker
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF141414) : const Color(0xFFE5E5DE),
-                  border: Border.all(
-                    color: isDark ? Colors.white : AppColors.pitchBlack,
-                    width: 1.5,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth >= 600;
+          final isExpanded = constraints.maxWidth >= 1000;
+          final crossAxisCount = isExpanded ? 3 : (isWide ? 2 : 1);
+
+          return ResponsiveContainer(
+            maxWidth: 1100,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: CustomScrollView(
+              slivers: [
+                // Continue Learning Card (if course is in progress)
+                if (activeCourse != null)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: _buildContinueLearningCard(
+                        context,
+                        activeCourse,
+                        progress.completedLessonsCount(activeCourse.id),
+                        activeCourse.lessons.length,
+                      ),
+                    ),
+                  ),
+
+                // Search Field
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search courses and skills...',
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: colorScheme.onSurface.withOpacity(0.5),
+                        ),
+                        suffixIcon: _searchQuery.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear, size: 18),
+                                onPressed: () => _searchController.clear(),
+                              )
+                            : null,
+                      ),
+                    ),
                   ),
                 ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        '>>> ZERO-PADDING BRUTALISM // FLUTTER',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
-                      ),
+
+                // Category Filter Chips
+                SliverToBoxAdapter(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Row(
+                      children: _categories.map((category) {
+                        final isSelected = _selectedCategory == category;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: FilterChip(
+                            label: Text(category),
+                            selected: isSelected,
+                            onSelected: (_) {
+                              setState(() {
+                                _selectedCategory = category;
+                              });
+                            },
+                          ),
+                        );
+                      }).toList(),
                     ),
-                    SizedBox(width: 8),
-                    Text(
-                      '// NO CAP 🔥',
-                      style: TextStyle(
-                        fontSize: 9.5,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'monospace',
-                        color: AppColors.acidGreen,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
 
-              const SizedBox(height: 14),
-
-              // Operator Greeting & Asymmetric Z-Index Layering
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                      border: Border.all(
-                        color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                        width: 2.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-                          offset: const Offset(4, 4),
-                          blurRadius: 0,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                // Course Catalog Header
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              color: isDark ? Colors.white : AppColors.pitchBlack,
-                              child: Text(
-                                '// MAIN CHARACTER',
-                                style: TextStyle(
-                                  fontSize: 9.5,
-                                  fontWeight: FontWeight.w900,
-                                  fontFamily: 'monospace',
-                                  color: isDark ? AppColors.pitchBlack : AppColors.acidGreen,
-                                ),
-                              ),
+                        Expanded(
+                          child: Text(
+                            'Available Certifications',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: colorScheme.onSurface,
                             ),
-                            const SizedBox(width: 8),
-                            const Text(
-                              '<VIBE: IMMACULATE>',
-                              style: TextStyle(
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w900,
-                                fontFamily: 'monospace',
-                                color: AppColors.acidGreen,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          '${learnerName.toUpperCase()} ⚡',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
-                            fontFamily: 'monospace',
-                            letterSpacing: -0.5,
-                            color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(width: 8),
                         Text(
-                          'Pick a track. Grind 5 modules. Ace the 10-question final boss to flex your certificate. No cap.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            height: 1.4,
-                            fontFamily: 'monospace',
-                            color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
+                          '${_filteredCourses.length} courses',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurface.withOpacity(0.6),
                           ),
                         ),
                       ],
                     ),
                   ),
+                ),
 
-                  // Asymmetric Rotated Sticker Overlay
-                  Positioned(
-                    top: -10,
-                    right: 10,
-                    child: Transform.rotate(
-                      angle: -0.06,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.neonYellow,
-                          border: Border.all(color: AppColors.pitchBlack, width: 2.0),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: AppColors.pitchBlack,
-                              offset: Offset(2, 2),
-                              blurRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: const Text(
-                          'RANK: GOAT IN TRAINING 🔥',
-                          style: TextStyle(
-                            fontSize: 9.5,
-                            fontWeight: FontWeight.w900,
-                            fontFamily: 'monospace',
-                            color: AppColors.pitchBlack,
+                // Empty State or Course List
+                if (_filteredCourses.isEmpty)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: EmptyState(
+                      icon: Icons.search_off_outlined,
+                      title: 'No courses found',
+                      message:
+                          'We could not find any courses matching "$_searchQuery". Try adjusting your search term or category filter.',
+                      actionLabel: 'Clear filters',
+                      onAction: _clearFilters,
+                    ),
+                  )
+                else if (crossAxisCount == 1)
+                  // Phone ListView (lazy builder)
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final course = _filteredCourses[index];
+                        final status = progress.getCourseStatus(course.id);
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: CourseCard(
+                            course: course,
+                            status: status,
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                '/course-detail',
+                                arguments: course.id,
+                              );
+                            },
                           ),
-                        ),
-                      ),
+                        );
+                      },
+                      childCount: _filteredCourses.length,
                     ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Telemetry Grid: Streak & Aura
-              Row(
-                children: [
-                  Expanded(
-                    child: StatCard(
-                      title: 'DAILY STREAK',
-                      value: '${profile?.streakDays ?? 1} DAYS',
-                      icon: Icons.local_fire_department_sharp,
-                      accentColor: const Color(0xFFFF5500),
-                      subtitle: 'NEVER MISSED 🔥',
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: StatCard(
-                      title: 'AURA POINTS',
-                      value: '${profile?.xp ?? 0}',
-                      icon: Icons.bolt_sharp,
-                      accentColor: AppColors.neonYellow,
-                      subtitle: 'BANKED ON-DEVICE ✨',
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 10),
-
-              // Metric Tags
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.acidGreen,
-                      border: Border.all(color: isDark ? Colors.white : AppColors.pitchBlack, width: 2),
-                    ),
-                    child: Text(
-                      '[BIG W\'S: $completedCount CERTS]',
-                      style: const TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'monospace',
-                        color: AppColors.pitchBlack,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.white : AppColors.pitchBlack,
-                      border: Border.all(color: isDark ? Colors.white : AppColors.pitchBlack, width: 2),
-                    ),
-                    child: Text(
-                      '[GRINDING: ${inProgressCourses.length} TRACKS]',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'monospace',
-                        color: isDark ? AppColors.pitchBlack : Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFDDDDDD),
-                      border: Border.all(color: isDark ? Colors.white : AppColors.pitchBlack, width: 1.5),
-                    ),
-                    child: const Text(
-                      '<ZERO_L\'S // LOCKED_IN>',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // SECTION 1: CONTINUE LEARNING (Active Node)
-              Text(
-                '// WHAT YOU\'RE COOKING RN:',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'monospace',
-                  letterSpacing: 1.0,
-                  color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                ),
-              ),
-              const SizedBox(height: 6),
-
-              if (activeCourse != null)
-                CourseCard(
-                  course: activeCourse,
-                  isFeatured: true,
-                  onTap: () => _onCourseTap(context, activeCourse),
-                )
-              else
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-                    border: Border.all(
-                      color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
-                      width: 2.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: isDark ? Colors.white.withValues(alpha: 0.2) : AppColors.pitchBlack,
-                        offset: const Offset(3, 3),
-                        blurRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '<NOTHING COOKING RN 💀>',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Pick a course below and start leveling up your skills on-device.',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontFamily: 'monospace',
-                          color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      BrutalButton(
-                        text: '>>> BROWSE ALL DROPS >>>',
-                        onPressed: onNavigateToExplore,
-                        backgroundColor: AppColors.acidGreen,
-                        foregroundColor: AppColors.pitchBlack,
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                      ),
-                    ],
-                  ),
-                ),
-
-              const SizedBox(height: 22),
-
-              // SECTION 2: EXPLORE COURSES (Grid)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '// CURRICULUM DROPS [04 TRACKS]:',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w900,
-                      fontFamily: 'monospace',
-                      letterSpacing: 1.0,
-                      color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: onNavigateToExplore,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      color: isDark ? Colors.white : AppColors.pitchBlack,
-                      child: Text(
-                        'EXPAND_ALL',
-                        style: TextStyle(
-                          fontSize: 9.5,
-                          fontWeight: FontWeight.w900,
-                          fontFamily: 'monospace',
-                          color: isDark ? AppColors.pitchBlack : Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-
-              // GridView of Course Nodes
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final isWide = constraints.maxWidth > 600;
-
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                  )
+                else
+                  // Tablet / Desktop GridView (lazy builder)
+                  SliverGrid(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: isWide ? 2 : 1,
-                      childAspectRatio: isWide ? 1.25 : 1.28,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      mainAxisExtent: 260,
                     ),
-                    itemCount: allCourses.length,
-                    itemBuilder: (context, index) {
-                      final course = allCourses[index];
-                      return CourseCard(
-                        course: course,
-                        onTap: () => _onCourseTap(context, course),
-                      );
-                    },
-                  );
-                },
-              ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final course = _filteredCourses[index];
+                        final status = progress.getCourseStatus(course.id);
+                        return CourseCard(
+                          course: course,
+                          status: status,
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              '/course-detail',
+                              arguments: course.id,
+                            );
+                          },
+                        );
+                      },
+                      childCount: _filteredCourses.length,
+                    ),
+                  ),
 
-              const SizedBox(height: 22),
-
-              // SECTION 3: SYSTEM PROTOCOL UNLOCKS
-              Text(
-                '// BADGES & TROPHIES:',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'monospace',
-                  letterSpacing: 1.0,
-                  color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 24),
                 ),
-              ),
-              const SizedBox(height: 8),
-
-              Row(
-                children: [
-                  _buildAchievementBadge(
-                    context,
-                    title: 'FIRST SYNC',
-                    subtitle: 'ENROLLED 🔥',
-                    isUnlocked: courseService.enrolledCourses.isNotEmpty,
-                    angle: -0.04,
-                  ),
-                  const SizedBox(width: 8),
-                  _buildAchievementBadge(
-                    context,
-                    title: '5 MODULES',
-                    subtitle: 'TRACK BEATEN ✨',
-                    isUnlocked: allCourses.any((c) => c.isFullyLearned),
-                    angle: 0.05,
-                  ),
-                  const SizedBox(width: 8),
-                  _buildAchievementBadge(
-                    context,
-                    title: 'CERTIFIED',
-                    subtitle: 'HUGE W ≥60%',
-                    isUnlocked: completedCount > 0,
-                    angle: -0.03,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildAchievementBadge(
-    BuildContext context, {
-    required String title,
-    required String subtitle,
-    required bool isUnlocked,
-    double angle = 0.0,
-  }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  Widget _buildContinueLearningCard(
+    BuildContext context,
+    Course course,
+    int completed,
+    int total,
+  ) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final progressFraction = total > 0 ? (completed / total).clamp(0.0, 1.0) : 0.0;
 
-    return Expanded(
-      child: Transform.rotate(
-        angle: angle,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-          decoration: BoxDecoration(
-            color: isUnlocked
-                ? AppColors.neonYellow
-                : (isDark ? const Color(0xFF141414) : const Color(0xFFEBEBE5)),
-            border: Border.all(
-              color: isDark ? Colors.white : AppColors.pitchBlack,
-              width: 2.0,
+    return Card(
+      color: colorScheme.primaryContainer.withOpacity(0.4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: colorScheme.primary.withOpacity(0.3), width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.play_circle_outline,
+                  color: colorScheme.primary,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'CONTINUE LEARNING',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1,
+                    color: colorScheme.primary,
+                  ),
+                ),
+              ],
             ),
-            boxShadow: isUnlocked
-                ? [
-                    BoxShadow(
-                      color: isDark ? Colors.white.withValues(alpha: 0.3) : AppColors.pitchBlack,
-                      offset: const Offset(2, 2),
-                      blurRadius: 0,
-                    ),
-                  ]
-                : null,
-          ),
-          child: Column(
-            children: [
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 9.5,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'monospace',
-                  color: isUnlocked
-                      ? AppColors.pitchBlack
-                      : (isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted),
-                ),
+            const SizedBox(height: 10),
+            Text(
+              course.title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onSurface,
               ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'monospace',
-                  color: isUnlocked
-                      ? AppColors.pitchBlack
-                      : (isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted),
-                ),
+            ),
+            const SizedBox(height: 12),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: progressFraction,
+                minHeight: 6,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '$completed of $total lessons completed',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurface.withOpacity(0.7),
+                  ),
+                ),
+                FilledButton.tonal(
+                  style: FilledButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      '/learning-path',
+                      arguments: course.id,
+                    );
+                  },
+                  child: const Text('Resume'),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

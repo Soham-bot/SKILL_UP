@@ -1,148 +1,268 @@
 import 'package:flutter/material.dart';
-import '../models/course.dart';
-import '../services/course_service.dart';
-import '../theme/app_colors.dart';
-import '../utils/glitch_page_route.dart';
-import '../widgets/wireframe_grid_background.dart';
-import '../widgets/course_card.dart';
-import 'learning_hub_screen.dart';
-import 'certificate_screen.dart';
+import '../data/course_repository.dart';
+import '../models/enums.dart';
+import '../services/certificate_pdf_service.dart';
+import '../services/progress_scope.dart';
+import '../widgets/empty_state.dart';
+import '../widgets/responsive_container.dart';
+import '../widgets/status_chip.dart';
 
-class MyLearningScreen extends StatefulWidget {
-  final CourseService courseService;
-
-  const MyLearningScreen({super.key, required this.courseService});
-
-  @override
-  State<MyLearningScreen> createState() => _MyLearningScreenState();
-}
-
-class _MyLearningScreenState extends State<MyLearningScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  void _onCourseTap(Course course) {
-    if (course.status == CourseStatus.completed && course.bestResult != null) {
-      GlitchPageRoute.push(
-        context,
-        CertificateScreen(
-          courseService: widget.courseService,
-          quizResult: course.bestResult!,
-        ),
-      );
-    } else {
-      GlitchPageRoute.push(
-        context,
-        LearningHubScreen(
-          courseService: widget.courseService,
-          courseId: course.id,
-        ),
-      );
-    }
-  }
+class MyLearningScreen extends StatelessWidget {
+  const MyLearningScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final enrolled = widget.courseService.enrolledCourses;
-    final inProgress = widget.courseService.inProgressCourses;
-    final completed = widget.courseService.completedCourses;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final progress = ProgressScope.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('// FLEX_RECEIPT // YOUR HUB'),
-        bottom: TabBar(
-          controller: _tabController,
-          labelColor: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-          unselectedLabelColor: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-          indicatorColor: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-          indicatorWeight: 3.5,
-          labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontFamily: 'monospace', fontSize: 10.5),
-          tabs: [
-            Tab(text: 'ENROLLED (${enrolled.length})'),
-            Tab(text: 'COOKING (${inProgress.length})'),
-            Tab(text: 'CERTIFIED W\'S (${completed.length})'),
-          ],
+    final inProgressCourses = CourseRepository.allCourses.where((c) {
+      final status = progress.getCourseStatus(c.id);
+      return status == CourseStatus.inProgress || status == CourseStatus.attempted;
+    }).toList();
+
+    final completedCourses = CourseRepository.allCourses.where((c) {
+      final status = progress.getCourseStatus(c.id);
+      return status == CourseStatus.completed;
+    }).toList();
+
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: colorScheme.surface,
+        appBar: AppBar(
+          title: const Text('My Learning'),
+          bottom: TabBar(
+            indicatorColor: colorScheme.primary,
+            labelColor: colorScheme.primary,
+            unselectedLabelColor: colorScheme.onSurface.withOpacity(0.6),
+            tabs: [
+              Tab(
+                text: 'In Progress (${inProgressCourses.length})',
+              ),
+              Tab(
+                text: 'Completed (${completedCourses.length})',
+              ),
+            ],
+          ),
         ),
-      ),
-      body: WireframeGridBackground(
-        child: TabBarView(
-          controller: _tabController,
+        body: TabBarView(
           children: [
-            _buildCourseList(enrolled, '<NOTHING ENROLLED YET 💀>\nGo pick a track from drops to start cooking.'),
-            _buildCourseList(inProgress, '<NOTHING COOKING RN>\nPick an enrolled track to begin grinding.'),
-            _buildCourseList(completed, '<NO CERTIFICATES YET 💀>\nBeat the 10-MCQ test with ≥ 60% to unlock your big flex.'),
+            // Tab 1: In Progress
+            inProgressCourses.isEmpty
+                ? EmptyState(
+                    icon: Icons.book_outlined,
+                    title: 'No courses in progress',
+                    message:
+                        'Explore our catalog on the Home tab to discover skills and begin learning.',
+                    actionLabel: 'Browse Courses',
+                    onAction: () {
+                      Navigator.of(context).pushReplacementNamed('/main');
+                    },
+                  )
+                : ResponsiveContainer(
+                    maxWidth: 720,
+                    child: ListView.builder(
+                      itemCount: inProgressCourses.length,
+                      itemBuilder: (context, index) {
+                        final course = inProgressCourses[index];
+                        final done = progress.completedLessonsCount(course.id);
+                        final total = course.lessons.length;
+                        final fraction = total > 0 ? done / total : 0.0;
+                        final status = progress.getCourseStatus(course.id);
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: Card(
+                            color: colorScheme.surfaceContainer,
+                            child: Padding(
+                              padding: const EdgeInsets.all(18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          course.title,
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                      StatusChip(status: status),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: LinearProgressIndicator(
+                                      value: fraction,
+                                      minHeight: 6,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '$done of $total lessons done',
+                                        style: theme.textTheme.bodySmall?.copyWith(
+                                          color: colorScheme.onSurface
+                                              .withOpacity(0.65),
+                                        ),
+                                      ),
+                                      FilledButton.tonal(
+                                        style: FilledButton.styleFrom(
+                                          visualDensity: VisualDensity.compact,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pushNamed(
+                                            '/learning-path',
+                                            arguments: course.id,
+                                          );
+                                        },
+                                        child: Text(
+                                          done >= total
+                                              ? 'Take Assessment'
+                                              : 'Continue',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+            // Tab 2: Completed (Certificates)
+            completedCourses.isEmpty
+                ? EmptyState(
+                    icon: Icons.workspace_premium_outlined,
+                    title: 'No certificates earned yet',
+                    message:
+                        'Pass a final assessment with a score of 60% or higher to earn and download your certificate.',
+                  )
+                : ResponsiveContainer(
+                    maxWidth: 720,
+                    child: ListView.builder(
+                      itemCount: completedCourses.length,
+                      itemBuilder: (context, index) {
+                        final course = completedCourses[index];
+                        final bestResult = progress.getBestResult(course.id);
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: Card(
+                            color: colorScheme.surfaceContainer,
+                            child: Padding(
+                              padding: const EdgeInsets.all(18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: 44,
+                                        height: 44,
+                                        decoration: BoxDecoration(
+                                          color: colorScheme.tertiaryContainer,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Icon(
+                                          Icons.workspace_premium,
+                                          color:
+                                              colorScheme.onTertiaryContainer,
+                                          size: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 14),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              course.title,
+                                              style: theme.textTheme.titleMedium
+                                                  ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                                color: colorScheme.onSurface,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 2),
+                                            Text(
+                                              bestResult != null
+                                                  ? 'Score: ${bestResult.score}/10 (${bestResult.percentage.toStringAsFixed(0)}%) · ID: ${bestResult.id}'
+                                                  : 'Certificate of Completion',
+                                              style: theme.textTheme.bodySmall
+                                                  ?.copyWith(
+                                                color: colorScheme.onSurface
+                                                    .withOpacity(0.7),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      OutlinedButton.icon(
+                                        style: OutlinedButton.styleFrom(
+                                          visualDensity: VisualDensity.compact,
+                                        ),
+                                        icon: const Icon(Icons.download, size: 16),
+                                        label: const Text('Download'),
+                                        onPressed: bestResult != null
+                                            ? () => CertificatePdfService.shareOrSave(
+                                                  bestResult,
+                                                )
+                                            : null,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      FilledButton.icon(
+                                        style: FilledButton.styleFrom(
+                                          visualDensity: VisualDensity.compact,
+                                        ),
+                                        icon: const Icon(
+                                            Icons.remove_red_eye_outlined,
+                                            size: 16),
+                                        label: const Text('View'),
+                                        onPressed: () {
+                                          Navigator.of(context).pushNamed(
+                                            '/certificate',
+                                            arguments: course.id,
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildCourseList(List<Course> courses, String emptyMessage) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    if (courses.isEmpty) {
-      return Center(
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: isDark ? Colors.white : AppColors.pitchBlack,
-              width: 2,
-            ),
-          ),
-          child: Text(
-            emptyMessage,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 11.5,
-              fontFamily: 'monospace',
-              fontWeight: FontWeight.w700,
-              height: 1.45,
-              color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-            ),
-          ),
-        ),
-      );
-    }
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isWide = constraints.maxWidth > 600;
-        return GridView.builder(
-          physics: const BouncingScrollPhysics(
-            decelerationRate: ScrollDecelerationRate.fast,
-          ),
-          padding: const EdgeInsets.all(14),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: isWide ? 2 : 1,
-            childAspectRatio: isWide ? 1.25 : 1.28,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-          ),
-          itemCount: courses.length,
-          itemBuilder: (context, index) {
-            final course = courses[index];
-            return CourseCard(
-              course: course,
-              onTap: () => _onCourseTap(course),
-            );
-          },
-        );
-      },
     );
   }
 }

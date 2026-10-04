@@ -1,0 +1,130 @@
+{
+  "$schema": "https://tr.designtokens.org/format/",
+  "name": "SkillUp Quiet Royal Design System Tokens",
+  "version": "2.0.0",
+  "description": "Design tokens for SkillUp professional certification platform adhering to Material Design 3 and W3C Design Tokens Community Group specification.",
+  "color": {
+    "seed": {
+      "value": "#2B3A67",
+      "type": "color",
+      "description": "Navy-indigo royal seed color"
+    },
+    "light": {
+      "primary": { "value": "#2B3A67", "type": "color" },
+      "onPrimary": { "value": "#FFFFFF", "type": "color" },
+      "primaryContainer": { "value": "#DDE1F5", "type": "color" },
+      "onPrimaryContainer": { "value": "#111A34", "type": "color" },
+      "secondary": { "value": "#505C7C", "type": "color" },
+      "onSecondary": { "value": "#FFFFFF", "type": "color" },
+      "secondaryContainer": { "value": "#D8E0F7", "type": "color" },
+      "onSecondaryContainer": { "value": "#17233B", "type": "color" },
+      "tertiary": { "value": "#B08D57", "type": "color", "description": "Muted antique gold" },
+      "onTertiary": { "value": "#FFFFFF", "type": "color" },
+      "tertiaryContainer": { "value": "#FCEECB", "type": "color" },
+      "onTertiaryContainer": { "value": "#382900", "type": "color" },
+      "surface": { "value": "#FAF8F4", "type": "color", "description": "Warm ivory background" },
+      "onSurface": { "value": "#1C1B1F", "type": "color" },
+      "surfaceVariant": { "value": "#F2EFE9", "type": "color" },
+      "onSurfaceVariant": { "value": "#49454F", "type": "color" },
+      "outline": { "value": "#E4E0D8", "type": "color" },
+      "outlineVariant": { "value": "#CCC7BE", "type": "color" },
+      "cardBackground": { "value": "#FFFFFF", "type": "color" },
+      "success": { "value": "#4F7F6A", "type": "color", "description": "Soft sage" },
+      "successContainer": { "value": "#E2EFE7", "type": "color" },
+      "onSuccess": { "value": "#FFFFFF", "type": "color" },
+      "warning": { "value": "#B5654A", "type": "color", "description": "Muted terracotta" },
+      "warningContainer": { "value": "#FBEAE5", "type": "color" },
+      "onWarning": { "value": "#FFFFFF", "type": "color" }
+    },
+    "dark": {
+      "primary": { "value": "#A9BCE9", "type": "color" },
+      "onPrimary": { "value": "#142247", "type": "color" },
+      "primaryContainer": { "value": "#1F2D54", "type": "color" },
+      "onPrimaryContainer": { "value": "#DDE1F5", "type": "color" },
+      "secondary": { "value": "#B6C4E2", "type": "color" },
+      "onSecondary": { "value": "#222E49", "type": "color" },
+      "secondaryContainer": { "value": "#384562", "type": "color" },
+      "onSecondaryContainer": { "value": "#D8E0F7", "type": "color" },
+      "tertiary": { "value": "#DFC28D", "type": "color" },
+      "onTertiary": { "value": "#3E2E07", "type": "color" },
+      "tertiaryContainer": { "value": "#594411", "type": "color" },
+      "onTertiaryContainer": { "value": "#FCEECB", "type": "color" },
+      "surface": { "value": "#12151F", "type": "color", "description": "Deep ink" },
+      "onSurface": { "value": "#E4E2E6", "type": "color" },
+      "surfaceVariant": { "value": "#1A1F2E", "type": "color", "description": "Card background" },
+      "onSurfaceVariant": { "value": "#C5C6D0", "type": "color" },
+      "outline": { "value": "#2A3042", "type": "color" },
+      "outlineVariant": { "value": "#3C445C", "type": "color" },
+      "cardBackground": { "value": "#1A1F2E", "type": "color" },
+      "success": { "value": "#78A690", "type": "color" },
+      "successContainer": { "value": "#203B2E", "type": "color" },
+      "onSuccess": { "value": "#0C2419", "type": "color" },
+      "warning": { "value": "#E08F75", "type": "color" },
+      "warningContainer": { "value": "#4E2417", "type": "color" },
+      "onWarning": { "value": "#2C0F06", "type": "color" }
+    }
+  },
+  "typography": {
+    "fontFamilies": {
+      "serif": { "value": "Fraunces, Cormorant Garamond, Georgia, serif" },
+      "sans": { "value": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" },
+      "mono": { "value": "'JetBrains Mono', 'SF Mono', Consolas, monospace" }
+    },
+    "fontSizes": {
+      "displayLarge": { "value": "36px" },
+      "displayMedium": { "value": "30px" },
+      "headlineLarge": { "value": "26px" },
+      "headlineMedium": { "value": "22px" },
+      "titleLarge": { "value": "19px" },
+      "titleMedium": { "value": "16px" },
+      "bodyLarge": { "value": "16px" },
+      "bodyMedium": { "value": "14px" },
+      "labelLarge": { "value": "14px" },
+      "labelMedium": { "value": "12px" },
+      "labelSmall": { "value": "11px" }
+    },
+    "fontWeights": {
+      "regular": { "value": "400" },
+      "medium": { "value": "500" },
+      "semiBold": { "value": "600" },
+      "bold": { "value": "700" }
+    },
+    "lineHeights": {
+      "tight": { "value": "1.2" },
+      "normal": { "value": "1.4" },
+      "relaxed": { "value": "1.6" }
+    }
+  },
+  "spacing": {
+    "space-1": { "value": "4px" },
+    "space-2": { "value": "8px" },
+    "space-3": { "value": "12px" },
+    "space-4": { "value": "16px" },
+    "space-5": { "value": "20px" },
+    "space-6": { "value": "24px" },
+    "space-8": { "value": "32px" },
+    "space-10": { "value": "40px" },
+    "space-12": { "value": "48px" },
+    "space-16": { "value": "64px" }
+  },
+  "borderRadius": {
+    "small": { "value": "8px", "description": "Chips, tags, badges" },
+    "medium": { "value": "12px", "description": "Buttons, text fields" },
+    "large": { "value": "16px", "description": "Cards, sheets, dialogs" },
+    "pill": { "value": "999px", "description": "Avatars, rounded pills" }
+  },
+  "elevation": {
+    "card": { "value": "none (0dp elevation with 1px outline)" },
+    "certificate": {
+      "color": "rgba(43, 58, 103, 0.08)",
+      "offsetY": "12px",
+      "blur": "32px",
+      "spread": "0px"
+    }
+  },
+  "breakpoints": {
+    "compact": { "value": "600px", "description": "Phone layout < 600px" },
+    "medium": { "value": "1000px", "description": "Tablet layout 600-1000px" },
+    "expanded": { "value": "1280px", "description": "Desktop layout > 1000px" }
+  }
+}

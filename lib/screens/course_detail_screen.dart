@@ -1,383 +1,375 @@
 import 'package:flutter/material.dart';
-import '../models/course.dart';
-import '../services/course_service.dart';
-import '../theme/app_colors.dart';
-import '../utils/glitch_page_route.dart';
-import '../widgets/wireframe_grid_background.dart';
-import '../widgets/status_badge.dart';
-import '../widgets/brutal_button.dart';
-import 'learning_hub_screen.dart';
-import 'certificate_screen.dart';
+import '../data/course_repository.dart';
+import '../models/enums.dart';
+import '../services/progress_scope.dart';
+import '../widgets/responsive_container.dart';
+import '../widgets/status_chip.dart';
 
-class CourseDetailScreen extends StatefulWidget {
-  final CourseService courseService;
-  final Course course;
+class CourseDetailScreen extends StatelessWidget {
+  final String courseId;
 
-  const CourseDetailScreen({
-    super.key,
-    required this.courseService,
-    required this.course,
-  });
-
-  @override
-  State<CourseDetailScreen> createState() => _CourseDetailScreenState();
-}
-
-class _CourseDetailScreenState extends State<CourseDetailScreen> {
-  late Course _course;
-
-  @override
-  void initState() {
-    super.initState();
-    _course = widget.course;
-  }
-
-  void _handleEnrollAndStart() async {
-    if (_course.status == CourseStatus.available) {
-      await widget.courseService.enroll(_course.id);
-      final updated = widget.courseService.getCourseById(_course.id);
-      if (updated != null) {
-        setState(() => _course = updated);
-      }
-    }
-
-    if (mounted) {
-      GlitchPageRoute.pushReplacement(
-        context,
-        LearningHubScreen(
-          courseService: widget.courseService,
-          courseId: _course.id,
-        ),
-      );
-    }
-  }
-
-  void _handleViewCertificate() {
-    if (_course.bestResult != null) {
-      GlitchPageRoute.push(
-        context,
-        CertificateScreen(
-          courseService: widget.courseService,
-          quizResult: _course.bestResult!,
-        ),
-      );
-    }
-  }
+  const CourseDetailScreen({super.key, required this.courseId});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final percent = (_course.progress * 100).toInt();
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final progress = ProgressScope.of(context);
+    final course = CourseRepository.getById(courseId);
+
+    if (course == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Course Not Found')),
+        body: const Center(child: Text('The requested course does not exist.')),
+      );
+    }
+
+    final status = progress.getCourseStatus(course.id);
+    final isEnrolled = progress.isEnrolled(course.id);
+    final isCompleted = status == CourseStatus.completed;
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text('// ${_course.title.toUpperCase()}'),
+        title: Text(course.category),
         actions: [
-          if (_course.status == CourseStatus.completed)
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: StatusBadge.completed(),
-            ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(child: StatusChip(status: status)),
+          ),
         ],
       ),
-      // Single-Thumb Velocity Reach Zone
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(14, 10, 14, 18),
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-          border: Border(
-            top: BorderSide(
-              color: isDark ? Colors.white : AppColors.pitchBlack,
-              width: 2.5,
-            ),
-          ),
-        ),
-        child: SafeArea(
-          child: Row(
-            children: [
-              if (_course.status == CourseStatus.completed) ...[
-                Expanded(
-                  child: BrutalButton(
-                    text: '// REVIEW MODULES',
-                    onPressed: () {
-                      GlitchPageRoute.push(
-                        context,
-                        LearningHubScreen(
-                          courseService: widget.courseService,
-                          courseId: _course.id,
-                        ),
-                      );
-                    },
-                    backgroundColor: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFE5E5DE),
-                    foregroundColor: isDark ? Colors.white : AppColors.pitchBlack,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: BrutalButton(
-                    text: 'VIEW CERTIFICATE (THE FLEX)',
-                    onPressed: _handleViewCertificate,
-                    backgroundColor: AppColors.acidGreen,
-                    foregroundColor: AppColors.pitchBlack,
-                  ),
-                ),
-              ] else if (_course.status == CourseStatus.inProgress ||
-                  _course.status == CourseStatus.enrolled) ...[
-                Expanded(
-                  child: BrutalButton(
-                    text: _course.progress > 0
-                        ? '>>> KEEP COOKING ($percent%) >>>'
-                        : '>>> ENTER TRACK >>>',
-                    onPressed: _handleEnrollAndStart,
-                    backgroundColor: AppColors.acidGreen,
-                    foregroundColor: AppColors.pitchBlack,
-                  ),
-                ),
-              ] else ...[
-                Expanded(
-                  child: BrutalButton(
-                    text: '>>> ENROLL FOR FREE // TAP IN >>>',
-                    onPressed: _handleEnrollAndStart,
-                    backgroundColor: AppColors.acidGreen,
-                    foregroundColor: AppColors.pitchBlack,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
-      body: WireframeGridBackground(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Top Badges
-              Row(
-                children: [
-                  StatusBadge.category(_course.category),
-                  const SizedBox(width: 8),
-                  StatusBadge.difficulty(_course.difficulty),
-                ],
-              ),
-
-              const SizedBox(height: 12),
-
-              // Title
-              Text(
-                _course.title.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'monospace',
-                  letterSpacing: -0.5,
-                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                ),
-              ),
-
-              const SizedBox(height: 6),
-
-              Text(
-                _course.fullDescription,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  height: 1.45,
-                  fontFamily: 'monospace',
-                  color: isDark ? AppColors.darkTextSecondary : AppColors.lightTextSecondary,
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Telemetry Metric Box
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF141414) : const Color(0xFFEBEBE5),
-                  border: Border.all(
-                    color: isDark ? Colors.white : AppColors.pitchBlack,
-                    width: 2.0,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-                      offset: const Offset(3, 3),
-                      blurRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: ResponsiveContainer(
+                maxWidth: 720,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildMetric('GRIND TIME', _course.duration.toUpperCase()),
-                    _buildDivider(isDark),
-                    _buildMetric('MODULES', '${_course.modules.length} UNITS'),
-                    _buildDivider(isDark),
-                    _buildMetric('FINAL BOSS', '10 MCQS'),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 22),
-
-              // Acquired Capabilities
-              Text(
-                '// WHAT YOU GET GOOD AT:',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'monospace',
-                  color: isDark ? AppColors.acidGreen : AppColors.pitchBlack,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              ..._course.skillsLearned.map((skill) => Container(
-                    margin: const EdgeInsets.only(bottom: 6),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isDark ? AppColors.darkSurface : Colors.white,
-                      border: Border.all(
-                        color: isDark ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
-                        width: 1.5,
+                    // Course Title
+                    Text(
+                      course.title,
+                      style: theme.textTheme.displaySmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.onSurface,
                       ),
                     ),
-                    child: Row(
+                    const SizedBox(height: 16),
+
+                    // SUMMARY ROW (Required by PS: title, duration, difficulty, question count)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: colorScheme.outline, width: 1),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildSummaryItem(
+                            context,
+                            Icons.tune_outlined,
+                            'Difficulty',
+                            course.difficulty.label,
+                          ),
+                          _buildDivider(context),
+                          _buildSummaryItem(
+                            context,
+                            Icons.schedule_outlined,
+                            'Duration',
+                            '${course.duration.inMinutes} mins',
+                          ),
+                          _buildDivider(context),
+                          _buildSummaryItem(
+                            context,
+                            Icons.quiz_outlined,
+                            'Assessment',
+                            '${course.quizQuestionCount} Questions',
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // About this course
+                    Text(
+                      'About this course',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      course.description,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurface.withOpacity(0.85),
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // What you'll learn
+                    Text(
+                      "What you'll learn",
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ...course.outcomes.map(
+                      (outcome) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              size: 18,
+                              color: colorScheme.primary,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                outcome,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onSurface.withOpacity(0.85),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Course Content (5 lessons collapsed list)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          '⚡ ',
-                          style: TextStyle(
-                            color: AppColors.acidGreen,
-                            fontWeight: FontWeight.w900,
-                            fontFamily: 'monospace',
+                        Text(
+                          'Course content',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: colorScheme.onSurface,
                           ),
                         ),
-                        Expanded(
-                          child: Text(
-                            skill.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'monospace',
-                              color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                            ),
+                        Text(
+                          '${course.lessons.length} lessons · ${course.duration.inMinutes} min total',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurface.withOpacity(0.65),
                           ),
                         ),
                       ],
                     ),
-                  )),
+                    const SizedBox(height: 12),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: colorScheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: colorScheme.outline, width: 1),
+                      ),
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: course.lessons.length,
+                        separatorBuilder: (_, _) => Divider(
+                          color: colorScheme.outline.withOpacity(0.5),
+                          height: 1,
+                        ),
+                        itemBuilder: (context, index) {
+                          final lesson = course.lessons[index];
+                          final isLessonDone = progress.isLessonCompleted(course.id, lesson.id);
 
-              const SizedBox(height: 22),
-
-              // 5 Syllabus Nodes
-              Text(
-                '// THE GRIND [05 MODULES]:',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'monospace',
-                  color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              ..._course.modules.map((module) => Container(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: isDark ? AppColors.darkSurface : Colors.white,
-                      border: Border.all(
-                        color: isDark ? Colors.white : AppColors.pitchBlack,
-                        width: 1.8,
+                          return ListTile(
+                            leading: CircleAvatar(
+                              radius: 14,
+                              backgroundColor: isLessonDone
+                                  ? colorScheme.primaryContainer
+                                  : colorScheme.surfaceContainerHighest,
+                              child: isLessonDone
+                                  ? Icon(Icons.check, size: 14, color: colorScheme.primary)
+                                  : Text(
+                                      '${index + 1}',
+                                      style: theme.textTheme.labelSmall?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                            ),
+                            title: Text(
+                              lesson.title,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                            trailing: Text(
+                              '${lesson.estimatedMinutes} min',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: colorScheme.onSurface.withOpacity(0.6),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 26,
-                          height: 26,
-                          decoration: BoxDecoration(
-                            color: module.isCompleted
-                                ? AppColors.acidGreen
-                                : (isDark ? const Color(0xFF222222) : const Color(0xFFE5E5DE)),
-                            border: Border.all(
-                              color: isDark ? Colors.white : AppColors.pitchBlack,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '0${module.orderIndex}',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w900,
-                                fontFamily: 'monospace',
-                                color: isDark && !module.isCompleted
-                                    ? Colors.white
-                                    : AppColors.pitchBlack,
-                              ),
-                            ),
-                          ),
+                    const SizedBox(height: 24),
+
+                    // Final assessment info card
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: colorScheme.primaryContainer.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: colorScheme.primary.withOpacity(0.2),
+                          width: 1,
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              Text(
-                                module.title.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 12.5,
-                                  fontWeight: FontWeight.w900,
-                                  fontFamily: 'monospace',
-                                  color: isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
-                                ),
+                              Icon(
+                                Icons.workspace_premium_outlined,
+                                color: colorScheme.primary,
+                                size: 20,
                               ),
+                              const SizedBox(width: 8),
                               Text(
-                                '// READ TIME: ${module.estimatedMinutes.toUpperCase()}',
-                                style: TextStyle(
-                                  fontSize: 9.5,
-                                  fontFamily: 'monospace',
-                                  color: isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted,
+                                'Final Assessment & Certification',
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: colorScheme.primary,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 8),
+                          Text(
+                            'Complete all 5 lessons to unlock the 10-question evaluation. Pass mark is 60% with unlimited retakes. Earning a passing grade generates your official on-device verified certificate.',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: colorScheme.onSurface.withOpacity(0.8),
+                              height: 1.45,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )),
-
-              const SizedBox(height: 16),
-            ],
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
+
+          // Sticky Bottom Bar
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainer,
+              border: Border(
+                top: BorderSide(color: colorScheme.outline, width: 1),
+              ),
+            ),
+            child: SafeArea(
+              top: false,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 720),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: () async {
+                            if (isCompleted) {
+                              Navigator.of(context).pushNamed(
+                                '/certificate',
+                                arguments: course.id,
+                              );
+                            } else if (isEnrolled) {
+                              Navigator.of(context).pushNamed(
+                                '/learning-path',
+                                arguments: course.id,
+                              );
+                            } else {
+                              await progress.enroll(course.id);
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("You're enrolled. Start your first lesson!"),
+                                  ),
+                                );
+                                Navigator.of(context).pushNamed(
+                                  '/learning-path',
+                                  arguments: course.id,
+                                );
+                              }
+                            }
+                          },
+                          child: Text(
+                            isCompleted
+                                ? 'View Certificate'
+                                : (isEnrolled ? 'Continue Learning' : 'Enroll for Free'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildMetric(String label, String value) {
+  Widget _buildSummaryItem(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
+        Icon(icon, size: 18, color: colorScheme.primary),
+        const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(fontSize: 8.5, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: colorScheme.onSurface.withOpacity(0.6),
+          ),
         ),
         const SizedBox(height: 2),
         Text(
           value,
-          style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w900, fontFamily: 'monospace'),
+          style: theme.textTheme.labelMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: colorScheme.onSurface,
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildDivider(bool isDark) {
+  Widget _buildDivider(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      width: 2,
-      height: 24,
-      color: isDark ? const Color(0xFF333333) : const Color(0xFFCCCCCC),
+      width: 1,
+      height: 32,
+      color: colorScheme.outline.withOpacity(0.6),
     );
   }
 }

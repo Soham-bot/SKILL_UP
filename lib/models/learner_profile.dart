@@ -1,59 +1,59 @@
+import 'package:flutter/material.dart';
+
 class LearnerProfile {
   final String name;
-  final String? email;
-  final String? phone;
-  int xp;
-  int streakDays;
-  DateTime lastActiveDate;
+  final ThemeMode themeMode;
 
-  LearnerProfile({
+  const LearnerProfile({
     required this.name,
-    this.email,
-    this.phone,
-    this.xp = 0,
-    this.streakDays = 1,
-    DateTime? lastActiveDate,
-  }) : lastActiveDate = lastActiveDate ?? DateTime.now();
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'xp': xp,
-      'streakDays': streakDays,
-      'lastActiveDate': lastActiveDate.toIso8601String(),
-    };
-  }
-
-  factory LearnerProfile.fromJson(Map<String, dynamic> json) {
-    return LearnerProfile(
-      name: json['name'] as String? ?? 'Learner',
-      email: json['email'] as String?,
-      phone: json['phone'] as String?,
-      xp: (json['xp'] as num?)?.toInt() ?? 0,
-      streakDays: (json['streakDays'] as num?)?.toInt() ?? 1,
-      lastActiveDate: json['lastActiveDate'] != null
-          ? DateTime.tryParse(json['lastActiveDate'] as String) ?? DateTime.now()
-          : DateTime.now(),
-    );
-  }
+    this.themeMode = ThemeMode.system,
+  });
 
   LearnerProfile copyWith({
     String? name,
-    String? email,
-    String? phone,
-    int? xp,
-    int? streakDays,
-    DateTime? lastActiveDate,
+    ThemeMode? themeMode,
   }) {
     return LearnerProfile(
       name: name ?? this.name,
-      email: email ?? this.email,
-      phone: phone ?? this.phone,
-      xp: xp ?? this.xp,
-      streakDays: streakDays ?? this.streakDays,
-      lastActiveDate: lastActiveDate ?? this.lastActiveDate,
+      themeMode: themeMode ?? this.themeMode,
+    );
+  }
+
+  /// Validation: trim whitespace; 2–50 characters; letters, spaces, apostrophes, hyphens and dots only.
+  static String? validateName(String? raw) {
+    if (raw == null) return 'Please enter your full name.';
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return 'Please enter your full name.';
+    if (trimmed.length < 2) return 'Name must be at least 2 characters.';
+    if (trimmed.length > 50) return 'Name must not exceed 50 characters.';
+    final validChars = RegExp(r"^[a-zA-Z\s'\-\.]+$");
+    if (!validChars.hasMatch(trimmed)) {
+      return 'Only letters, spaces, hyphens, dots, and apostrophes are allowed.';
+    }
+    return null;
+  }
+
+  String get firstName {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return 'Learner';
+    final parts = trimmed.split(RegExp(r'\s+'));
+    return parts.first;
+  }
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'themeMode': themeMode.name,
+  };
+
+  factory LearnerProfile.fromJson(Map<String, dynamic> json) {
+    final modeName = json['themeMode'] as String? ?? 'system';
+    final mode = ThemeMode.values.firstWhere(
+      (m) => m.name == modeName,
+      orElse: () => ThemeMode.system,
+    );
+    return LearnerProfile(
+      name: json['name'] as String? ?? '',
+      themeMode: mode,
     );
   }
 }

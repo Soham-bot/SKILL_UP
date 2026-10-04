@@ -1,310 +1,280 @@
-# SKILLUP — Gamified Offline Learning & Certification Platform
+# SkillUp — Online Skill Certification Platform
 
-> **"Learn. Level Up. Get Certified."**
+> **"A calm, professional, on-device skill certification platform engineered with Flutter & Material Design 3."**
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.47.2-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.13.2-0175C2?logo=dart)](https://dart.dev)
-[![Material Design 3](https://img.shields.io/badge/Material_Design-3-6366F1)](https://m3.material.io)
-[![Platform](https://img.shields.io/badge/Platform-Cross--Platform%20(iOS%20%7C%20Android%20%7C%20macOS%20%7C%20Web)-blue)](#)
-[![Status](https://img.shields.io/badge/Status-100%25%20Offline%20First-success)](#)
-[![License](https://img.shields.io/badge/License-Academic%20Capstone-emerald)](#)
+[![Material Design 3](https://img.shields.io/badge/Material_Design-3-2B3A67)](https://m3.material.io)
+[![Architecture](https://img.shields.io/badge/Architecture-ChangeNotifier%20%2B%20InheritedNotifier-success)](#)
+[![Scoring](https://img.shields.io/badge/Scoring-100%25%20On--Device%20%7C%20Instant-blue)](#)
+[![Analysis](https://img.shields.io/badge/flutter%20analyze-0%20issues-brightgreen)](#)
+[![Tests](https://img.shields.io/badge/flutter%20test-25%2F25%20passed-brightgreen)](#)
 
 ---
 
-## 📖 Executive Summary & Academic Problem Statement
+## 📖 1. Overview & Problem Statement
 
-### Academic Problem Statement
-> *"SkillUp wants a mobile app where learners can enroll in short skill courses, attempt topic-wise quizzes, and instantly view a pass/fail result with a certificate screen. The app should feel fast, guide the learner clearly from course selection to certificate, and calculate scores entirely on-device."*
+### Problem Statement
+> *SkillUp wants a mobile app where learners can enroll in short skill courses, attempt topic-wise quizzes, and instantly view a pass/fail result with a certificate screen. The app should feel fast, guide the learner clearly from course selection to certificate, and calculate scores entirely on-device.*
 
-**SkillUp** is a miniature, gamified, offline-first cross-platform learning platform engineered with Flutter and Dart. Designed specifically as a final **Cross Platform Application Capstone Project** for **B.Tech Computer Science Engineering and Artificial Intelligence**, SkillUp proves that rich, interactive, and pedagogically sound educational software can operate with zero external API dependencies, sub-second latency, and uncompromising design aesthetics.
+SkillUp is rebuilt from the ground up as a **calm, dignified, distraction-free online learning and certification platform**, inspired by the aesthetic clarity and professional credibility of Coursera, Google Skillshop, LinkedIn Learning, and freeCodeCamp.
 
----
-
-## 🎯 Objectives & Key Features
-
-1. **Course Discovery & Free Enrollment:**
-   - Browse technical skill domains (Mobile Development, Programming & AI, Web Engineering, Systems Security).
-   - Local state machine manages course lifecycle: `Available` $\to$ `Enrolled` $\to$ `In Progress` $\to$ `Completed`.
-2. **Topic-Wise Five-Module Learning Hub:**
-   - Every course contains **exactly five structured learning modules**.
-   - Modular lessons broken into Theory, Core Concepts, Syntax/Architecture code blocks, Pro-Tips, and Key Takeaways.
-   - Interactive progress bar dynamically updates as modules are completed.
-3. **Randomized Assessment Engine (Stratified 10 MCQs):**
-   - Each course maintains a repository of 15–20 questions across all five modules.
-   - When launching an assessment, the system dynamically selects **exactly 10 questions**, ensuring stratified representation across all five topics.
-   - Repeated attempts reshuffle both question selection and order.
-4. **On-Device Pure Dart Scoring Logic:**
-   - 100% offline, zero network calls. Scores are computed using pure Dart iteration, equality comparison, and percentage evaluation.
-   - Academic constant: `passPercentage = 60.0`.
-5. **Dynamic Verifiable Certificate Generation:**
-   - Passing learners ($\ge 60\%$) receive an official certificate featuring their name, course title, score, percentage, timestamp, and unique serial identifier (`SKL-XXX-YYYY-ZZZZ`).
-6. **Gamification & Micro-Interactions:**
-   - Visual learning streak tracker (🔥), XP progression (⚡), achievement badges (🏆), and instant feedback.
-7. **Sound Null Safety & Material 3:**
-   - Full support for light and dark modes with Material 3 theming.
-   - Rigorous Dart sound null safety demonstration (`hint?`, `explanation?`) with graceful UI fallback.
+### Key Architectural Pillars
+- **100% Offline & On-Device**: Zero backend servers, zero Firebase, zero external HTTP dependencies. Course catalogs, 5-lesson curriculum, 20-question randomized banks, pure Dart scoring, and PDF certificate generation operate entirely locally.
+- **Material Design 3 (Quiet Royal Aesthetic)**: Fine stationery and library feel. Seeded from deep navy-indigo (`#2B3A67`), warm ivory light surface (`#FAF8F4`), deep ink dark surface (`#12151F`), muted antique gold (`#B08D57`), soft sage success (`#4F7F6A`), and muted terracotta fail/warning (`#B5654A`).
+- **Pedagogical Progression**: Strict *Lessons-First* progression: all 5 comprehensive lessons (including realistic real-world case studies) must be completed before the final assessment unlocks.
+- **Verifiable Dynamic Certificates**: On-screen certificate preview and A4 landscape PDF export featuring unique certificate serials (`SKL-<COURSE3>-<YYYY>-<4CHARS>`), recipient scaling, official vector seals, and share/print capabilities via `printing` and `pdf`.
 
 ---
 
-## 🗺️ Core User Journey
+## 🗺️ 2. The Complete User Journey
 
 ```
-┌─────────────────┐
-│   App Launch    │
-└────────┬────────┘
-         ▼
-┌─────────────────────────────────┐
-│ Welcome / Learner Profile Setup │ ◄── Name, Email, Phone (Saved Locally)
-└────────┬────────────────────────┘
-         ▼
-┌─────────────────────────────────┐
-│     Home / Gamified Hub         │ ◄── Streak, XP, Continue Learning, GridView
-└────────┬────────────────────────┘
-         ▼
-┌─────────────────────────────────┐
-│       Course Overview           │ ◄── Syllabus, Outcomes, Skills Learned
-└────────┬────────────────────────┘
-         ▼
-┌─────────────────────────────────┐
-│  [ Enroll & Start Learning ]    │ ◄── Lifecycle: Available ➔ Enrolled
-└────────┬────────────────────────┘
-         ▼
-┌─────────────────────────────────┐
-│      Course Learning Hub        │ ◄── 5 Topic-Wise Modules Roadmap
-└────────┬────────────────────────┘
-         ▼
-┌─────────────────────────────────┐
-│  Interactive Module Reader      │ ◄── Read Concepts, Review Code Examples
-└────────┬────────────────────────┘
-         ▼
-┌─────────────────────────────────┐
-│  Complete All 5 Modules         │ ◄── Unlocks Final Assessment
-└────────┬────────────────────────┘
-         ▼
-┌─────────────────────────────────┐
-│ 10-Question Random MCQ Exam     │ ◄── Stratified draw from 18-question bank
-└────────┬────────────────────────┘
-         ▼
-┌─────────────────────────────────┐
-│   Instant On-Device Evaluation  │ ◄── Score calculated locally in Dart
-└────────┬────────────────────────┘
-         ├──[ Score < 60% : Fail ]──────┐
-         ▼                              ▼
-┌──────────────────────────┐    ┌───────────────────────────┐
-│   Official Certificate   │    │  Review Modules & Retake  │
-│  (Passed ≥ 60%, Unique ID)│   │  (Generates Fresh 10 MCQs) │
-└──────────────────────────┘    └───────────────────────────┘
+[Splash (1.2s)] ──► [Welcome / Name Entry] ──► [Home: Course Catalog]
+                                                      │
+                       ┌──────────────────────────────┘
+                       ▼
+               [Course Detail]
+                       │ (Enroll for free)
+                       ▼
+               [Learning Path: 5 Lessons Checklist]
+                       │ (Open lessons 1 to 5)
+                       ▼
+         [Lesson Reader × 5 (with Case Study & Code)]
+                       │ (All 5 completed)
+                       ▼
+               [Assessment Intro] (10 MCQs, 60% Pass Mark, No Timer)
+                       │ (Start Assessment)
+                       ▼
+               [Quiz × 10 Questions] (Null-safe hints, pop-scope guard)
+                       │ (Review Answers)
+                       ▼
+               [Review & Submit] (Flags unanswered, idempotent submit)
+                       │ (Submit Assessment)
+                       ▼
+               [Result: Score & Answer Review]
+                ├── PASS (≥ 60%) ──► [Certificate] ──► Download PDF / Share
+                └── FAIL (< 60%)  ──► Retake (Fresh 10 MCQs) or Review Lessons
+                       │
+                       ▼
+        [Home Catalog]: Course marked "Completed ✓" or "Attempted"
 ```
 
 ---
 
-## 📚 Curriculum & Course Catalog
+## 📚 3. Course Catalog & Curriculum
 
-| Course Title | Category | Difficulty | Modules | Question Bank | Focus Skills |
-| :--- | :--- | :--- | :---: | :---: | :--- |
-| **Flutter Fundamentals** | Mobile Development | Beginner | 5 | 18 MCQs | Engine Architecture, Dart Null Safety, Widget Tree, State & setState, pubspec.yaml |
-| **Python Programming** | Programming & AI | Beginner | 5 | 18 MCQs | CPython Execution, Sequences & Dicts, Functions & Closures, OOP & Duck Typing, Context Managers |
-| **Web Development Basics**| Web Engineering | Beginner | 5 | 18 MCQs | Semantic HTML5, CSS Grid & Flexbox, Event Loop, Promises & async/await, Fetch API & JSON |
-| **Cybersecurity Fundamentals** | Security & Systems | Intermediate | 5 | 18 MCQs | CIA Triad, TLS 1.3 & Firewalls, AES vs RSA, Hashing & Salting, OWASP Top 10, Zero Trust |
+The repository ships with **4 comprehensive, production-grade technical courses** in [`lib/data/course_repository.dart`](file:///Users/sohamahirrao/Desktop/socreate/lib/data/course_repository.dart):
+
+| Course Title | Category | Difficulty | Lessons | Question Bank | Real-World Case Study |
+|:---|:---|:---|:---:|:---:|:---|
+| **Flutter Fundamentals** | Mobile | Beginner | 5 lessons (~90 min) | 20 questions | *Scale at HyperPay*: Jank reduction via RepaintBoundary and const trees |
+| **Python Programming** | Programming | Beginner | 5 lessons (~95 min) | 20 questions | *DataPipe Logistics*: High-throughput streaming via Python generators & `__slots__` |
+| **Web Development Basics** | Web | Beginner | 5 lessons (~80 min) | 20 questions | *NewsPulse Media*: Layout stability and Core Web Vitals optimization |
+| **Cybersecurity Essentials** | Security | Intermediate | 5 lessons (~90 min) | 20 questions | *HealthVault Systems*: Zero-trust migration, bcrypt salting, and TLS 1.3 hardening |
+
+Each lesson contains:
+1. Meta header with reading duration.
+2. Concept explanation (3–5 structured paragraphs).
+3. Core architectural bullet points.
+4. Worked syntax / code block.
+5. **Real-world case study** (Scenario, Problem, Approach, Outcome, Key Takeaway).
+6. Summary takeaways.
 
 ---
 
-## 🧮 Assessment & On-Device Scoring Architecture
+## 🧮 4. Pure Dart Scoring & Stratification Engine
 
-### Stratified 10-Question Selection
+The quiz engine is implemented cleanly in [`lib/services/quiz_service.dart`](file:///Users/sohamahirrao/Desktop/socreate/lib/services/quiz_service.dart):
+
+### 4.1 Stratified Question Draw
+To ensure rigorous educational coverage, 10 questions are drawn with **at least one question per lesson**, options shuffled, and the correct option index tracked dynamically:
+
 ```dart
-List<Question> generateRandomQuestions(Course course) {
-  // 1. Group 18-question pool into 5 module buckets
-  final Map<String, List<Question>> buckets = {};
+static List<Question> selectQuestions(Course course, {int targetCount = 10}) {
+  final Map<String, List<Question>> byLesson = {};
   for (final q in course.questionBank) {
-    buckets.putIfAbsent(q.moduleId, () => []).add(q);
+    byLesson.putIfAbsent(q.lessonId, () => []).add(q);
   }
-
-  // 2. Stratified guarantee: Draw at least 1 question per module
-  final List<Question> selected = [];
-  for (final entry in buckets.entries) {
-    final shuffled = List<Question>.from(entry.value)..shuffle();
-    if (shuffled.isNotEmpty) selected.add(shuffled.removeLast());
-  }
-
-  // 3. Pool remaining questions, shuffle, and fill up to exactly 10
-  final List<Question> remaining = [];
-  for (final q in course.questionBank) {
-    if (!selected.contains(q)) remaining.add(q);
-  }
-  remaining.shuffle();
-  while (selected.length < 10 && remaining.isNotEmpty) {
-    selected.add(remaining.removeLast());
-  }
-
-  return selected..shuffle();
+  // Stratified draw: at least one per lesson...
+  // Options shuffled with correct index updated...
 }
 ```
 
-### On-Device Score Calculation Algorithm
+### 4.2 Score Evaluation (Pure Dart Loop + Conditionals)
 ```dart
-static const double passPercentage = 60.0;
-
-QuizResult evaluateQuiz({
+static QuizResult evaluate({
   required Course course,
   required List<Question> questions,
-  required Map<int, int> selectedAnswers,
+  required Map<int, int> answers,
+  required String learnerName,
 }) {
   int score = 0;
-  for (int i = 0; i < questions.length; i++) {
-    if (selectedAnswers[i] == questions[i].correctOptionIndex) {
+  for (int i = 0; i < questions.length; i++) {              // LOOP
+    final chosen = answers[i];
+    if (chosen != null && chosen == questions[i].correctIndex) { // CONDITIONAL
       score++;
     }
   }
-  final double percentage = (score / questions.length) * 100.0;
-  final bool passed = percentage >= passPercentage;
-
-  return QuizResult(
-    courseId: course.id,
-    courseTitle: course.title,
-    score: score,
-    totalQuestions: questions.length,
-    percentage: percentage,
-    passed: passed,
-    attemptedAt: DateTime.now(),
-    certificateId: CertificateUtils.generateCertificateId(course.id),
-  );
+  final percentage = questions.isEmpty ? 0.0 : (score / questions.length) * 100;
+  final passed = percentage >= passMark;                    // CONDITIONAL
+  ...
 }
 ```
 
 ---
 
-## 🏗️ Technical Architecture & Folder Structure
+## 🏗️ 5. Project Architecture & Folder Map
 
 ```
-skillup/
+socreate/
 ├── lib/
-│   ├── main.dart                       # App bootstrap & dynamic theme listening
-│   ├── models/
-│   │   ├── course.dart                 # Course entity, status machine & progress logic
-│   │   ├── learning_module.dart        # 5 modules per course with structured sections
-│   │   ├── question.dart               # MCQ model with sound null-safe hint/explanation
-│   │   ├── quiz_result.dart            # Immutable result with score and certificate ID
-│   │   └── learner_profile.dart        # Local profile (name, XP, streak)
-│   ├── data/
-│   │   └── course_data.dart            # 4 courses, 20 educational modules, 72 MCQs
-│   ├── services/
-│   │   ├── storage_service.dart        # SharedPreferences persistence
-│   │   ├── quiz_service.dart           # Stratified selection & on-device score calculation
-│   │   └── course_service.dart         # ChangeNotifier state management
+│   ├── main.dart                       # Entry point, StorageService init, runApp
+│   ├── app.dart                        # MaterialApp, M3 themes, onGenerateRoute
 │   ├── theme/
-│   │   ├── app_colors.dart             # Curated developer tech palette
-│   │   └── app_theme.dart              # Material 3 light and dark theme configurations
+│   │   └── app_theme.dart              # M3 light/dark ThemeData, AppStatusColors ThemeExtension
+│   ├── models/
+│   │   ├── course.dart                 # Course entity with lessons & 20-question bank
+│   │   ├── lesson.dart                 # Lesson & CaseStudy models
+│   │   ├── question.dart               # Question model with null-safe hint & explanation
+│   │   ├── quiz_result.dart            # Immutable QuizResult with JSON serialization
+│   │   ├── learner_profile.dart        # Name & preferences
+│   │   └── enums.dart                  # Difficulty & CourseStatus enums
+│   ├── data/
+│   │   └── course_repository.dart      # 4 complete courses with lessons, case studies & MCQs
+│   ├── services/
+│   │   ├── quiz_service.dart           # Stratified selection & instant evaluation
+│   │   ├── storage_service.dart        # Defensive SharedPreferences wrapper
+│   │   ├── progress_service.dart       # ChangeNotifier state machine (enrollment, lessons, certs)
+│   │   ├── progress_scope.dart         # InheritedNotifier provider
+│   │   └── certificate_pdf_service.dart# A4 landscape PDF generator (pdf & printing)
 │   ├── widgets/
-│   │   ├── course_card.dart            # Course display card (Grid & List)
-│   │   ├── module_tile.dart            # Learning Hub roadmap module item
-│   │   ├── question_card.dart          # 4-option radio selector with hint toggle
-│   │   ├── stat_card.dart              # Gamified streak & XP metrics
-│   │   ├── status_badge.dart           # Category, difficulty & pass/fail badges
-│   │   └── certificate_widget.dart     # Verifiable certificate card with gold seal
-│   ├── screens/
-│   │   ├── welcome_screen.dart         # Initial learner profile setup
-│   │   ├── main_navigation_screen.dart # Persistent 4-tab bottom navigation
-│   │   ├── home_screen.dart            # Gamified dashboard (Streak, XP, Discovery)
-│   │   ├── explore_screen.dart         # Filterable search & category chips
-│   │   ├── course_detail_screen.dart   # Syllabus, outcomes, and enrollment
-│   │   ├── learning_hub_screen.dart    # 5-module progression roadmap
-│   │   ├── learning_module_screen.dart # Interactive lesson reader with code examples
-│   │   ├── quiz_screen.dart            # 10 random MCQs, progress bar & validator
-│   │   ├── result_screen.dart          # Instant score reveal & pass/fail feedback
-│   │   ├── certificate_screen.dart     # Verifiable certificate screen
-│   │   ├── my_learning_screen.dart     # Enrolled, In-Progress & Completed tabs
-│   │   └── profile_screen.dart         # Learner stats, theme switcher & certificates
-│   └── utils/
-│       └── certificate_utils.dart      # Unique ID generator (e.g. SKL-FLT-2026-8942)
+│   │   ├── responsive_container.dart   # LayoutBuilder adaptive max-width container
+│   │   ├── course_card.dart            # Responsive catalog card (List & Grid)
+│   │   ├── status_chip.dart            # Not started / In progress / Completed status chip
+│   │   ├── difficulty_tag.dart         # Difficulty pill (Beginner / Intermediate / Advanced)
+│   │   ├── option_tile.dart            # Quiz option with accessible ≥48dp tap target
+│   │   ├── question_nav_strip.dart     # Direct jump strip for 10 questions
+│   │   ├── certificate_view.dart       # Authentic parchment certificate rendering
+│   │   └── empty_state.dart            # Empty search / no learning placeholder
+│   └── screens/
+│       ├── splash_screen.dart          # 1.2s auto-routing splash
+│       ├── welcome_screen.dart         # Validated learner name entry (2–50 chars)
+│       ├── main_navigation_screen.dart # M3 NavigationBar (Home, My Learning, Profile)
+│       ├── home_screen.dart            # Catalog, continue learning card, search & filters
+│       ├── course_detail_screen.dart   # Outcomes, syllabus, sticky enrollment action
+│       ├── learning_path_screen.dart   # 5-lesson checklist & locked/unlocked assessment
+│       ├── lesson_screen.dart          # Whole concept reader, case study & progress tracker
+│       ├── assessment_intro_screen.dart# Exam parameters & deep-link guard
+│       ├── quiz_screen.dart            # 1-question per page, hints, PopScope leave dialog
+│       ├── review_screen.dart          # Answer review & unanswered confirmation
+│       ├── result_screen.dart          # Score reveal, pass/fail badge, review accordion
+│       ├── certificate_screen.dart     # Full certificate view with PDF/Share/Print
+│       ├── my_learning_screen.dart     # In-progress & completed courses tabs
+│       └── profile_screen.dart         # Name editor, theme selector, reset progress
 ├── test/
-│   ├── quiz_service_test.dart          # Unit tests: 10 MCQs, stratification, scoring, null safety
-│   ├── course_progress_test.dart       # Unit tests: 5 modules, progression, state machine
-│   └── widget_test.dart                # Widget test: launch, branding & welcome flow
-├── pubspec.yaml
+│   ├── quiz_service_test.dart          # Scoring boundaries (0,5,6,10), stratification, null safety
+│   ├── certificate_pdf_test.dart       # %PDF header verification & layout generation
+│   ├── progress_service_test.dart      # Enrollment lifecycle, lesson unlocking, best score retention
+│   └── widget_test.dart                # 8 comprehensive flow and accessibility widget tests
+├── figma_tokens.json                   # W3C standard tokens export
+├── FIGMA_SPEC.md                       # Frame-by-frame Figma specification (390x844 & 1280x800)
+├── JUSTIFICATION.md                    # In-depth architectural & pedagogical justification
+├── pubspec.yaml                        # Dependencies (shared_preferences, pdf, printing, google_fonts)
 └── README.md
 ```
 
 ---
 
-## 🎨 Design System & Theming
-
-SkillUp implements **Material Design 3** with dual-mode support:
-- **Primary Color:** Electric Indigo (`#6366F1`)
-- **Secondary Color:** Cyber Cyan (`#06B6D4`)
-- **Gamified XP Accent:** Vibrant Amber (`#F59E0B`)
-- **Pass Status:** Emerald Green (`#10B981`)
-- **Fail Status:** Crimson Rose (`#EF4444`)
-- **Surfaces:** Dark Slate (`#0A0F1D` / `#121A2D`) & Light Slate (`#F8FAFC` / `#FFFFFF`)
-- **Typography:** Google Fonts Inter with system sans-serif fallback
-
----
-
-## 🧪 Testing & Verification
-
-SkillUp includes an automated test suite verifying all core academic invariants:
-
-```bash
-flutter test
-```
-
-### Automated Test Output
-```
-00:00 +0: Course Progression & State Machine Tests TC06, TC08 & TC09: Module completion updates progress and state machine
-00:00 +1: Course Progression & State Machine Tests All 4 courses have exactly 5 modules and >= 15 questions
-00:00 +2: Quiz Engine & Scoring Logic TC10 & TC11: Course contains > 10 questions, but generated quiz has exactly 10
-00:00 +3: Quiz Engine & Scoring Logic TC11 Stratification: Questions cover all 5 learning modules
-00:00 +4: Quiz Engine & Scoring Logic TC11 Randomization: Repeat attempts produce varied shuffles
-00:00 +5: Quiz Engine & Scoring Logic TC15 & TC16: On-Device Score Calculation and Passing Threshold (60%)
-00:00 +6: Quiz Engine & Scoring Logic TC23 & TC24: Sound Null Safety handling for hint and explanation
-00:00 +7: TC01 & TC02: SkillUp launches and displays branding and setup/home flow
-00:00 +8: All tests passed!
-```
-
----
-
-## 🚀 Installation & Running
+## 🚀 6. Setup & Running
 
 ### Prerequisites
-- Flutter SDK $\ge 3.47.0$
-- Dart SDK $\ge 3.13.0$
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) $\ge 3.47.0$
+- [Dart SDK](https://dart.dev) $\ge 3.13.0$
+- macOS, Windows, Linux, Android Studio, or VS Code with Flutter extension.
 
-### Steps
-1. Clone the repository:
+### Setup in VS Code / Terminal
+1. Clone the repository and navigate into the workspace:
    ```bash
-   git clone <repository_url>
-   cd socreate
+   git clone https://github.com/Soham-bot/Skill_Up.git
+   cd Skill_Up
    ```
-2. Fetch dependencies:
+2. Install dependencies:
    ```bash
    flutter pub get
    ```
-3. Run on your desired target:
+3. Run static analyzer:
    ```bash
-   # Run on connected phone / desktop / Chrome:
-   flutter run
+   flutter analyze
+   ```
+   *(Expected output: `No issues found!`)*
 
-   # Or build standalone Web bundle:
-   flutter build web --release
+4. Run automated test suite:
+   ```bash
+   flutter test
+   ```
+   *(Expected output: `All 25 tests passed!`)*
+
+5. Run on your preferred target:
+   ```bash
+   # Run on Chrome browser:
+   flutter run -d chrome
+
+   # Run on macOS desktop:
+   flutter run -d macos
+
+   # Run on connected iOS / Android device:
+   flutter run
    ```
 
 ---
 
-## 📦 Academic & Design Deliverables Bundle
+## 🧪 7. Test Suite Summary
 
-All non-runtime submission artifacts, formal reports, Figma assets, and testing matrices have been consolidated into [`academic_deliverables/`](./academic_deliverables/) and packaged into a single submission archive:
-* **Single Submission Archive:** [`SkillUp_Academic_Deliverables.zip`](./SkillUp_Academic_Deliverables.zip) (741 KB)
-* **Manifest & Evaluation Guide:** [`academic_deliverables/DELIVERABLES_MANIFEST.md`](./academic_deliverables/DELIVERABLES_MANIFEST.md)
-* **Full Academic Report (38 Chapters):** [`academic_deliverables/SkillUp_Academic_Project_Report.docx`](./academic_deliverables/SkillUp_Academic_Project_Report.docx)
-* **Figma Neo-Brutalist Design System:** [`academic_deliverables/FIGMA_DESIGN_SYSTEM.md`](./academic_deliverables/FIGMA_DESIGN_SYSTEM.md)
-* **Figma Vector Artboards:** [`academic_deliverables/figma_assets/`](./academic_deliverables/figma_assets/)
-* **Formal QA Test Report (TC01–TC25):** [`academic_deliverables/TEST_REPORT.md`](./academic_deliverables/TEST_REPORT.md)
-* **Viva Voce Defense & Demo Script:** [`academic_deliverables/VIVA_GUIDE.md`](./academic_deliverables/VIVA_GUIDE.md)
+The automated test suite in [`test/`](file:///Users/sohamahirrao/Desktop/socreate/test) covers **25 automated test cases**:
+
+1. **`test/quiz_service_test.dart`**:
+   - `0 / 10` correct evaluates to `0.0%` (failed).
+   - `5 / 10` correct evaluates to `50.0%` (failed).
+   - `6 / 10` boundary condition evaluates to `60.0%` (`passed: true`).
+   - `10 / 10` correct evaluates to `100.0%` (`passed: true`).
+   - Unanswered questions are counted incorrect.
+   - Stratified selection returns exactly 10 questions with representation across all 5 lessons.
+   - Option shuffling correctly keeps the right answer index synchronized.
+   - Sound null safety: handles null `hint` and null `explanation` without crash or `!`.
+   - Certificate ID format regex validation (`^SKL-[A-Z0-9]{3,4}-\d{4}-[A-Z0-9]{4}$`).
+2. **`test/certificate_pdf_test.dart`**:
+   - Generates non-empty byte buffer.
+   - Asserts buffer header matches standard magic bytes `%PDF`.
+3. **`test/progress_service_test.dart`**:
+   - Enrollment state transitions and lesson completion logic.
+   - Assessment remains locked until all 5 lessons are completed.
+   - Best score preservation: retaking with lower score retains highest score on certificate.
+   - Defensive fallback when `SharedPreferences` returns invalid/corrupted JSON.
+   - `resetAll()` clears progress while preserving profile name.
+4. **`test/widget_test.dart`**:
+   - Welcome screen name validation (enables Continue only on $\ge 2$ characters).
+   - Home screen displays 4 courses with responsive layout.
+   - Full enrollment flow navigates to Learning Path with 5 lessons.
+   - Assessment lock prevents premature access.
+   - Full passing flow: Quiz $\to$ Review $\to$ Result $\to$ Certificate.
+   - Passed course displays `"Completed ✓"` badge on Home catalog.
+   - Responsive and accessibility pass: Dark mode builds with zero overflow at 320 px width and text scale 2.0.
+   - Failing flow: Result screen displays Not Passed and Retake resets quiz state with fresh questions.
 
 ---
 
-## 👨‍💻 Author
+## 🎨 8. Design System & Tokens
 
-**Soham Ahirrao**  
-*B.Tech in Computer Science Engineering & Artificial Intelligence*  
-Cross Platform Application Capstone Project
+SkillUp adheres strictly to **Material Design 3**:
+- Zero hardcoded colors outside [`lib/theme/app_theme.dart`](file:///Users/sohamahirrao/Desktop/socreate/lib/theme/app_theme.dart).
+- Full token export available in [`figma_tokens.json`](file:///Users/sohamahirrao/Desktop/socreate/figma_tokens.json).
+- Comprehensive frame-by-frame Figma implementation spec in [`FIGMA_SPEC.md`](file:///Users/sohamahirrao/Desktop/socreate/FIGMA_SPEC.md).
+- Academic viva documentation and design justification in [`JUSTIFICATION.md`](file:///Users/sohamahirrao/Desktop/socreate/JUSTIFICATION.md).
+
+---
+
+## 📄 9. License & Authorship
+
+Developed by **Soham Ahirrao** for the **B.Tech Computer Science Engineering & AI** Cross Platform Application Capstone.
+Built with 100% Flutter, Dart, and Material Design 3.

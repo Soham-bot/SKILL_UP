@@ -1,121 +1,205 @@
 import 'package:flutter/material.dart';
+import '../data/course_repository.dart';
 import '../models/quiz_result.dart';
-import '../services/course_service.dart';
-import '../theme/app_colors.dart';
-import '../widgets/wireframe_grid_background.dart';
-import '../widgets/certificate_widget.dart';
-import '../widgets/brutal_button.dart';
+import '../services/certificate_pdf_service.dart';
+import '../services/progress_scope.dart';
+import '../widgets/certificate_view.dart';
+import '../widgets/empty_state.dart';
+import '../widgets/responsive_container.dart';
 
-class CertificateScreen extends StatelessWidget {
-  final CourseService courseService;
-  final QuizResult quizResult;
+class CertificateScreen extends StatefulWidget {
+  final String courseId;
 
-  const CertificateScreen({
-    super.key,
-    required this.courseService,
-    required this.quizResult,
-  });
+  const CertificateScreen({super.key, required this.courseId});
 
-  void _handleShare(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '// RECEIPT CODE COPIED: [${quizResult.certificateId}] // GO FLEX IT!',
-          style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
-        ),
-        backgroundColor: AppColors.pitchBlack,
-        duration: const Duration(seconds: 2),
-      ),
-    );
+  @override
+  State<CertificateScreen> createState() => _CertificateScreenState();
+}
+
+class _CertificateScreenState extends State<CertificateScreen> {
+  bool _isGeneratingPdf = false;
+
+  Future<void> _downloadOrSharePdf(QuizResult result) async {
+    if (_isGeneratingPdf) return;
+    setState(() => _isGeneratingPdf = true);
+
+    try {
+      final success = await CertificatePdfService.shareOrSave(result);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              success
+                  ? 'Certificate PDF ready. File saved/shared.'
+                  : 'PDF generated successfully.',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not generate PDF. Please try again.'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isGeneratingPdf = false);
+      }
+    }
   }
 
-  void _handleSave(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '// RECEIPT SAVED TO YOUR DEVICE // SERIAL: ${quizResult.certificateId}',
-          style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700),
-        ),
-        backgroundColor: AppColors.acidGreen,
-        duration: const Duration(seconds: 2),
-      ),
-    );
+  Future<void> _print(QuizResult result) async {
+    try {
+      await CertificatePdfService.printCertificate(result);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not initiate printing. Please try again.'),
+          ),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final learnerName = courseService.profile?.name ?? 'MAIN CHARACTER';
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final progress = ProgressScope.of(context);
+    final course = CourseRepository.getById(widget.courseId);
+    final bestResult = progress.getBestResult(widget.courseId);
+
+    // Guard: Certificate is only accessible if the course is passed
+    if (course == null || bestResult == null || !bestResult.passed) {
+      return Scaffold(
+        backgroundColor: colorScheme.surface,
+        appBar: AppBar(title: const Text('Certificate')),
+        body: EmptyState(
+          icon: Icons.lock_outline,
+          title: 'Certificate Not Available Yet',
+          message:
+              'Complete the lessons and score 60% or higher on the final assessment to earn your official certificate.',
+          actionLabel: 'Go to Course',
+          onAction: () {
+            Navigator.of(context).pushReplacementNamed(
+              '/course-detail',
+              arguments: widget.courseId,
+            );
+          },
+        ),
+      );
+    }
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: const Text('// THE BIG RECEIPT'),
+        title: const Text('Your Certificate'),
         actions: [
           IconButton(
-            tooltip: 'SHARE THE FLEX',
-            icon: const Icon(Icons.share_sharp),
-            onPressed: () => _handleShare(context),
+            icon: const Icon(Icons.print_outlined),
+            tooltip: 'Print Certificate',
+            onPressed: () => _print(bestResult),
           ),
           IconButton(
-            tooltip: 'SAVE TO DEVICE',
-            icon: const Icon(Icons.download_sharp),
-            onPressed: () => _handleSave(context),
+            icon: const Icon(Icons.share_outlined),
+            tooltip: 'Share Certificate',
+            onPressed: () => _downloadOrSharePdf(bestResult),
           ),
         ],
       ),
-      body: WireframeGridBackground(
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 540),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: SingleChildScrollView(
+        child: ResponsiveContainer(
+          maxWidth: 720,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Notice banner
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: colorScheme.primaryContainer.withOpacity(0.4),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: colorScheme.primary.withOpacity(0.3),
+                  ),
+                ),
+                child: Row(
                   children: [
-                    CertificateWidget(
-                      learnerName: learnerName,
-                      quizResult: quizResult,
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: BrutalButton(
-                            text: '// SAVE RECEIPT',
-                            onPressed: () => _handleSave(context),
-                            backgroundColor: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFE5E5DE),
-                            foregroundColor: isDark ? Colors.white : AppColors.pitchBlack,
-                          ),
+                    Icon(Icons.verified, size: 20, color: colorScheme.primary),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Verified On-Device Certification. Rendered from immutable cryptographic evaluation.',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w500,
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: BrutalButton(
-                            text: 'SHARE THE FLEX ⚡',
-                            onPressed: () => _handleShare(context),
-                            backgroundColor: AppColors.acidGreen,
-                            foregroundColor: AppColors.pitchBlack,
-                            shadowColor: isDark ? Colors.white : AppColors.pitchBlack,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    TextButton(
-                      onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
-                      child: const Text(
-                        '// RETURN TO FEED',
-                        style: TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w900),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
+              const SizedBox(height: 20),
+
+              // The Visual Certificate Widget (Must look good in light & dark modes)
+              CertificateView(result: bestResult),
+              const SizedBox(height: 28),
+
+              // Actions: Download PDF (Primary), Print, Share
+              FilledButton.icon(
+                onPressed: _isGeneratingPdf
+                    ? null
+                    : () => _downloadOrSharePdf(bestResult),
+                icon: _isGeneratingPdf
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.picture_as_pdf_outlined),
+                label: Text(
+                  _isGeneratingPdf ? 'Generating PDF...' : 'Download PDF Certificate',
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.print_outlined),
+                      label: const Text('Print'),
+                      onPressed: () => _print(bestResult),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.share_outlined),
+                      label: const Text('Share'),
+                      onPressed: () => _downloadOrSharePdf(bestResult),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/main',
+                    (route) => false,
+                  );
+                },
+                child: const Text('Return to Course Catalog'),
+              ),
+              const SizedBox(height: 24),
+            ],
           ),
         ),
       ),
